@@ -79,29 +79,6 @@
       </tags>
   </entry>
   <entry>
-    <title>CentOS更换Yum源为阿里云源</title>
-    <url>/posts/e8a99a62/</url>
-    <content><![CDATA[<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/wx_title_centos_yum_2018.11.21.png' height=320px >
-<span id="more"></span>
-
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Yum仓库部署在国外，为了方便之后项目环境的部署更新操作，最好更新为国内的镜像源，本文以阿里云源为例。<br>参考网站:<a href="https://opsx.alibaba.com/mirror">https://opsx.alibaba.com/mirror</a></p>
-<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1-备份"><a href="#1-备份" class="headerlink" title="1.备份"></a>1.备份</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup</span><br></pre></td></tr></table></figure>
-<p><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/20181121_centosbf.png" alt="图中即为重命名的备份文件"></p>
-<h3 id="2-下载阿里云的源文件"><a href="#2-下载阿里云的源文件" class="headerlink" title="2.下载阿里云的源文件"></a>2.下载阿里云的源文件</h3><p>这里我的虚拟机版本为CentOS 7，这里根据你的版本进行操作，参考上文链接</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">wget -O /etc/yum.repos.d/CentOS-Base.repo http:<span class="comment">//mirrors.aliyun.com/repo/Centos-7.repo</span></span><br></pre></td></tr></table></figure>
-<p><font color="red">注意：这里需要给与管理员权限<font/><br><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/20181121213830.png" alt="在这里插入图片描述"></p>
-<h3 id="3-生成缓存"><a href="#3-生成缓存" class="headerlink" title="3.生成缓存"></a>3.生成缓存</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">yum makecache</span><br></pre></td></tr></table></figure>
-<p><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/20181121214100.png" alt="在这里插入图片描述"></p>
-<h2 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h2><p>如果更换源后出现问题，则需要先清除默认Yum源的本地缓存</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">yum clean all</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>Linux</tag>
-        <tag>Yum</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Android自定义Dialog对话框</title>
     <url>/posts/1bd356c0/</url>
     <content><![CDATA[<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/20181119_wx_title_dialog.png' height=320px >
@@ -123,6 +100,29 @@
       <tags>
         <tag>Android</tag>
         <tag>数据储存</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CentOS更换Yum源为阿里云源</title>
+    <url>/posts/e8a99a62/</url>
+    <content><![CDATA[<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/wx_title_centos_yum_2018.11.21.png' height=320px >
+<span id="more"></span>
+
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Yum仓库部署在国外，为了方便之后项目环境的部署更新操作，最好更新为国内的镜像源，本文以阿里云源为例。<br>参考网站:<a href="https://opsx.alibaba.com/mirror">https://opsx.alibaba.com/mirror</a></p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1-备份"><a href="#1-备份" class="headerlink" title="1.备份"></a>1.备份</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup</span><br></pre></td></tr></table></figure>
+<p><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/20181121_centosbf.png" alt="图中即为重命名的备份文件"></p>
+<h3 id="2-下载阿里云的源文件"><a href="#2-下载阿里云的源文件" class="headerlink" title="2.下载阿里云的源文件"></a>2.下载阿里云的源文件</h3><p>这里我的虚拟机版本为CentOS 7，这里根据你的版本进行操作，参考上文链接</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">wget -O /etc/yum.repos.d/CentOS-Base.repo http:<span class="comment">//mirrors.aliyun.com/repo/Centos-7.repo</span></span><br></pre></td></tr></table></figure>
+<p><font color="red">注意：这里需要给与管理员权限<font/><br><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/20181121213830.png" alt="在这里插入图片描述"></p>
+<h3 id="3-生成缓存"><a href="#3-生成缓存" class="headerlink" title="3.生成缓存"></a>3.生成缓存</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">yum makecache</span><br></pre></td></tr></table></figure>
+<p><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/20181121214100.png" alt="在这里插入图片描述"></p>
+<h2 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h2><p>如果更换源后出现问题，则需要先清除默认Yum源的本地缓存</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">yum clean all</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Yum</tag>
       </tags>
   </entry>
   <entry>
@@ -188,43 +188,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Spring Data JPA 映射VO/DTO对象</title>
-    <url>/posts/17193f90/</url>
-    <content><![CDATA[<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/weixin_title_2019.05.13.png' height=320px >
-<span id="more"></span>
- 
-# 简介
-
-<blockquote>
-<p>在项目开发中,时常需要根据业务需求来映射VO/DTO对象(这两个概念理解感觉很模糊- 。- )，本文将简单介绍以Spring Data JPA的方式处理实体类映射</p>
-</blockquote>
-<h2 id="HQL方式"><a href="#HQL方式" class="headerlink" title="HQL方式"></a>HQL方式</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MusicTypeRepository</span> <span class="keyword">extends</span> <span class="title">JpaRepository</span>&lt;<span class="title">MusicType</span>,<span class="title">Integer</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">     <span class="meta">@Query(&quot;select new cn.srblog.springbootcurd.vo.StudentTypeInfoVo(count(s.id),m.name) &quot; +</span></span><br><span class="line"><span class="meta">             &quot;FROM MusicType m  left JOIN Student s on s.musicTypeId = m.id group by m.id &quot;)</span></span><br><span class="line">     <span class="function">List&lt;StudentTypeInfoVo&gt; <span class="title">getTypeInfo</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>填写实体类路径,构造参数顺序要一致,字段名一律为实体类中的属性</li>
-<li>如果配置了实体类属性的映射关系，则<code>on s.musicTypeId = m.id</code>语句可以省略</li>
-</ul>
-<h3 id="VO实体类"><a href="#VO实体类" class="headerlink" title="VO实体类"></a>VO实体类</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Value</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StudentTypeInfoVo</span>  </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Long count;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>使用<code>Lombok</code>的 <code>@Value</code> 注解</p>
-<ul>
-<li>默认生成带参构造方法</li>
-<li>默认为成员变量添加<code>final</code>修饰,且只提供getter()方法</li>
-</ul>
-<h2 id="原生SQL的形式"><a href="#原生SQL的形式" class="headerlink" title="原生SQL的形式"></a>原生SQL的形式</h2><h3 id="接口形式"><a href="#接口形式" class="headerlink" title="接口形式"></a>接口形式</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CoursePlanRepository</span> <span class="keyword">extends</span> <span class="title">JpaRepository</span>&lt;<span class="title">CoursePlan</span>,<span class="title">Integer</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">       <span class="meta">@Query(nativeQuery = true,value = &quot;SELECT &quot; +</span></span><br><span class="line"><span class="meta">               &quot; c.id as id,&quot; +</span></span><br><span class="line"><span class="meta">               &quot;DAYOFWEEK(c.start_time) as week,&quot; +</span></span><br><span class="line"><span class="meta">               &quot;m.name as musicType,&quot; +</span></span><br><span class="line"><span class="meta">               &quot;t.name as teacherName,&quot; +</span></span><br><span class="line"><span class="meta">               &quot;c.start_time as startTime,&quot; +</span></span><br><span class="line"><span class="meta">               &quot;c.end_time as endTime &quot; +</span></span><br><span class="line"><span class="meta">               &quot; FROM t_courseplan c,t_musictype m , t_teacher t &quot; +</span></span><br><span class="line"><span class="meta">               &quot; WHERE DATE(c.start_time) &lt; DATE_ADD(CURDATE(), INTERVAL 7 DAY ) AND CURDATE() &lt;= DATE(c.start_time) &quot; +</span></span><br><span class="line"><span class="meta">               &quot; and t.id=c.tea_id and c.music_type_id = m.id order by c.start_time &quot;)</span></span><br><span class="line">       <span class="function">List&lt;CoursePlanVos&gt; <span class="title">getWeekList</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">````</span><br><span class="line"></span><br><span class="line">- nativeQuery = <span class="keyword">true</span> 表示开启原生SQL查询</span><br><span class="line">- 查询字段别名需要与实体类中字段一一对应</span><br><span class="line">- 该方法功能为查询一周后的数据</span><br><span class="line"></span><br><span class="line">函数 | 说明</span><br><span class="line">---------| -------------</span><br><span class="line">DAYOFWEEK() | DAYOFWEEK函数返回日期的工作日索引值，即星期日为<span class="number">1</span>，星期一为<span class="number">2</span>，星期六为<span class="number">7</span>。例:``DAYOFWEEK(<span class="string">&#x27;2019-05-09&#x27;</span>)`` 返回 ``<span class="number">5</span>``</span><br><span class="line">DATE() | 提取日期或日期/时间表达式的日期部分,格式``<span class="string">&#x27;YYYY-MM-DD&#x27;</span>``或者``<span class="string">&#x27;YYYYMMDD&#x27;</span>``</span><br><span class="line">DATE_ADD(date,INTERVAL expr unit)| 给日期添加指定的时间间隔。date 参数是合法的日期表达式,expr 参数是您希望添加的时间间隔,type 参数可以是MySQL支持的时间日期相关类型值</span><br><span class="line">CURDATE() | 返回当前日期  例:``<span class="string">&#x27;2019-05-09&#x27;</span>``</span><br><span class="line"></span><br><span class="line">#### VO实体类(接口形式)</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CoursePlanVos</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function">Integer <span class="title">getId</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">Integer <span class="title">getWeek</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">String <span class="title">getMusicType</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">String <span class="title">getTeacherName</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">Date <span class="title">getStartTime</span><span class="params">()</span> </span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">Date <span class="title">getEndTime</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="结果集形式"><a href="#结果集形式" class="headerlink" title="结果集形式"></a>结果集形式</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Query(value = &quot;select count(s.id) as count,m.name as name &quot; +</span></span><br><span class="line"><span class="meta">             &quot; FROM t_musictype m  left JOIN t_student s on s.music_type_id = m.id group by m.id &quot;,nativeQuery = true)</span></span><br><span class="line">    List&lt;Object[]&gt; listType1();</span><br></pre></td></tr></table></figure>
-
-<p>对比第一种方法,使用原生SQL默认会返回Object数组</p>
-]]></content>
-      <tags>
-        <tag>Spring Data JPA</tag>
-        <tag>JpaRepository</tag>
-        <tag>VO</tag>
-        <tag>HQL</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Spring框架入门(一):概念简介</title>
     <url>/posts/f9407374/</url>
     <content><![CDATA[<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/wx_title_2018.10.30.png' height=320px >
@@ -279,6 +242,118 @@
 <li>Web-Struts 模块：提供了与 Struts 无缝集成， Struts1.x 和 Struts2.x 都支持。</li>
 <li>Test 模块： Spring 支持 Junit 和 TestNG 测试框架，而且还额外提供了一些基于 Spring 的测试功能，比如在测试 Web 框架时，模拟 Http 请求的功能。</li>
 </ul>
+<hr>
+]]></content>
+      <tags>
+        <tag>Spring</tag>
+        <tag>框架</tag>
+        <tag>Java EE</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Spring Data JPA 映射VO/DTO对象</title>
+    <url>/posts/17193f90/</url>
+    <content><![CDATA[<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/weixin_title_2019.05.13.png' height=320px >
+<span id="more"></span>
+ 
+# 简介
+
+<blockquote>
+<p>在项目开发中,时常需要根据业务需求来映射VO/DTO对象(这两个概念理解感觉很模糊- 。- )，本文将简单介绍以Spring Data JPA的方式处理实体类映射</p>
+</blockquote>
+<h2 id="HQL方式"><a href="#HQL方式" class="headerlink" title="HQL方式"></a>HQL方式</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MusicTypeRepository</span> <span class="keyword">extends</span> <span class="title">JpaRepository</span>&lt;<span class="title">MusicType</span>,<span class="title">Integer</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">     <span class="meta">@Query(&quot;select new cn.srblog.springbootcurd.vo.StudentTypeInfoVo(count(s.id),m.name) &quot; +</span></span><br><span class="line"><span class="meta">             &quot;FROM MusicType m  left JOIN Student s on s.musicTypeId = m.id group by m.id &quot;)</span></span><br><span class="line">     <span class="function">List&lt;StudentTypeInfoVo&gt; <span class="title">getTypeInfo</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>填写实体类路径,构造参数顺序要一致,字段名一律为实体类中的属性</li>
+<li>如果配置了实体类属性的映射关系，则<code>on s.musicTypeId = m.id</code>语句可以省略</li>
+</ul>
+<h3 id="VO实体类"><a href="#VO实体类" class="headerlink" title="VO实体类"></a>VO实体类</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Value</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StudentTypeInfoVo</span>  </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Long count;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>使用<code>Lombok</code>的 <code>@Value</code> 注解</p>
+<ul>
+<li>默认生成带参构造方法</li>
+<li>默认为成员变量添加<code>final</code>修饰,且只提供getter()方法</li>
+</ul>
+<h2 id="原生SQL的形式"><a href="#原生SQL的形式" class="headerlink" title="原生SQL的形式"></a>原生SQL的形式</h2><h3 id="接口形式"><a href="#接口形式" class="headerlink" title="接口形式"></a>接口形式</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CoursePlanRepository</span> <span class="keyword">extends</span> <span class="title">JpaRepository</span>&lt;<span class="title">CoursePlan</span>,<span class="title">Integer</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">       <span class="meta">@Query(nativeQuery = true,value = &quot;SELECT &quot; +</span></span><br><span class="line"><span class="meta">               &quot; c.id as id,&quot; +</span></span><br><span class="line"><span class="meta">               &quot;DAYOFWEEK(c.start_time) as week,&quot; +</span></span><br><span class="line"><span class="meta">               &quot;m.name as musicType,&quot; +</span></span><br><span class="line"><span class="meta">               &quot;t.name as teacherName,&quot; +</span></span><br><span class="line"><span class="meta">               &quot;c.start_time as startTime,&quot; +</span></span><br><span class="line"><span class="meta">               &quot;c.end_time as endTime &quot; +</span></span><br><span class="line"><span class="meta">               &quot; FROM t_courseplan c,t_musictype m , t_teacher t &quot; +</span></span><br><span class="line"><span class="meta">               &quot; WHERE DATE(c.start_time) &lt; DATE_ADD(CURDATE(), INTERVAL 7 DAY ) AND CURDATE() &lt;= DATE(c.start_time) &quot; +</span></span><br><span class="line"><span class="meta">               &quot; and t.id=c.tea_id and c.music_type_id = m.id order by c.start_time &quot;)</span></span><br><span class="line">       <span class="function">List&lt;CoursePlanVos&gt; <span class="title">getWeekList</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">````</span><br><span class="line"></span><br><span class="line">- nativeQuery = <span class="keyword">true</span> 表示开启原生SQL查询</span><br><span class="line">- 查询字段别名需要与实体类中字段一一对应</span><br><span class="line">- 该方法功能为查询一周后的数据</span><br><span class="line"></span><br><span class="line">函数 | 说明</span><br><span class="line">---------| -------------</span><br><span class="line">DAYOFWEEK() | DAYOFWEEK函数返回日期的工作日索引值，即星期日为<span class="number">1</span>，星期一为<span class="number">2</span>，星期六为<span class="number">7</span>。例:``DAYOFWEEK(<span class="string">&#x27;2019-05-09&#x27;</span>)`` 返回 ``<span class="number">5</span>``</span><br><span class="line">DATE() | 提取日期或日期/时间表达式的日期部分,格式``<span class="string">&#x27;YYYY-MM-DD&#x27;</span>``或者``<span class="string">&#x27;YYYYMMDD&#x27;</span>``</span><br><span class="line">DATE_ADD(date,INTERVAL expr unit)| 给日期添加指定的时间间隔。date 参数是合法的日期表达式,expr 参数是您希望添加的时间间隔,type 参数可以是MySQL支持的时间日期相关类型值</span><br><span class="line">CURDATE() | 返回当前日期  例:``<span class="string">&#x27;2019-05-09&#x27;</span>``</span><br><span class="line"></span><br><span class="line">#### VO实体类(接口形式)</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CoursePlanVos</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function">Integer <span class="title">getId</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">Integer <span class="title">getWeek</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">String <span class="title">getMusicType</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">String <span class="title">getTeacherName</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">Date <span class="title">getStartTime</span><span class="params">()</span> </span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">Date <span class="title">getEndTime</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="结果集形式"><a href="#结果集形式" class="headerlink" title="结果集形式"></a>结果集形式</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Query(value = &quot;select count(s.id) as count,m.name as name &quot; +</span></span><br><span class="line"><span class="meta">             &quot; FROM t_musictype m  left JOIN t_student s on s.music_type_id = m.id group by m.id &quot;,nativeQuery = true)</span></span><br><span class="line">    List&lt;Object[]&gt; listType1();</span><br></pre></td></tr></table></figure>
+
+<p>对比第一种方法,使用原生SQL默认会返回Object数组</p>
+]]></content>
+      <tags>
+        <tag>Spring Data JPA</tag>
+        <tag>JpaRepository</tag>
+        <tag>VO</tag>
+        <tag>HQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Tomcat服务器配置Https协议</title>
+    <url>/posts/8baea545/</url>
+    <content><![CDATA[<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/wx_title_2019.04.25.png' height=320px >
+<span id="more"></span>
+ 
+### 前言
+> 日常开发项目时,一般本机都是基于http协议,但是要实现某些需求必须要开启https协议。
+> 现在https协议已经成为主流,网站如果未开启https协议,浏览器会进行安全提示。
+> 本文以**Tomcat**服务器为例,简单介绍如何在**本机开发环境**配置https协议
+
+<h3 id="证书生成"><a href="#证书生成" class="headerlink" title="证书生成"></a>证书生成</h3><p><strong>使用JDK自带的keytool工具来生成证书库</strong>：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">keytool -genkeypair -alias <span class="string">&quot;tomcat&quot;</span> -keyalg <span class="string">&quot;RSA&quot;</span> -keystore <span class="string">&quot;d:\https\tomcat.keystore&quot;</span>  </span><br></pre></td></tr></table></figure>
+<p><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2019-4-25-https1.png" alt="在这里插入图片描述"></p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>alias</td>
+<td>证书别名</td>
+</tr>
+<tr>
+<td>keyalg</td>
+<td>加密算法,RSA</td>
+</tr>
+<tr>
+<td>keystore</td>
+<td>证书保存路径</td>
+</tr>
+</tbody></table>
+<h3 id="环境设置"><a href="#环境设置" class="headerlink" title="环境设置"></a>环境设置</h3><p> <strong>修改Tomcat配置文件</strong>：<br>打开Tomcat安装目录/conf/server.xml,修改如下配置,并取消注释<br>注：这里以Tomcat8.0为例,8.5以上配置请另行百度</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">&quot;8443&quot;</span> <span class="attr">protocol</span>=<span class="string">&quot;org.apache.coyote.http11.Http11NioProtocol&quot;</span></span></span><br><span class="line"><span class="tag">              <span class="attr">maxThreads</span>=<span class="string">&quot;150&quot;</span> <span class="attr">SSLEnabled</span>=<span class="string">&quot;true&quot;</span> <span class="attr">scheme</span>=<span class="string">&quot;https&quot;</span> <span class="attr">secure</span>=<span class="string">&quot;true&quot;</span></span></span><br><span class="line"><span class="tag">              <span class="attr">clientAuth</span>=<span class="string">&quot;false&quot;</span> <span class="attr">sslProtocol</span>=<span class="string">&quot;TLS&quot;</span></span></span><br><span class="line"><span class="tag">              <span class="attr">keystoreFile</span>=<span class="string">&quot;d:\https\tomcat.keystore&quot;</span>  <span class="attr">keystorePass</span>=<span class="string">&quot;123456&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="启动Tomcat"><a href="#启动Tomcat" class="headerlink" title="启动Tomcat"></a>启动Tomcat</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">https:<span class="comment">//localhost:8443/</span></span><br></pre></td></tr></table></figure>
+<p>访问链接,浏览器会提示站点不安全，点击继续访问即可(<strong>本地安装证书</strong>或者<strong>互联网申请证书解决</strong>)<br><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2019-4-25-https2.png" alt="在这里插入图片描述"></p>
+]]></content>
+      <tags>
+        <tag>Tomcat</tag>
+        <tag>Https协议</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Spring框架入门(二):安装配置</title>
+    <url>/posts/1df93bf0/</url>
+    <content><![CDATA[<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/wx_title2_2018.10.30.png' height=320px >
+<span id="more"></span>
+
+<blockquote>
+<h5 id="下载架包"><a href="#下载架包" class="headerlink" title="下载架包"></a>下载架包</h5></blockquote>
+<p>这里以4.3.20版本为例，点击下载:<a href="http://repo.spring.io/release/org/springframework/spring/4.3.20.RELEASE/spring-framework-4.3.20.RELEASE-dist.zip">SpringFramewoek 4.3.20版本</a></p>
+<hr>
+<h6 id="解压缩后目录"><a href="#解压缩后目录" class="headerlink" title="解压缩后目录:"></a>解压缩后目录:</h6><p><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/20181030144323.png" alt="解压缩"></p>
+<p>— docs目录为api和开发文档介绍，schema目录为配置xml的schema约束文件，libs文件夹中为我们要使用的架包<br><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/lib20181030144732.png" alt="在这里插入图片描述"><br><strong><font color=red size=3>注意：</font>另外还要下载spring的依赖架包:</strong> <a href="http://mirrors.shu.edu.cn/apache//commons/logging/binaries/commons-logging-1.2-bin.zip">commons-logging</a></p>
+<hr>
+<blockquote>
+<h5 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h5></blockquote>
+<h6 id="1-打开IDE工具，新建项目，导入上文下载好的架包"><a href="#1-打开IDE工具，新建项目，导入上文下载好的架包" class="headerlink" title="1. 打开IDE工具，新建项目，导入上文下载好的架包"></a>1. 打开IDE工具，新建项目，导入上文下载好的架包</h6><p><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/prolibs20181030154520.png" alt="导入项目"></p>
+<h6 id="2-创建实体类并意添加一个方法打印输入"><a href="#2-创建实体类并意添加一个方法打印输入" class="headerlink" title="2. 创建实体类并意添加一个方法打印输入"></a>2. 创建实体类并意添加一个方法打印输入</h6><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.sr.spring;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">isSelf</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;我是谁，我在哪，我在干什么&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h6 id="3-在src目录下-创建xml文件"><a href="#3-在src目录下-创建xml文件" class="headerlink" title="3. 在src目录下 创建xml文件"></a>3. 在src目录下 创建xml文件</h6><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="tag"><span class="string">        http://www.springframework.org/schema/beans/spring-beans.xsd&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 配置javabean对象 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;user&quot;</span> <span class="attr">class</span>=<span class="string">&quot;cn.sr.spring.User&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h6 id="4-创建测试类"><a href="#4-创建测试类" class="headerlink" title="4. 创建测试类"></a>4. 创建测试类</h6><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.sr.spring;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.support.ClassPathXmlApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.junit.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestBean</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//通过xml文件获取Spring的上下文对象</span></span><br><span class="line">		ApplicationContext context = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">&quot;beans.xml&quot;</span>);</span><br><span class="line">		<span class="comment">//通过id获取Spring管理的JavaBean对象</span></span><br><span class="line">		User user = (User) context.getBean(<span class="string">&quot;user&quot;</span>);</span><br><span class="line">		System.out.println(user);</span><br><span class="line">		user.isSelf();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<h5 id="配置完成"><a href="#配置完成" class="headerlink" title="配置完成"></a>配置完成</h5></blockquote>
+<p><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/prolibs.png"></p>
+<p>如图所示，即配置成功。</p>
 <hr>
 ]]></content>
       <tags>
@@ -372,84 +447,9 @@
       </tags>
   </entry>
   <entry>
-    <title>Spring框架入门(二):安装配置</title>
-    <url>/posts/1df93bf0/</url>
-    <content><![CDATA[<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/wx_title2_2018.10.30.png' height=320px >
-<span id="more"></span>
-
-<blockquote>
-<h5 id="下载架包"><a href="#下载架包" class="headerlink" title="下载架包"></a>下载架包</h5></blockquote>
-<p>这里以4.3.20版本为例，点击下载:<a href="http://repo.spring.io/release/org/springframework/spring/4.3.20.RELEASE/spring-framework-4.3.20.RELEASE-dist.zip">SpringFramewoek 4.3.20版本</a></p>
-<hr>
-<h6 id="解压缩后目录"><a href="#解压缩后目录" class="headerlink" title="解压缩后目录:"></a>解压缩后目录:</h6><p><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/20181030144323.png" alt="解压缩"></p>
-<p>— docs目录为api和开发文档介绍，schema目录为配置xml的schema约束文件，libs文件夹中为我们要使用的架包<br><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/lib20181030144732.png" alt="在这里插入图片描述"><br><strong><font color=red size=3>注意：</font>另外还要下载spring的依赖架包:</strong> <a href="http://mirrors.shu.edu.cn/apache//commons/logging/binaries/commons-logging-1.2-bin.zip">commons-logging</a></p>
-<hr>
-<blockquote>
-<h5 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h5></blockquote>
-<h6 id="1-打开IDE工具，新建项目，导入上文下载好的架包"><a href="#1-打开IDE工具，新建项目，导入上文下载好的架包" class="headerlink" title="1. 打开IDE工具，新建项目，导入上文下载好的架包"></a>1. 打开IDE工具，新建项目，导入上文下载好的架包</h6><p><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/prolibs20181030154520.png" alt="导入项目"></p>
-<h6 id="2-创建实体类并意添加一个方法打印输入"><a href="#2-创建实体类并意添加一个方法打印输入" class="headerlink" title="2. 创建实体类并意添加一个方法打印输入"></a>2. 创建实体类并意添加一个方法打印输入</h6><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.sr.spring;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">isSelf</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;我是谁，我在哪，我在干什么&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h6 id="3-在src目录下-创建xml文件"><a href="#3-在src目录下-创建xml文件" class="headerlink" title="3. 在src目录下 创建xml文件"></a>3. 在src目录下 创建xml文件</h6><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="tag"><span class="string">        http://www.springframework.org/schema/beans/spring-beans.xsd&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 配置javabean对象 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;user&quot;</span> <span class="attr">class</span>=<span class="string">&quot;cn.sr.spring.User&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h6 id="4-创建测试类"><a href="#4-创建测试类" class="headerlink" title="4. 创建测试类"></a>4. 创建测试类</h6><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.sr.spring;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.support.ClassPathXmlApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.junit.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestBean</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//通过xml文件获取Spring的上下文对象</span></span><br><span class="line">		ApplicationContext context = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">&quot;beans.xml&quot;</span>);</span><br><span class="line">		<span class="comment">//通过id获取Spring管理的JavaBean对象</span></span><br><span class="line">		User user = (User) context.getBean(<span class="string">&quot;user&quot;</span>);</span><br><span class="line">		System.out.println(user);</span><br><span class="line">		user.isSelf();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<h5 id="配置完成"><a href="#配置完成" class="headerlink" title="配置完成"></a>配置完成</h5></blockquote>
-<p><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/prolibs.png"></p>
-<p>如图所示，即配置成功。</p>
-<hr>
-]]></content>
-      <tags>
-        <tag>Spring</tag>
-        <tag>框架</tag>
-        <tag>Java EE</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hello World</title>
     <url>/posts/4a17b156/</url>
     <content><![CDATA[<h3 id="永远相信美好的事情即将发生"><a href="#永远相信美好的事情即将发生" class="headerlink" title="永远相信美好的事情即将发生~"></a>永远相信美好的事情即将发生~</h3>]]></content>
-  </entry>
-  <entry>
-    <title>Tomcat服务器配置Https协议</title>
-    <url>/posts/8baea545/</url>
-    <content><![CDATA[<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/wx_title_2019.04.25.png' height=320px >
-<span id="more"></span>
- 
-### 前言
-> 日常开发项目时,一般本机都是基于http协议,但是要实现某些需求必须要开启https协议。
-> 现在https协议已经成为主流,网站如果未开启https协议,浏览器会进行安全提示。
-> 本文以**Tomcat**服务器为例,简单介绍如何在**本机开发环境**配置https协议
-
-<h3 id="证书生成"><a href="#证书生成" class="headerlink" title="证书生成"></a>证书生成</h3><p><strong>使用JDK自带的keytool工具来生成证书库</strong>：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">keytool -genkeypair -alias <span class="string">&quot;tomcat&quot;</span> -keyalg <span class="string">&quot;RSA&quot;</span> -keystore <span class="string">&quot;d:\https\tomcat.keystore&quot;</span>  </span><br></pre></td></tr></table></figure>
-<p><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2019-4-25-https1.png" alt="在这里插入图片描述"></p>
-<table>
-<thead>
-<tr>
-<th>属性</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>alias</td>
-<td>证书别名</td>
-</tr>
-<tr>
-<td>keyalg</td>
-<td>加密算法,RSA</td>
-</tr>
-<tr>
-<td>keystore</td>
-<td>证书保存路径</td>
-</tr>
-</tbody></table>
-<h3 id="环境设置"><a href="#环境设置" class="headerlink" title="环境设置"></a>环境设置</h3><p> <strong>修改Tomcat配置文件</strong>：<br>打开Tomcat安装目录/conf/server.xml,修改如下配置,并取消注释<br>注：这里以Tomcat8.0为例,8.5以上配置请另行百度</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">&quot;8443&quot;</span> <span class="attr">protocol</span>=<span class="string">&quot;org.apache.coyote.http11.Http11NioProtocol&quot;</span></span></span><br><span class="line"><span class="tag">              <span class="attr">maxThreads</span>=<span class="string">&quot;150&quot;</span> <span class="attr">SSLEnabled</span>=<span class="string">&quot;true&quot;</span> <span class="attr">scheme</span>=<span class="string">&quot;https&quot;</span> <span class="attr">secure</span>=<span class="string">&quot;true&quot;</span></span></span><br><span class="line"><span class="tag">              <span class="attr">clientAuth</span>=<span class="string">&quot;false&quot;</span> <span class="attr">sslProtocol</span>=<span class="string">&quot;TLS&quot;</span></span></span><br><span class="line"><span class="tag">              <span class="attr">keystoreFile</span>=<span class="string">&quot;d:\https\tomcat.keystore&quot;</span>  <span class="attr">keystorePass</span>=<span class="string">&quot;123456&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="启动Tomcat"><a href="#启动Tomcat" class="headerlink" title="启动Tomcat"></a>启动Tomcat</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">https:<span class="comment">//localhost:8443/</span></span><br></pre></td></tr></table></figure>
-<p>访问链接,浏览器会提示站点不安全，点击继续访问即可(<strong>本地安装证书</strong>或者<strong>互联网申请证书解决</strong>)<br><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2019-4-25-https2.png" alt="在这里插入图片描述"></p>
-]]></content>
-      <tags>
-        <tag>Tomcat</tag>
-        <tag>Https协议</tag>
-      </tags>
   </entry>
   <entry>
     <title>最大间隔数-桶排序应用</title>
@@ -513,6 +513,25 @@
       </tags>
   </entry>
   <entry>
+    <title>蓝桥杯-历届试题-Excel地址</title>
+    <url>/posts/b1245755/</url>
+    <content><![CDATA[<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><blockquote>
+<p>Excel单元格的地址表示很有趣，它使用字母来表示列号。<br>　　比如，<br>　　A表示第1列，<br>　　B表示第2列，<br>　　Z表示第26列，<br>　　AA表示第27列，<br>　　AB表示第28列，<br>　　BA表示第53列，<br>　　….<br>　　当然Excel的最大列号是有限度的，所以转换起来不难。<br>　　如果我们想把这种表示法一般化，可以把很大的数字转换为很长的字母序列呢？<br>　　本题目即是要求对输入的数字, 输出其对应的Excel地址表示方式。</p>
+</blockquote>
+<span id="more"></span>
+<hr>
+<p><strong>样例输入</strong><br>      26<br><strong>样例输出</strong><br>      Z<br><strong>样例输入</strong><br>      2054<br><strong>样例输出</strong><br>      BZZ</p>
+<hr>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> n, i;</span><br><span class="line">	<span class="keyword">int</span> cont = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">char</span> a[<span class="number">100</span>];</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">	<span class="keyword">while</span> (n)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (n % <span class="number">26</span> == <span class="number">0</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			a[cont++] = <span class="number">26</span> + <span class="number">64</span>;</span><br><span class="line">			n /= <span class="number">26</span>;</span><br><span class="line">			n--;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> &#123;</span><br><span class="line">			a[cont++] = n % <span class="number">26</span> + <span class="number">64</span>;</span><br><span class="line">			n /= <span class="number">26</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (i = cont - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>, a[i]);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>算法</tag>
+        <tag>蓝桥杯</tag>
+        <tag>C语言</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>记录腾讯云服务器当矿机的一天</title>
     <url>/posts/23f6ec83/</url>
     <content><![CDATA[<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/wx_title_2019-11-26-0.png' height=320px >
@@ -543,25 +562,6 @@
         <tag>服务器</tag>
         <tag>Docker</tag>
         <tag>网络安全</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>蓝桥杯-历届试题-Excel地址</title>
-    <url>/posts/b1245755/</url>
-    <content><![CDATA[<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><blockquote>
-<p>Excel单元格的地址表示很有趣，它使用字母来表示列号。<br>　　比如，<br>　　A表示第1列，<br>　　B表示第2列，<br>　　Z表示第26列，<br>　　AA表示第27列，<br>　　AB表示第28列，<br>　　BA表示第53列，<br>　　….<br>　　当然Excel的最大列号是有限度的，所以转换起来不难。<br>　　如果我们想把这种表示法一般化，可以把很大的数字转换为很长的字母序列呢？<br>　　本题目即是要求对输入的数字, 输出其对应的Excel地址表示方式。</p>
-</blockquote>
-<span id="more"></span>
-<hr>
-<p><strong>样例输入</strong><br>      26<br><strong>样例输出</strong><br>      Z<br><strong>样例输入</strong><br>      2054<br><strong>样例输出</strong><br>      BZZ</p>
-<hr>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> n, i;</span><br><span class="line">	<span class="keyword">int</span> cont = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">char</span> a[<span class="number">100</span>];</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">	<span class="keyword">while</span> (n)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (n % <span class="number">26</span> == <span class="number">0</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			a[cont++] = <span class="number">26</span> + <span class="number">64</span>;</span><br><span class="line">			n /= <span class="number">26</span>;</span><br><span class="line">			n--;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> &#123;</span><br><span class="line">			a[cont++] = n % <span class="number">26</span> + <span class="number">64</span>;</span><br><span class="line">			n /= <span class="number">26</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (i = cont - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>, a[i]);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>算法</tag>
-        <tag>蓝桥杯</tag>
-        <tag>C语言</tag>
       </tags>
   </entry>
 </search>
