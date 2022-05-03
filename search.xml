@@ -1,39 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Android网络编程之HttpURLConnection应用-快递查询案例</title>
-    <url>/posts/660e61a1/</url>
-    <content><![CDATA[<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2018.12.06_blog_title_httpdemo.png'>
-<span id="more"></span>
-
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
-<p><strong>HttpURLConnection</strong>是一种多用途、轻量极的HTTP客户端。它的API简单，体积较小，因而非常适用于Android项目，压缩和缓存机制可以有效地减少网络访问的流量，在提升速度和省电方面也起到了较大的作用，使用它来进行HTTP操作可以适用于大多数的应用程序。HttpUrlConnection是Android SDK的标准实现，直接支持系统级连接池，即打开的连接不会直接关闭，在一段时间内所有程序可共用；直接在系统层面做了缓存策略处理，加快重复请求的速度</p>
-</blockquote>
-<p>本文将以一个查询快递信息的案例来介绍，包括GET，POST两中方式请求网络资源，解析JSON数据，Handler异步消息处理机制等应用~</p>
-<h2 id="部分代码"><a href="#部分代码" class="headerlink" title="部分代码"></a>部分代码</h2><ul>
-<li>主界面<br><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/20181206200417_blog_adroid_httpdemo.png"></li>
-<li>这里主要介绍GET和POST两种网络请求方式<figure class="highlight java"><figcaption><span>GET方式</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(<span class="keyword">final</span> String params)</span> </span>&#123;</span><br><span class="line">       <span class="comment">//子线程执行网络操作</span></span><br><span class="line">       <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">           <span class="meta">@Override</span></span><br><span class="line">           <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">               <span class="keyword">try</span> &#123;</span><br><span class="line">                   URL url = <span class="keyword">new</span> URL(URL_Source+<span class="string">&quot;?type=&quot;</span>+URLEncoder.encode(Param_DHL,<span class="string">&quot;UTF-8&quot;</span>)+<span class="string">&quot;&amp;postid=&quot;</span>+URLEncoder.encode(params,<span class="string">&quot;UTF-8&quot;</span>));</span><br><span class="line">                   HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();</span><br><span class="line">                   httpURLConnection.setRequestMethod(<span class="string">&quot;GET&quot;</span>);<span class="comment">//设置请求方式为GET</span></span><br><span class="line">                   httpURLConnection.setReadTimeout(<span class="number">3000</span>);<span class="comment">//设置连接超时时间</span></span><br><span class="line">                   <span class="keyword">if</span>(httpURLConnection.getResponseCode() == <span class="number">200</span>)&#123;</span><br><span class="line">                       InputStream is = httpURLConnection.getInputStream();</span><br><span class="line">                       BufferedReader br = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(is));</span><br><span class="line">                       String line =<span class="string">&quot;&quot;</span>;</span><br><span class="line">                       StringBuffer result= <span class="keyword">new</span> StringBuffer();</span><br><span class="line">                       <span class="keyword">while</span>((line = br.readLine()) != <span class="keyword">null</span>)&#123;</span><br><span class="line">                             result.append(line);</span><br><span class="line">                       &#125;</span><br><span class="line">                       is.close();</span><br><span class="line">                       br.close();</span><br><span class="line"></span><br><span class="line">                       httpURLConnection.disconnect();<span class="comment">//关闭连接</span></span><br><span class="line">                       Message message =<span class="keyword">new</span> Message();<span class="comment">//创建消息体</span></span><br><span class="line">                       message.what = <span class="number">1</span>;</span><br><span class="line">                       message.obj = parseData(result.toString());</span><br><span class="line">                       handler.sendMessage(message);<span class="comment">//发送消息体，添加到消息队列中</span></span><br><span class="line"></span><br><span class="line">                   &#125;</span><br><span class="line">               &#125; <span class="keyword">catch</span> (MalformedURLException e) &#123;</span><br><span class="line">                   e.printStackTrace();</span><br><span class="line">               &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                   e.printStackTrace();</span><br><span class="line">               &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">           &#125;</span><br><span class="line">       &#125;).start();</span><br><span class="line">   &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-</ul>
-<figure class="highlight java"><figcaption><span>POST方式</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">doPost</span><span class="params">(<span class="keyword">final</span> String params)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">           <span class="meta">@Override</span></span><br><span class="line">           <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">               <span class="keyword">try</span> &#123;</span><br><span class="line">                   URL url = <span class="keyword">new</span> URL(URL_Source);</span><br><span class="line">                   HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();</span><br><span class="line">                   httpURLConnection.setConnectTimeout(<span class="number">3000</span>);     <span class="comment">//设置连接超时时间</span></span><br><span class="line">                   httpURLConnection.setDoInput(<span class="keyword">true</span>);            <span class="comment">//打开输入流，以便从服务器获取数据</span></span><br><span class="line">                   httpURLConnection.setDoOutput(<span class="keyword">true</span>);           <span class="comment">//打开输出流，以便向服务器提交数据</span></span><br><span class="line">                   httpURLConnection.setUseCaches(<span class="keyword">false</span>);         <span class="comment">//禁用缓存</span></span><br><span class="line">                   httpURLConnection.setRequestMethod(<span class="string">&quot;POST&quot;</span>);</span><br><span class="line">                   httpURLConnection.setRequestProperty(<span class="string">&quot;Content-Type&quot;</span>,<span class="string">&quot;application/x-www-form-urlencoded&quot;</span>);<span class="comment">//设置数据编码方式</span></span><br><span class="line">                   String param =<span class="string">&quot;type=&quot;</span>+URLEncoder.encode(Param_DHL,<span class="string">&quot;UTF-8&quot;</span>) +<span class="string">&quot;&amp;postid=&quot;</span>+URLEncoder.encode(params,<span class="string">&quot;UTF-8&quot;</span>);</span><br><span class="line"></span><br><span class="line">                   OutputStream os = httpURLConnection.getOutputStream();</span><br><span class="line">                   os.write(param.getBytes());</span><br><span class="line"></span><br><span class="line">                   <span class="keyword">if</span>(httpURLConnection.getResponseCode() == <span class="number">200</span>)&#123;</span><br><span class="line">                       InputStream is = httpURLConnection.getInputStream();</span><br><span class="line">                       BufferedReader br = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(is));</span><br><span class="line">                       String line =<span class="string">&quot;&quot;</span>;</span><br><span class="line">                       StringBuffer result= <span class="keyword">new</span> StringBuffer();</span><br><span class="line">                       <span class="keyword">while</span>((line = br.readLine()) != <span class="keyword">null</span>)&#123;</span><br><span class="line">                           result.append(line);</span><br><span class="line">                       &#125;</span><br><span class="line">                       is.close();</span><br><span class="line">                       br.close();</span><br><span class="line"></span><br><span class="line">                       httpURLConnection.disconnect();<span class="comment">//关闭连接</span></span><br><span class="line">                       Message message =<span class="keyword">new</span> Message();</span><br><span class="line">                       message.what = <span class="number">2</span>;</span><br><span class="line">                       message.obj = parseData(result.toString());</span><br><span class="line">                       handler.sendMessage(message);</span><br><span class="line"></span><br><span class="line">                   &#125;</span><br><span class="line">               &#125; <span class="keyword">catch</span> (MalformedURLException e) &#123;</span><br><span class="line">                   e.printStackTrace();</span><br><span class="line">               &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                   e.printStackTrace();</span><br><span class="line">               &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">           &#125;</span><br><span class="line">       &#125;).start();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>JSON数据的解析</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> String <span class="title">parseData</span><span class="params">(String json)</span></span>&#123;</span><br><span class="line">       String result = <span class="string">&quot;&quot;</span>;</span><br><span class="line">       <span class="keyword">try</span> &#123;</span><br><span class="line">           JSONObject jsonObject = <span class="keyword">new</span> JSONObject(json);</span><br><span class="line">           JSONArray data = jsonObject.getJSONArray(<span class="string">&quot;data&quot;</span>);</span><br><span class="line">           <span class="comment">//这里只取最新的一条数据显示</span></span><br><span class="line">             <span class="keyword">if</span>(data.length()&gt;<span class="number">0</span>)&#123;</span><br><span class="line">                 result=<span class="string">&quot;更新时间: &quot;</span>+data.getJSONObject(<span class="number">0</span>).getString(<span class="string">&quot;time&quot;</span>)+</span><br><span class="line">                         <span class="string">&quot;\n状态: &quot;</span>+data.getJSONObject(<span class="number">0</span>).getString(<span class="string">&quot;context&quot;</span>);</span><br><span class="line">             &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                 result = <span class="string">&quot;该单号暂无物流进展,请稍后再试,或检查公司和单号是否有误&quot;</span>;</span><br><span class="line">             &#125;</span><br><span class="line">       &#125; <span class="keyword">catch</span> (JSONException e) &#123;</span><br><span class="line">           e.printStackTrace();</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> result;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></li>
-<li><p>使用Handler更新UI</p>
-</li>
-</ul>
-<figure class="highlight java"><figcaption><span>更新TextView</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> Handler handler = <span class="keyword">new</span> Handler()&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleMessage</span><span class="params">(Message msg)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span>(msg.what == <span class="number">1</span>)&#123;</span><br><span class="line">           message.setText(<span class="string">&quot;最新状态 (GET方式)&quot;</span>);</span><br><span class="line">           info.setText(msg.obj+<span class="string">&quot;&quot;</span>);</span><br><span class="line">       &#125;<span class="keyword">else</span> <span class="keyword">if</span> (msg.what == <span class="number">2</span>)&#123;</span><br><span class="line">           message.setText(<span class="string">&quot;最新状态 (POST方式)&quot;</span>);</span><br><span class="line">           info.setText(msg.obj+<span class="string">&quot;&quot;</span>);</span><br><span class="line">       &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h2 id="动图演示"><a href="#动图演示" class="headerlink" title="动图演示"></a>动图演示</h2><p><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/gif/20181206_android_httpdemo.gif"></p>
-<h2 id="项目源码"><a href="#项目源码" class="headerlink" title="项目源码"></a>项目源码</h2><p>等待上传中~</p>
-]]></content>
-      <tags>
-        <tag>Android</tag>
-        <tag>网络编程</tag>
-        <tag>JSON</tag>
-        <tag>HTTP</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Android数据储存之SharedPreferences-记住密码案例</title>
     <url>/posts/f454cc8e/</url>
     <content><![CDATA[<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/wx_title-android_2018.11.09.png' >
@@ -76,6 +43,39 @@
       <tags>
         <tag>Android</tag>
         <tag>数据储存</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Android网络编程之HttpURLConnection应用-快递查询案例</title>
+    <url>/posts/660e61a1/</url>
+    <content><![CDATA[<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2018.12.06_blog_title_httpdemo.png'>
+<span id="more"></span>
+
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
+<p><strong>HttpURLConnection</strong>是一种多用途、轻量极的HTTP客户端。它的API简单，体积较小，因而非常适用于Android项目，压缩和缓存机制可以有效地减少网络访问的流量，在提升速度和省电方面也起到了较大的作用，使用它来进行HTTP操作可以适用于大多数的应用程序。HttpUrlConnection是Android SDK的标准实现，直接支持系统级连接池，即打开的连接不会直接关闭，在一段时间内所有程序可共用；直接在系统层面做了缓存策略处理，加快重复请求的速度</p>
+</blockquote>
+<p>本文将以一个查询快递信息的案例来介绍，包括GET，POST两中方式请求网络资源，解析JSON数据，Handler异步消息处理机制等应用~</p>
+<h2 id="部分代码"><a href="#部分代码" class="headerlink" title="部分代码"></a>部分代码</h2><ul>
+<li>主界面<br><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/20181206200417_blog_adroid_httpdemo.png"></li>
+<li>这里主要介绍GET和POST两种网络请求方式<figure class="highlight java"><figcaption><span>GET方式</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(<span class="keyword">final</span> String params)</span> </span>&#123;</span><br><span class="line">       <span class="comment">//子线程执行网络操作</span></span><br><span class="line">       <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">           <span class="meta">@Override</span></span><br><span class="line">           <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">               <span class="keyword">try</span> &#123;</span><br><span class="line">                   URL url = <span class="keyword">new</span> URL(URL_Source+<span class="string">&quot;?type=&quot;</span>+URLEncoder.encode(Param_DHL,<span class="string">&quot;UTF-8&quot;</span>)+<span class="string">&quot;&amp;postid=&quot;</span>+URLEncoder.encode(params,<span class="string">&quot;UTF-8&quot;</span>));</span><br><span class="line">                   HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();</span><br><span class="line">                   httpURLConnection.setRequestMethod(<span class="string">&quot;GET&quot;</span>);<span class="comment">//设置请求方式为GET</span></span><br><span class="line">                   httpURLConnection.setReadTimeout(<span class="number">3000</span>);<span class="comment">//设置连接超时时间</span></span><br><span class="line">                   <span class="keyword">if</span>(httpURLConnection.getResponseCode() == <span class="number">200</span>)&#123;</span><br><span class="line">                       InputStream is = httpURLConnection.getInputStream();</span><br><span class="line">                       BufferedReader br = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(is));</span><br><span class="line">                       String line =<span class="string">&quot;&quot;</span>;</span><br><span class="line">                       StringBuffer result= <span class="keyword">new</span> StringBuffer();</span><br><span class="line">                       <span class="keyword">while</span>((line = br.readLine()) != <span class="keyword">null</span>)&#123;</span><br><span class="line">                             result.append(line);</span><br><span class="line">                       &#125;</span><br><span class="line">                       is.close();</span><br><span class="line">                       br.close();</span><br><span class="line"></span><br><span class="line">                       httpURLConnection.disconnect();<span class="comment">//关闭连接</span></span><br><span class="line">                       Message message =<span class="keyword">new</span> Message();<span class="comment">//创建消息体</span></span><br><span class="line">                       message.what = <span class="number">1</span>;</span><br><span class="line">                       message.obj = parseData(result.toString());</span><br><span class="line">                       handler.sendMessage(message);<span class="comment">//发送消息体，添加到消息队列中</span></span><br><span class="line"></span><br><span class="line">                   &#125;</span><br><span class="line">               &#125; <span class="keyword">catch</span> (MalformedURLException e) &#123;</span><br><span class="line">                   e.printStackTrace();</span><br><span class="line">               &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                   e.printStackTrace();</span><br><span class="line">               &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">           &#125;</span><br><span class="line">       &#125;).start();</span><br><span class="line">   &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<figure class="highlight java"><figcaption><span>POST方式</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">doPost</span><span class="params">(<span class="keyword">final</span> String params)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">           <span class="meta">@Override</span></span><br><span class="line">           <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">               <span class="keyword">try</span> &#123;</span><br><span class="line">                   URL url = <span class="keyword">new</span> URL(URL_Source);</span><br><span class="line">                   HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();</span><br><span class="line">                   httpURLConnection.setConnectTimeout(<span class="number">3000</span>);     <span class="comment">//设置连接超时时间</span></span><br><span class="line">                   httpURLConnection.setDoInput(<span class="keyword">true</span>);            <span class="comment">//打开输入流，以便从服务器获取数据</span></span><br><span class="line">                   httpURLConnection.setDoOutput(<span class="keyword">true</span>);           <span class="comment">//打开输出流，以便向服务器提交数据</span></span><br><span class="line">                   httpURLConnection.setUseCaches(<span class="keyword">false</span>);         <span class="comment">//禁用缓存</span></span><br><span class="line">                   httpURLConnection.setRequestMethod(<span class="string">&quot;POST&quot;</span>);</span><br><span class="line">                   httpURLConnection.setRequestProperty(<span class="string">&quot;Content-Type&quot;</span>,<span class="string">&quot;application/x-www-form-urlencoded&quot;</span>);<span class="comment">//设置数据编码方式</span></span><br><span class="line">                   String param =<span class="string">&quot;type=&quot;</span>+URLEncoder.encode(Param_DHL,<span class="string">&quot;UTF-8&quot;</span>) +<span class="string">&quot;&amp;postid=&quot;</span>+URLEncoder.encode(params,<span class="string">&quot;UTF-8&quot;</span>);</span><br><span class="line"></span><br><span class="line">                   OutputStream os = httpURLConnection.getOutputStream();</span><br><span class="line">                   os.write(param.getBytes());</span><br><span class="line"></span><br><span class="line">                   <span class="keyword">if</span>(httpURLConnection.getResponseCode() == <span class="number">200</span>)&#123;</span><br><span class="line">                       InputStream is = httpURLConnection.getInputStream();</span><br><span class="line">                       BufferedReader br = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(is));</span><br><span class="line">                       String line =<span class="string">&quot;&quot;</span>;</span><br><span class="line">                       StringBuffer result= <span class="keyword">new</span> StringBuffer();</span><br><span class="line">                       <span class="keyword">while</span>((line = br.readLine()) != <span class="keyword">null</span>)&#123;</span><br><span class="line">                           result.append(line);</span><br><span class="line">                       &#125;</span><br><span class="line">                       is.close();</span><br><span class="line">                       br.close();</span><br><span class="line"></span><br><span class="line">                       httpURLConnection.disconnect();<span class="comment">//关闭连接</span></span><br><span class="line">                       Message message =<span class="keyword">new</span> Message();</span><br><span class="line">                       message.what = <span class="number">2</span>;</span><br><span class="line">                       message.obj = parseData(result.toString());</span><br><span class="line">                       handler.sendMessage(message);</span><br><span class="line"></span><br><span class="line">                   &#125;</span><br><span class="line">               &#125; <span class="keyword">catch</span> (MalformedURLException e) &#123;</span><br><span class="line">                   e.printStackTrace();</span><br><span class="line">               &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                   e.printStackTrace();</span><br><span class="line">               &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">           &#125;</span><br><span class="line">       &#125;).start();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>JSON数据的解析</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> String <span class="title">parseData</span><span class="params">(String json)</span></span>&#123;</span><br><span class="line">       String result = <span class="string">&quot;&quot;</span>;</span><br><span class="line">       <span class="keyword">try</span> &#123;</span><br><span class="line">           JSONObject jsonObject = <span class="keyword">new</span> JSONObject(json);</span><br><span class="line">           JSONArray data = jsonObject.getJSONArray(<span class="string">&quot;data&quot;</span>);</span><br><span class="line">           <span class="comment">//这里只取最新的一条数据显示</span></span><br><span class="line">             <span class="keyword">if</span>(data.length()&gt;<span class="number">0</span>)&#123;</span><br><span class="line">                 result=<span class="string">&quot;更新时间: &quot;</span>+data.getJSONObject(<span class="number">0</span>).getString(<span class="string">&quot;time&quot;</span>)+</span><br><span class="line">                         <span class="string">&quot;\n状态: &quot;</span>+data.getJSONObject(<span class="number">0</span>).getString(<span class="string">&quot;context&quot;</span>);</span><br><span class="line">             &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                 result = <span class="string">&quot;该单号暂无物流进展,请稍后再试,或检查公司和单号是否有误&quot;</span>;</span><br><span class="line">             &#125;</span><br><span class="line">       &#125; <span class="keyword">catch</span> (JSONException e) &#123;</span><br><span class="line">           e.printStackTrace();</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> result;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>使用Handler更新UI</p>
+</li>
+</ul>
+<figure class="highlight java"><figcaption><span>更新TextView</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> Handler handler = <span class="keyword">new</span> Handler()&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleMessage</span><span class="params">(Message msg)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span>(msg.what == <span class="number">1</span>)&#123;</span><br><span class="line">           message.setText(<span class="string">&quot;最新状态 (GET方式)&quot;</span>);</span><br><span class="line">           info.setText(msg.obj+<span class="string">&quot;&quot;</span>);</span><br><span class="line">       &#125;<span class="keyword">else</span> <span class="keyword">if</span> (msg.what == <span class="number">2</span>)&#123;</span><br><span class="line">           message.setText(<span class="string">&quot;最新状态 (POST方式)&quot;</span>);</span><br><span class="line">           info.setText(msg.obj+<span class="string">&quot;&quot;</span>);</span><br><span class="line">       &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="动图演示"><a href="#动图演示" class="headerlink" title="动图演示"></a>动图演示</h2><p><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/gif/20181206_android_httpdemo.gif"></p>
+<h2 id="项目源码"><a href="#项目源码" class="headerlink" title="项目源码"></a>项目源码</h2><p>等待上传中~</p>
+]]></content>
+      <tags>
+        <tag>Android</tag>
+        <tag>网络编程</tag>
+        <tag>JSON</tag>
+        <tag>HTTP</tag>
       </tags>
   </entry>
   <entry>
@@ -701,6 +701,28 @@
       </tags>
   </entry>
   <entry>
+    <title>有什么是真正永存的呢?</title>
+    <url>/posts/12debb6f/</url>
+    <content><![CDATA[<img alt='曾经有些人像光一样 照进过你的生活' data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/sun.jpg' >
+<span id="more"></span>
+
+<p>&emsp;&emsp;以前觉得有些人对着一些风景、美食拍来拍去，可能只是为了发个朋友圈，就感觉挺无味的。自己深以为有些美好该放在心上，放在记忆里珍藏。可是啊，人潮汹涌，聚散离别，当记忆随风消散，青春开始显露出一段一段的空白，可笑又可悲。<br>&emsp;&emsp;人间的面，吃一碗少一碗，见一面少一面。<br>&emsp;&emsp;所以啊，朋友们，在这个信息爆炸的互联网时代，请用文字、照片、视频当做媒介，别吝啬着自己去记录当下生活的点滴。哪怕是仅自己可见也好，某些人不可见也罢，在某一刻停下来记录这定格的瞬间，记忆里塞一份，网络中存一份索引(bushi)。<br>&emsp;&emsp;希望在未来某个四下无人的夜里，你偶然想起某个人某些事时，不只是记忆里的片段，还可以通过QQ、微信、聊天记录（点名批评QQ的漫游功能）、照片、视频等等等，想想那时发生了什么，再看看曾经的同路人的近况，即使再没机会重逢寒暄，但相逢总是美好。<br>&emsp;&emsp;当然也希望有人会想起你……</p>
+<figure class="highlight python"><figcaption><span>人生苦短</span></figcaption><table><tr><td class="code"><pre><span class="line">悔人亦悔事，悔过亦悔心</span><br><span class="line">恕己也恕人，恕过亦恕今</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>共勉！</strong></p>
+<hr>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=450 src="//music.163.com/outchain/player?type=0&id=7297752304&auto=1&height=430"></iframe>
+
+
+
+
+]]></content>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>最大间隔数-桶排序应用</title>
     <url>/posts/28e83e0e/</url>
     <content><![CDATA[<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2019-05-23_wx_title.png' >
@@ -713,51 +735,6 @@
       <tags>
         <tag>桶排序</tag>
         <tag>对数器</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>荷兰国旗-快速排序应用</title>
-    <url>/posts/5644be5d/</url>
-    <content><![CDATA[<hr>
-<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2019-04-20%20.png' height=120px >
-
-<hr>
-<span id="more"></span>
-
-<h2 id="荷兰国旗"><a href="#荷兰国旗" class="headerlink" title="荷兰国旗"></a>荷兰国旗</h2><blockquote>
-<p>”荷兰国旗难题“是计算机科学中的一个程序难题，它是由Edsger Dijkstra提出的。荷兰国旗是由红、白、蓝三色组成的。现有红白蓝三个不同颜色的小球，乱序排列在一起，请重新排列这些小球，使得红白蓝三色的同颜色的球在一起。<br>ps:我们可以将红白蓝三色小球想象成条状物，有序排列后正好组成荷兰国旗。</p>
-</blockquote>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><blockquote>
-<p>arr[i]&lt; key时相当于“荷兰国旗问题”中的0<br>arr[i]= key时相当于“荷兰国旗问题”中的1<br>arr[i]&gt; key时相当于“荷兰国旗问题”中的2</p>
-</blockquote>
-<p>这样就可以使用“荷兰国旗问题”的解法来解决快速排序了，这样一来，即使待排序的元素中有一些元素和key一样，也能保证时间复杂度是最差是NlogN的，因为对于待排序的等于Key的数值，可以在执行下一次Partition时直接跳过，利于数据规模的降低。</p>
-<hr>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight java"><figcaption><span>荷兰国旗</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NetherlandsFlag</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] partition(<span class="keyword">int</span>[] arr,<span class="keyword">int</span> L,<span class="keyword">int</span> R,<span class="keyword">int</span> p) &#123;</span><br><span class="line">		<span class="keyword">int</span> less = L-<span class="number">1</span>;</span><br><span class="line">		<span class="keyword">int</span> more = R+<span class="number">1</span>;</span><br><span class="line">		<span class="keyword">while</span>(L &lt; more) &#123;</span><br><span class="line">			<span class="keyword">if</span>(arr[L] &lt; p) &#123;</span><br><span class="line">				swap(arr,++less,L++);</span><br><span class="line">			&#125;<span class="keyword">else</span> <span class="keyword">if</span>(arr[L] &gt; p) &#123;</span><br><span class="line">				swap(arr,--more,L);</span><br><span class="line">			&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">				L++;</span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123;less+<span class="number">1</span>,more-<span class="number">1</span>&#125;;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">     </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> temp = arr[i];</span><br><span class="line">		arr[i] = arr[j];</span><br><span class="line">		arr[j] = temp;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] getArray() &#123;</span><br><span class="line">		<span class="keyword">int</span> arr[] = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>];</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; arr.length;i++) &#123;</span><br><span class="line">			arr[i] = (<span class="keyword">int</span>)(Math.random()*<span class="number">3</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> arr;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printArray</span><span class="params">(<span class="keyword">int</span> arr[])</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(arr == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> ;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; arr.length;i++) &#123;</span><br><span class="line">			System.out.print(arr[i]+<span class="string">&quot; &quot;</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		System.out.println();</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> test[] = getArray();</span><br><span class="line">		printArray(test);                             </span><br><span class="line">		<span class="keyword">int</span> res[] = partition(test,<span class="number">0</span>,test.length-<span class="number">1</span>,<span class="number">1</span>);   <span class="comment">//p值为1，用来判断0，1，2   </span></span><br><span class="line">		printArray(test);</span><br><span class="line">		System.out.println(res[<span class="number">0</span>]);</span><br><span class="line">		System.out.println(res[<span class="number">1</span>]);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>算法</tag>
-        <tag>快速排序</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>有什么是真正永存的呢?</title>
-    <url>/posts/12debb6f/</url>
-    <content><![CDATA[<img alt='曾经有些人像光一样 照进过你的生活' data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/sun.jpg' >
-<span id="more"></span>
-
-<p>&emsp;&emsp;以前觉得有些人对着一些风景、美食拍来拍去，可能只是为了发个朋友圈，就感觉挺无味的。自己深以为有些美好该放在心上，放在记忆里珍藏。可是啊，人潮汹涌，聚散离别，当记忆随风消散，青春开始显露出一段一段的空白，可笑又可悲。<br>&emsp;&emsp;人间的面，吃一碗少一碗，见一面少一面。<br>&emsp;&emsp;所以啊，朋友们，在这个信息爆炸的互联网时代，请用文字、照片、视频当做媒介，别吝啬着自己去记录当下生活的点滴。哪怕是仅自己可见也好，某些人不可见也罢，在某一刻停下来记录这定格的瞬间，记忆里塞一份，网络中存一份索引(bushi)。<br>&emsp;&emsp;希望在未来某个四下无人的夜里，你偶然想起某个人某些事时，不只是记忆里的片段，还可以通过QQ、微信、聊天记录（点名批评QQ的漫游功能）、照片、视频等等等，想想那时发生了什么，再看看曾经的同路人的近况，即使再没机会重逢寒暄，但相逢总是美好。<br>&emsp;&emsp;当然也希望有人会想起你……</p>
-<figure class="highlight python"><figcaption><span>人生苦短</span></figcaption><table><tr><td class="code"><pre><span class="line">悔人亦悔事，悔过亦悔心</span><br><span class="line">恕己也恕人，恕过亦恕今</span><br></pre></td></tr></table></figure>
-
-<hr>
-<blockquote>
-<p>这世界有那么多人<br>漫步人生路<br>逆光<br>再回首<br>开始懂了<br>体面<br>认真地老去<br>……</p>
-</blockquote>
-<hr>
-<p><strong>共勉！</strong></p>
-]]></content>
-      <tags>
-        <tag>随笔</tag>
       </tags>
   </entry>
   <entry>
@@ -820,6 +797,31 @@
       </tags>
   </entry>
   <entry>
+    <title>荷兰国旗-快速排序应用</title>
+    <url>/posts/5644be5d/</url>
+    <content><![CDATA[<hr>
+<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2019-04-20%20.png' height=120px >
+
+<hr>
+<span id="more"></span>
+
+<h2 id="荷兰国旗"><a href="#荷兰国旗" class="headerlink" title="荷兰国旗"></a>荷兰国旗</h2><blockquote>
+<p>”荷兰国旗难题“是计算机科学中的一个程序难题，它是由Edsger Dijkstra提出的。荷兰国旗是由红、白、蓝三色组成的。现有红白蓝三个不同颜色的小球，乱序排列在一起，请重新排列这些小球，使得红白蓝三色的同颜色的球在一起。<br>ps:我们可以将红白蓝三色小球想象成条状物，有序排列后正好组成荷兰国旗。</p>
+</blockquote>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><blockquote>
+<p>arr[i]&lt; key时相当于“荷兰国旗问题”中的0<br>arr[i]= key时相当于“荷兰国旗问题”中的1<br>arr[i]&gt; key时相当于“荷兰国旗问题”中的2</p>
+</blockquote>
+<p>这样就可以使用“荷兰国旗问题”的解法来解决快速排序了，这样一来，即使待排序的元素中有一些元素和key一样，也能保证时间复杂度是最差是NlogN的，因为对于待排序的等于Key的数值，可以在执行下一次Partition时直接跳过，利于数据规模的降低。</p>
+<hr>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight java"><figcaption><span>荷兰国旗</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NetherlandsFlag</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] partition(<span class="keyword">int</span>[] arr,<span class="keyword">int</span> L,<span class="keyword">int</span> R,<span class="keyword">int</span> p) &#123;</span><br><span class="line">		<span class="keyword">int</span> less = L-<span class="number">1</span>;</span><br><span class="line">		<span class="keyword">int</span> more = R+<span class="number">1</span>;</span><br><span class="line">		<span class="keyword">while</span>(L &lt; more) &#123;</span><br><span class="line">			<span class="keyword">if</span>(arr[L] &lt; p) &#123;</span><br><span class="line">				swap(arr,++less,L++);</span><br><span class="line">			&#125;<span class="keyword">else</span> <span class="keyword">if</span>(arr[L] &gt; p) &#123;</span><br><span class="line">				swap(arr,--more,L);</span><br><span class="line">			&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">				L++;</span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123;less+<span class="number">1</span>,more-<span class="number">1</span>&#125;;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">     </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> temp = arr[i];</span><br><span class="line">		arr[i] = arr[j];</span><br><span class="line">		arr[j] = temp;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] getArray() &#123;</span><br><span class="line">		<span class="keyword">int</span> arr[] = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>];</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; arr.length;i++) &#123;</span><br><span class="line">			arr[i] = (<span class="keyword">int</span>)(Math.random()*<span class="number">3</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> arr;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printArray</span><span class="params">(<span class="keyword">int</span> arr[])</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(arr == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> ;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; arr.length;i++) &#123;</span><br><span class="line">			System.out.print(arr[i]+<span class="string">&quot; &quot;</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		System.out.println();</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> test[] = getArray();</span><br><span class="line">		printArray(test);                             </span><br><span class="line">		<span class="keyword">int</span> res[] = partition(test,<span class="number">0</span>,test.length-<span class="number">1</span>,<span class="number">1</span>);   <span class="comment">//p值为1，用来判断0，1，2   </span></span><br><span class="line">		printArray(test);</span><br><span class="line">		System.out.println(res[<span class="number">0</span>]);</span><br><span class="line">		System.out.println(res[<span class="number">1</span>]);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>算法</tag>
+        <tag>快速排序</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>蓝桥杯-历届试题-Excel地址</title>
     <url>/posts/b1245755/</url>
     <content><![CDATA[<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><blockquote>
@@ -836,53 +838,6 @@
         <tag>算法</tag>
         <tag>蓝桥杯</tag>
         <tag>C语言</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>“莫名其妙”的鸡汤词条</title>
-    <url>/posts/70c9131d/</url>
-    <content><![CDATA[<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=545449273&auto=0&height=66"></iframe>
-
-<ul>
-<li>安逸</li>
-<li>平庸</li>
-<li>自嘲</li>
-<li>焦虑<span id="more"></span></li>
-<li>浮躁</li>
-<li>虚妄</li>
-<li>交集</li>
-<li>共性</li>
-<li>吸引</li>
-<li>盲区</li>
-<li>影子</li>
-<li>树洞</li>
-<li>底线</li>
-<li>劣根性</li>
-<li>虚荣心</li>
-<li>小聪明</li>
-<li>窥私欲</li>
-<li>成就感</li>
-<li>优越感</li>
-<li>信念感</li>
-<li>正能量</li>
-<li>负能量</li>
-<li>无所谓</li>
-<li>差不多</li>
-<li>多愁善感</li>
-<li>愤世嫉俗</li>
-<li>将心比心</li>
-<li>流言蜚语</li>
-<li>虚无缥缈</li>
-<li>心理慰藉</li>
-<li>心灵鸡汤</li>
-<li>芸芸众生</li>
-<li>妄自菲薄</li>
-<li>随缘而安</li>
-<li>人微言轻</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>随笔</tag>
       </tags>
   </entry>
   <entry>
@@ -916,6 +871,77 @@
         <tag>服务器</tag>
         <tag>Docker</tag>
         <tag>网络安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>银杏</title>
+    <url>/posts/3ab1619b/</url>
+    <content><![CDATA[<img  data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/yx_head.jpg' >
+<span id="more"></span>
+
+<blockquote>
+<p>小时候家中院子里有一棵银杏树，印象里不知道结过几次果，只记得金灿灿的落叶。</p>
+<p>现在院子和树都没了，才知道银杏果和开心果是两回事。</p>
+</blockquote>
+<hr>
+<img  style="zoom: 50%;" data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/yx1.png" />
+
+<hr>
+<img  style="zoom: 50%;" data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/yx2.png" />
+]]></content>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>“莫名其妙”的鸡汤词条</title>
+    <url>/posts/70c9131d/</url>
+    <content><![CDATA[<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=545449273&auto=0&height=66"></iframe>
+
+<ul>
+<li>安逸</li>
+<li>平庸</li>
+<li>自嘲</li>
+<li>焦虑<span id="more"></span></li>
+<li>浮躁</li>
+<li>虚妄</li>
+<li>交集</li>
+<li>共性</li>
+<li>吸引</li>
+<li>盲区</li>
+<li>影子</li>
+<li>树洞</li>
+<li>底线</li>
+<li>劣根性</li>
+<li>虚荣心</li>
+<li>小聪明</li>
+<li>窥私欲</li>
+<li>成就感</li>
+<li>优越感</li>
+<li>信念感</li>
+<li>正能量</li>
+<li>负能量</li>
+<li>不知道</li>
+<li>无所谓</li>
+<li>差不多</li>
+<li>同质化</li>
+<li>多愁善感</li>
+<li>愤世嫉俗</li>
+<li>将心比心</li>
+<li>流言蜚语</li>
+<li>虚无缥缈</li>
+<li>心理慰藉</li>
+<li>心灵鸡汤</li>
+<li>芸芸众生</li>
+<li>妄自菲薄</li>
+<li>随遇而安</li>
+<li>人微言轻</li>
+<li>闲言碎语</li>
+<li>庸人自扰</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>随笔</tag>
       </tags>
   </entry>
 </search>
