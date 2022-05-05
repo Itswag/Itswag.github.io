@@ -254,6 +254,69 @@
       </tags>
   </entry>
   <entry>
+    <title>Spring框架入门(一):概念简介</title>
+    <url>/posts/f9407374/</url>
+    <content><![CDATA[<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/wx_title_2018.10.30.png'>
+<span id="more"></span>
+
+<blockquote>
+<p><strong>简介</strong></p>
+</blockquote>
+<p>Spring 是一个开源的轻量级 Java SE（ Java 标准版本）/Java EE（ Java 企业版本）开发应用框架，其目的是用于简化企业级应用程序开发。Spring容器通过反转控制( IoC )和依赖注入( DI )来实现高内聚、低耦合的应用。除此之外它可以整合很多第三方框架，它还提供面向切面编程（ AOP ）的能力，对通用任务如安全、事务、日志等进行集中式管理</p>
+<blockquote>
+<p><strong>概念介绍</strong></p>
+</blockquote>
+<ul>
+<li> 框架：能完成一定功能的半成品，比如我们可以使用框架进行购物网站开发；框架做一部分功能，我们自己做一部分功能，辅助高效工作。而且框架规定了你在开发应用程序时的整体架构，提供了一些基础功能，还规定了类和对象的如何创建、如何协作等，从而简化我们的代码编写，让我们专注于业务逻辑开发。</li>
+<li>非侵入式设计：从框架角度可以这样理解，无需继承框架提供的类，这种设计就可以看作是非侵入式设计，如果继承了这些框架类，就是侵入设计，如果以后想更换框架，之前写过的代码几乎无法重用，如果非侵入式设计则之前写过的代码仍然可以继续使用。</li>
+<li>轻量级与重量级：轻量级是相对于重量级而言的，轻量级一般就是非入侵性的、所依赖的东西非常少、资源占用非常少、部署简单等等，其实就是比较容易使用，而重量级正好相反。</li>
+<li>POJO ： POJO （ Plain Ordinary Java Object ）简单的 Java 对象。它可以包含业务逻辑或持久化逻辑，但不担当任何特殊角色且不继承或不实现任何其它 Java 框架的类或接口。</li>
+<li>容器：在日常生活中容器就是一种盛放东西的器具，从程序设计角度看就是装对象的的对象，因为存在放入、拿出等操作，所以容器还要管理对象的生命周期。</li>
+<li>控制反转：即 Inversion of Control ，缩写为 IoC ，控制反转还有一个名字叫做依赖注入（ Dependency Injection ），就是由容器控制程序之间的关系，而非传统实现中，由程序代码直接操控。</li>
+<li>Bean ：一般指容器管理对象，在 Spring 中指 Spring IoC 容器管理对象。</li>
+</ul>
+<blockquote>
+<p><strong>优点</strong></p>
+</blockquote>
+<ul>
+<li>低侵入式设计，代码的污染极低。</li>
+<li>独立于各种应用服务器，基于Spring框架的应用，可以真正实现Write Once，Run Anywhere的承诺。</li>
+<li>Spring的IoC容器降低了业务对象替换的复杂性，提高了组件之间的解耦。</li>
+<li>Spring的AOP支持允许将一些通用任务如安全、事务、日志等进行集中式管理，从而提供了更好的复用。</li>
+<li>Spring的ORM和DAO提供了与第三方持久层框架的良好整合，并简化了底层的数据库访问。</li>
+<li>Spring的高度开放性，并不强制应用完全依赖于Spring，开发者可自由选用Spring框架的部分或全部。</li>
+</ul>
+<blockquote>
+<p><strong>架构图</strong></p>
+</blockquote>
+<p><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/spring_frameword.png"><br><strong>核心容器：包括 Core 、 Beans 、 Context 、 EL 模块</strong></p>
+<ul>
+<li>Core 模块：封装了框架依赖的最底层部分，包括资源访问、类型转换及一些常用工具类。</li>
+<li>Beans 模块：提供了框架的基础部分，包括控制反转（ IOC ）和依赖注入（ DI ）。其中 BeanFactory 是容器核心，本质是“工厂设计模式”的实现，而且无需编程实现“单例设计模式”，单例完全由容器控制，而且提倡面向接口编程，而非面向实现编程；所有应用程序对象及对象间关系由框架管理，从而真正从程序逻辑中把维护对象之间的依赖关系提取出来，所有这些依赖关系都由 BeanFactory 来维护。</li>
+<li>Context 模块：以 Core 和 Beans 为基础，集成 Beans 模块功能并添加资源绑定、数据验证、国际化、 Java EE 支持、容器生命周期、事件传播等；核心接口是 ApplicationContext 。</li>
+<li>EL 模块：提供强大的表达式语言支持，支持访问和修改属性值，方法调用，支持访问及修改数组、容器和索引器，命名变量，支持算数和逻辑运算，支持从 Spring 容器获取 Bean， 它也支持列表投影、选择和一般的列表聚合等。</li>
+</ul>
+<hr>
+<ul>
+<li>AOP 模块： Spring AOP 模块提供了符合 AOP Alliance 规范的面向切面的编程（ aspect-oriented programming ）实现，提供比如日志记录、权限控制、性能统计等通用功能和业务逻辑分离的技术，并且能动态的把这些功能添加到需要的代码中；这样各专其职，降低业务逻辑和通用功能的耦合。</li>
+<li>Aspects 模块：提供了对 AspectJ 的集成，AspectJ 提供了比 Spring ASP 更强大的功能。</li>
+<li>数据访问/集成模块：该模块包括了 JDBC 、 ORM 、 OXM 、 JMS 和事务管理。<br>事务模块：该模块用于 Spring 管理事务，只要是 Spring 管理对象都能得到 Spring 管理事务的好处，无需在代码中进行事务控制了，而且支持编程和声明性的事务管理。</li>
+<li>JDBC 模块：提供了一个 JBDC 的样例模板，使用这些模板能消除传统冗长的 JDBC 编码还有必须的事务控制，而且能享受到 Spring 管理事务的好处。<br>ORM 模块：提供与流行的“对象-关系”映射框架的无缝集成，包括 Hibernate 、JPA 、 MyBatis 等。而且可以使用 Spring 事务管理，无需额外控制事务。<br>OXM 模块：提供了一个对 Object / XML 映射实现，将 java 对象映射成 XML 数据，或者将 XML 数据映射成 java 对象， Object / XML 映射实现包括 JAXB 、 Castor 、 XMLBeans 和 XStream 。</li>
+<li>JMS 模块：用于 JMS ( Java Messaging Service )，提供一套 “消息生产者、消息消费者”模板用于更加简单的使用 JMS ， JMS 用于用于在两个应用程序之间，或分布式系统中发送消息，进行异步通信。</li>
+<li>Web / Remoting 模块： Web / Remoting 模块包含了 Web 、 Web-Servlet 、 Web-Struts 、 Web-Porlet 模块。</li>
+<li>Web 模块：提供了基础的 web 功能。例如多文件上传、集成 IoC 容器、远程过程访问（ RMI 、Hessian 、 Burlap ）以及 Web Service 支持，并提供一个 RestTemplate 类来提供方便的 Restful services 访问。<br>Web-Servlet 模块：提供了一个 Spring MVC Web 框架实现。Spring MVC 框架提供了基于注解的请求资源注入、更简单的数据绑定、数据验证等及一套非常易用的 JSP 标签，完全无缝与 Spring 其他技术协作。</li>
+<li>Web-Struts 模块：提供了与 Struts 无缝集成， Struts1.x 和 Struts2.x 都支持。</li>
+<li>Test 模块： Spring 支持 Junit 和 TestNG 测试框架，而且还额外提供了一些基于 Spring 的测试功能，比如在测试 Web 框架时，模拟 Http 请求的功能。</li>
+</ul>
+<hr>
+]]></content>
+      <tags>
+        <tag>Spring</tag>
+        <tag>框架</tag>
+        <tag>Java EE</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Spring框架入门(三):依赖注入和控制反转</title>
     <url>/posts/2d0cab43/</url>
     <content><![CDATA[<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/spring3_2018.10.31.png' >
@@ -338,100 +401,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Spring框架入门(一):概念简介</title>
-    <url>/posts/f9407374/</url>
-    <content><![CDATA[<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/wx_title_2018.10.30.png'>
-<span id="more"></span>
-
-<blockquote>
-<p><strong>简介</strong></p>
-</blockquote>
-<p>Spring 是一个开源的轻量级 Java SE（ Java 标准版本）/Java EE（ Java 企业版本）开发应用框架，其目的是用于简化企业级应用程序开发。Spring容器通过反转控制( IoC )和依赖注入( DI )来实现高内聚、低耦合的应用。除此之外它可以整合很多第三方框架，它还提供面向切面编程（ AOP ）的能力，对通用任务如安全、事务、日志等进行集中式管理</p>
-<blockquote>
-<p><strong>概念介绍</strong></p>
-</blockquote>
-<ul>
-<li> 框架：能完成一定功能的半成品，比如我们可以使用框架进行购物网站开发；框架做一部分功能，我们自己做一部分功能，辅助高效工作。而且框架规定了你在开发应用程序时的整体架构，提供了一些基础功能，还规定了类和对象的如何创建、如何协作等，从而简化我们的代码编写，让我们专注于业务逻辑开发。</li>
-<li>非侵入式设计：从框架角度可以这样理解，无需继承框架提供的类，这种设计就可以看作是非侵入式设计，如果继承了这些框架类，就是侵入设计，如果以后想更换框架，之前写过的代码几乎无法重用，如果非侵入式设计则之前写过的代码仍然可以继续使用。</li>
-<li>轻量级与重量级：轻量级是相对于重量级而言的，轻量级一般就是非入侵性的、所依赖的东西非常少、资源占用非常少、部署简单等等，其实就是比较容易使用，而重量级正好相反。</li>
-<li>POJO ： POJO （ Plain Ordinary Java Object ）简单的 Java 对象。它可以包含业务逻辑或持久化逻辑，但不担当任何特殊角色且不继承或不实现任何其它 Java 框架的类或接口。</li>
-<li>容器：在日常生活中容器就是一种盛放东西的器具，从程序设计角度看就是装对象的的对象，因为存在放入、拿出等操作，所以容器还要管理对象的生命周期。</li>
-<li>控制反转：即 Inversion of Control ，缩写为 IoC ，控制反转还有一个名字叫做依赖注入（ Dependency Injection ），就是由容器控制程序之间的关系，而非传统实现中，由程序代码直接操控。</li>
-<li>Bean ：一般指容器管理对象，在 Spring 中指 Spring IoC 容器管理对象。</li>
-</ul>
-<blockquote>
-<p><strong>优点</strong></p>
-</blockquote>
-<ul>
-<li>低侵入式设计，代码的污染极低。</li>
-<li>独立于各种应用服务器，基于Spring框架的应用，可以真正实现Write Once，Run Anywhere的承诺。</li>
-<li>Spring的IoC容器降低了业务对象替换的复杂性，提高了组件之间的解耦。</li>
-<li>Spring的AOP支持允许将一些通用任务如安全、事务、日志等进行集中式管理，从而提供了更好的复用。</li>
-<li>Spring的ORM和DAO提供了与第三方持久层框架的良好整合，并简化了底层的数据库访问。</li>
-<li>Spring的高度开放性，并不强制应用完全依赖于Spring，开发者可自由选用Spring框架的部分或全部。</li>
-</ul>
-<blockquote>
-<p><strong>架构图</strong></p>
-</blockquote>
-<p><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/spring_frameword.png"><br><strong>核心容器：包括 Core 、 Beans 、 Context 、 EL 模块</strong></p>
-<ul>
-<li>Core 模块：封装了框架依赖的最底层部分，包括资源访问、类型转换及一些常用工具类。</li>
-<li>Beans 模块：提供了框架的基础部分，包括控制反转（ IOC ）和依赖注入（ DI ）。其中 BeanFactory 是容器核心，本质是“工厂设计模式”的实现，而且无需编程实现“单例设计模式”，单例完全由容器控制，而且提倡面向接口编程，而非面向实现编程；所有应用程序对象及对象间关系由框架管理，从而真正从程序逻辑中把维护对象之间的依赖关系提取出来，所有这些依赖关系都由 BeanFactory 来维护。</li>
-<li>Context 模块：以 Core 和 Beans 为基础，集成 Beans 模块功能并添加资源绑定、数据验证、国际化、 Java EE 支持、容器生命周期、事件传播等；核心接口是 ApplicationContext 。</li>
-<li>EL 模块：提供强大的表达式语言支持，支持访问和修改属性值，方法调用，支持访问及修改数组、容器和索引器，命名变量，支持算数和逻辑运算，支持从 Spring 容器获取 Bean， 它也支持列表投影、选择和一般的列表聚合等。</li>
-</ul>
-<hr>
-<ul>
-<li>AOP 模块： Spring AOP 模块提供了符合 AOP Alliance 规范的面向切面的编程（ aspect-oriented programming ）实现，提供比如日志记录、权限控制、性能统计等通用功能和业务逻辑分离的技术，并且能动态的把这些功能添加到需要的代码中；这样各专其职，降低业务逻辑和通用功能的耦合。</li>
-<li>Aspects 模块：提供了对 AspectJ 的集成，AspectJ 提供了比 Spring ASP 更强大的功能。</li>
-<li>数据访问/集成模块：该模块包括了 JDBC 、 ORM 、 OXM 、 JMS 和事务管理。<br>事务模块：该模块用于 Spring 管理事务，只要是 Spring 管理对象都能得到 Spring 管理事务的好处，无需在代码中进行事务控制了，而且支持编程和声明性的事务管理。</li>
-<li>JDBC 模块：提供了一个 JBDC 的样例模板，使用这些模板能消除传统冗长的 JDBC 编码还有必须的事务控制，而且能享受到 Spring 管理事务的好处。<br>ORM 模块：提供与流行的“对象-关系”映射框架的无缝集成，包括 Hibernate 、JPA 、 MyBatis 等。而且可以使用 Spring 事务管理，无需额外控制事务。<br>OXM 模块：提供了一个对 Object / XML 映射实现，将 java 对象映射成 XML 数据，或者将 XML 数据映射成 java 对象， Object / XML 映射实现包括 JAXB 、 Castor 、 XMLBeans 和 XStream 。</li>
-<li>JMS 模块：用于 JMS ( Java Messaging Service )，提供一套 “消息生产者、消息消费者”模板用于更加简单的使用 JMS ， JMS 用于用于在两个应用程序之间，或分布式系统中发送消息，进行异步通信。</li>
-<li>Web / Remoting 模块： Web / Remoting 模块包含了 Web 、 Web-Servlet 、 Web-Struts 、 Web-Porlet 模块。</li>
-<li>Web 模块：提供了基础的 web 功能。例如多文件上传、集成 IoC 容器、远程过程访问（ RMI 、Hessian 、 Burlap ）以及 Web Service 支持，并提供一个 RestTemplate 类来提供方便的 Restful services 访问。<br>Web-Servlet 模块：提供了一个 Spring MVC Web 框架实现。Spring MVC 框架提供了基于注解的请求资源注入、更简单的数据绑定、数据验证等及一套非常易用的 JSP 标签，完全无缝与 Spring 其他技术协作。</li>
-<li>Web-Struts 模块：提供了与 Struts 无缝集成， Struts1.x 和 Struts2.x 都支持。</li>
-<li>Test 模块： Spring 支持 Junit 和 TestNG 测试框架，而且还额外提供了一些基于 Spring 的测试功能，比如在测试 Web 框架时，模拟 Http 请求的功能。</li>
-</ul>
-<hr>
-]]></content>
-      <tags>
-        <tag>Spring</tag>
-        <tag>框架</tag>
-        <tag>Java EE</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Spring框架入门(二):安装配置</title>
-    <url>/posts/1df93bf0/</url>
-    <content><![CDATA[<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/wx_title2_2018.10.30.png' >
-<span id="more"></span>
-
-<blockquote>
-<h5 id="下载架包"><a href="#下载架包" class="headerlink" title="下载架包"></a>下载架包</h5></blockquote>
-<p>这里以4.3.20版本为例，点击下载:<a href="http://repo.spring.io/release/org/springframework/spring/4.3.20.RELEASE/spring-framework-4.3.20.RELEASE-dist.zip">SpringFramewoek 4.3.20版本</a></p>
-<hr>
-<h6 id="解压缩后目录"><a href="#解压缩后目录" class="headerlink" title="解压缩后目录:"></a>解压缩后目录:</h6><p><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/20181030144323.png" alt="解压缩"></p>
-<p>— docs目录为api和开发文档介绍，schema目录为配置xml的schema约束文件，libs文件夹中为我们要使用的架包<br><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/lib20181030144732.png" alt="在这里插入图片描述"><br><strong><font color=red size=3>注意：</font>另外还要下载spring的依赖架包:</strong> <a href="http://mirrors.shu.edu.cn/apache//commons/logging/binaries/commons-logging-1.2-bin.zip">commons-logging</a></p>
-<hr>
-<blockquote>
-<h5 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h5></blockquote>
-<h6 id="1-打开IDE工具，新建项目，导入上文下载好的架包"><a href="#1-打开IDE工具，新建项目，导入上文下载好的架包" class="headerlink" title="1. 打开IDE工具，新建项目，导入上文下载好的架包"></a>1. 打开IDE工具，新建项目，导入上文下载好的架包</h6><p><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/prolibs20181030154520.png" alt="导入项目"></p>
-<h6 id="2-创建实体类并意添加一个方法打印输入"><a href="#2-创建实体类并意添加一个方法打印输入" class="headerlink" title="2. 创建实体类并意添加一个方法打印输入"></a>2. 创建实体类并意添加一个方法打印输入</h6><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.sr.spring;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">isSelf</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;我是谁，我在哪，我在干什么&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h6 id="3-在src目录下-创建xml文件"><a href="#3-在src目录下-创建xml文件" class="headerlink" title="3. 在src目录下 创建xml文件"></a>3. 在src目录下 创建xml文件</h6><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="tag"><span class="string">        http://www.springframework.org/schema/beans/spring-beans.xsd&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 配置javabean对象 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;user&quot;</span> <span class="attr">class</span>=<span class="string">&quot;cn.sr.spring.User&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h6 id="4-创建测试类"><a href="#4-创建测试类" class="headerlink" title="4. 创建测试类"></a>4. 创建测试类</h6><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.sr.spring;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.support.ClassPathXmlApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.junit.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestBean</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//通过xml文件获取Spring的上下文对象</span></span><br><span class="line">		ApplicationContext context = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">&quot;beans.xml&quot;</span>);</span><br><span class="line">		<span class="comment">//通过id获取Spring管理的JavaBean对象</span></span><br><span class="line">		User user = (User) context.getBean(<span class="string">&quot;user&quot;</span>);</span><br><span class="line">		System.out.println(user);</span><br><span class="line">		user.isSelf();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<h5 id="配置完成"><a href="#配置完成" class="headerlink" title="配置完成"></a>配置完成</h5></blockquote>
-<p><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/prolibs.png"></p>
-<p>如图所示，即配置成功。</p>
-<hr>
-]]></content>
-      <tags>
-        <tag>Spring</tag>
-        <tag>框架</tag>
-        <tag>Java EE</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Tomcat服务器配置Https协议</title>
     <url>/posts/8baea545/</url>
     <content><![CDATA[<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/wx_title_2019.04.25.png'>
@@ -476,6 +445,42 @@
       </tags>
   </entry>
   <entry>
+    <title>Hello World</title>
+    <url>/posts/4a17b156/</url>
+    <content><![CDATA[<h3 id="永远相信美好的事情即将发生"><a href="#永远相信美好的事情即将发生" class="headerlink" title="永远相信美好的事情即将发生~"></a>永远相信美好的事情即将发生~</h3>]]></content>
+  </entry>
+  <entry>
+    <title>Spring框架入门(二):安装配置</title>
+    <url>/posts/1df93bf0/</url>
+    <content><![CDATA[<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/wx_title2_2018.10.30.png' >
+<span id="more"></span>
+
+<blockquote>
+<h5 id="下载架包"><a href="#下载架包" class="headerlink" title="下载架包"></a>下载架包</h5></blockquote>
+<p>这里以4.3.20版本为例，点击下载:<a href="http://repo.spring.io/release/org/springframework/spring/4.3.20.RELEASE/spring-framework-4.3.20.RELEASE-dist.zip">SpringFramewoek 4.3.20版本</a></p>
+<hr>
+<h6 id="解压缩后目录"><a href="#解压缩后目录" class="headerlink" title="解压缩后目录:"></a>解压缩后目录:</h6><p><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/20181030144323.png" alt="解压缩"></p>
+<p>— docs目录为api和开发文档介绍，schema目录为配置xml的schema约束文件，libs文件夹中为我们要使用的架包<br><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/lib20181030144732.png" alt="在这里插入图片描述"><br><strong><font color=red size=3>注意：</font>另外还要下载spring的依赖架包:</strong> <a href="http://mirrors.shu.edu.cn/apache//commons/logging/binaries/commons-logging-1.2-bin.zip">commons-logging</a></p>
+<hr>
+<blockquote>
+<h5 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h5></blockquote>
+<h6 id="1-打开IDE工具，新建项目，导入上文下载好的架包"><a href="#1-打开IDE工具，新建项目，导入上文下载好的架包" class="headerlink" title="1. 打开IDE工具，新建项目，导入上文下载好的架包"></a>1. 打开IDE工具，新建项目，导入上文下载好的架包</h6><p><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/prolibs20181030154520.png" alt="导入项目"></p>
+<h6 id="2-创建实体类并意添加一个方法打印输入"><a href="#2-创建实体类并意添加一个方法打印输入" class="headerlink" title="2. 创建实体类并意添加一个方法打印输入"></a>2. 创建实体类并意添加一个方法打印输入</h6><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.sr.spring;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">isSelf</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;我是谁，我在哪，我在干什么&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h6 id="3-在src目录下-创建xml文件"><a href="#3-在src目录下-创建xml文件" class="headerlink" title="3. 在src目录下 创建xml文件"></a>3. 在src目录下 创建xml文件</h6><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="tag"><span class="string">        http://www.springframework.org/schema/beans/spring-beans.xsd&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 配置javabean对象 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;user&quot;</span> <span class="attr">class</span>=<span class="string">&quot;cn.sr.spring.User&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h6 id="4-创建测试类"><a href="#4-创建测试类" class="headerlink" title="4. 创建测试类"></a>4. 创建测试类</h6><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> cn.sr.spring;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.support.ClassPathXmlApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.junit.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestBean</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//通过xml文件获取Spring的上下文对象</span></span><br><span class="line">		ApplicationContext context = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">&quot;beans.xml&quot;</span>);</span><br><span class="line">		<span class="comment">//通过id获取Spring管理的JavaBean对象</span></span><br><span class="line">		User user = (User) context.getBean(<span class="string">&quot;user&quot;</span>);</span><br><span class="line">		System.out.println(user);</span><br><span class="line">		user.isSelf();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<h5 id="配置完成"><a href="#配置完成" class="headerlink" title="配置完成"></a>配置完成</h5></blockquote>
+<p><img data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/prolibs.png"></p>
+<p>如图所示，即配置成功。</p>
+<hr>
+]]></content>
+      <tags>
+        <tag>Spring</tag>
+        <tag>框架</tag>
+        <tag>Java EE</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>一段Js代码开启任意网站的匿名聊天室</title>
     <url>/posts/ccb2c90f/</url>
     <content><![CDATA[<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/blog_chart_2018.12.05.png'>
@@ -494,11 +499,6 @@
         <tag>JS</tag>
         <tag>聊天室</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/posts/4a17b156/</url>
-    <content><![CDATA[<h3 id="永远相信美好的事情即将发生"><a href="#永远相信美好的事情即将发生" class="headerlink" title="永远相信美好的事情即将发生~"></a>永远相信美好的事情即将发生~</h3>]]></content>
   </entry>
   <entry>
     <title>回忆清单之情景喜剧篇</title>
@@ -701,6 +701,21 @@
       </tags>
   </entry>
   <entry>
+    <title>最大间隔数-桶排序应用</title>
+    <url>/posts/28e83e0e/</url>
+    <content><![CDATA[<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2019-05-23_wx_title.png' >
+<span id="more"></span>
+
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><blockquote>
+<p>给定一个未排序的数组，返回其排序后的数组中<strong>相邻元素之差</strong>的最大值<br>例：给定数组：[5,9,8,3,15]<br>&emsp;&emsp;&emsp;排序后：[3,5,8,9,15]<br>相邻元素之差最大的是15-9=6,结果即为6。<br>要求:时间空间复杂度均为O(n)。</p>
+</blockquote>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MaximumGap</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">maximumGap</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> len = arr.length;</span><br><span class="line">        <span class="keyword">int</span> min = Integer.MAX_VALUE;</span><br><span class="line">        <span class="keyword">int</span> max = Integer.MIN_VALUE;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">            min = Math.min(min, arr[i]);</span><br><span class="line">            max = Math.max(max, arr[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (min == max) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">boolean</span> book[] = <span class="keyword">new</span> <span class="keyword">boolean</span>[len + <span class="number">1</span>];</span><br><span class="line">        <span class="keyword">int</span> maxs[] = <span class="keyword">new</span> <span class="keyword">int</span>[len + <span class="number">1</span>];</span><br><span class="line">        <span class="keyword">int</span> mins[] = <span class="keyword">new</span> <span class="keyword">int</span>[len + <span class="number">1</span>];</span><br><span class="line">        <span class="keyword">int</span> id = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">            <span class="comment">// 划分桶号</span></span><br><span class="line">            id = (<span class="keyword">int</span>) ((arr[i] - min) * len / (max - min));</span><br><span class="line">            mins[id] = book[id] ? Math.min(mins[id], arr[i]) : arr[i];</span><br><span class="line">            maxs[id] = book[id] ? Math.max(maxs[id], arr[i]) : arr[i];</span><br><span class="line">            book[id] = <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="comment">// 第一个桶内默认是最小值</span></span><br><span class="line">        <span class="keyword">int</span> lastMax = maxs[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (; i &lt;= len; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (book[i]) &#123;</span><br><span class="line">                <span class="comment">// 两个相邻的非空桶，后一个的最小值减去前一个的最大值为相对间隔最大值</span></span><br><span class="line">                res = Math.max(res, mins[i] - lastMax);</span><br><span class="line">                <span class="comment">// 当前桶的最大值更新为前一个最大值</span></span><br><span class="line">                lastMax = maxs[i];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">comparator</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        Arrays.sort(arr);</span><br><span class="line">        <span class="keyword">int</span> gap = Integer.MIN_VALUE;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; arr.length; i++) &#123;</span><br><span class="line">            gap = Math.max(arr[i] - arr[i - <span class="number">1</span>], gap);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> gap;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] getRandomArray(<span class="keyword">int</span> maxSize, <span class="keyword">int</span> maxValue) &#123;</span><br><span class="line">        <span class="keyword">int</span>[] arr = <span class="keyword">new</span> <span class="keyword">int</span>[(<span class="keyword">int</span>) ((maxSize + <span class="number">1</span>) * Math.random())];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123;</span><br><span class="line">            <span class="comment">// 获取 -maxVlaue + 1 ~ maxValue 的值</span></span><br><span class="line">            arr[i] = (<span class="keyword">int</span>) ((maxValue + <span class="number">1</span>) * Math.random()) - (<span class="keyword">int</span>) (maxValue * Math.random());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> arr;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] copyArray(<span class="keyword">int</span>[] arr) &#123;</span><br><span class="line">        <span class="keyword">if</span> (arr == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span>[] book = <span class="keyword">new</span> <span class="keyword">int</span>[arr.length];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123;</span><br><span class="line">            book[i] = arr[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> book;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 测试次数</span></span><br><span class="line">        <span class="keyword">int</span> test = <span class="number">50000</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 数组长度</span></span><br><span class="line">        <span class="keyword">int</span> maxSize = <span class="number">100</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 最大数值</span></span><br><span class="line">        <span class="keyword">int</span> maxValue = <span class="number">100</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">boolean</span> flag = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; test; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> arr1[] = getRandomArray(maxSize, maxValue);</span><br><span class="line">            <span class="comment">// 拷贝比较</span></span><br><span class="line">            <span class="keyword">int</span> arr2[] = copyArray(arr1);</span><br><span class="line">            <span class="keyword">if</span> (maximumGap(arr1) != comparator(arr2)) &#123;</span><br><span class="line">                flag = <span class="keyword">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(flag ? <span class="string">&quot;测试正常&quot;</span> : <span class="string">&quot;发生错误&quot;</span>);</span><br><span class="line">        <span class="comment">// 随机测试一组数据</span></span><br><span class="line">        <span class="keyword">int</span> arr[] = getRandomArray(maxSize, maxValue);</span><br><span class="line">        <span class="keyword">int</span> t = maximumGap(arr);</span><br><span class="line">        System.out.println(<span class="string">&quot;原数组:&quot;</span>+Arrays.toString(arr));</span><br><span class="line">        Arrays.sort(arr);</span><br><span class="line">        System.out.println(<span class="string">&quot;排序后:&quot;</span>+Arrays.toString(arr));</span><br><span class="line">        System.out.println(<span class="string">&quot;最大差值:&quot;</span>+t);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <tags>
+        <tag>桶排序</tag>
+        <tag>对数器</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>有什么是真正永存的呢?</title>
     <url>/posts/12debb6f/</url>
     <content><![CDATA[<img alt='曾经有些人像光一样 照进过你的生活' data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/sun.jpg' >
@@ -723,18 +738,47 @@
       </tags>
   </entry>
   <entry>
-    <title>最大间隔数-桶排序应用</title>
-    <url>/posts/28e83e0e/</url>
-    <content><![CDATA[<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2019-05-23_wx_title.png' >
+    <title>荷兰国旗-快速排序应用</title>
+    <url>/posts/5644be5d/</url>
+    <content><![CDATA[<hr>
+<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2019-04-20%20.png' height=120px >
+
+<hr>
 <span id="more"></span>
 
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><blockquote>
-<p>给定一个未排序的数组，返回其排序后的数组中<strong>相邻元素之差</strong>的最大值<br>例：给定数组：[5,9,8,3,15]<br>&emsp;&emsp;&emsp;排序后：[3,5,8,9,15]<br>相邻元素之差最大的是15-9=6,结果即为6。<br>要求:时间空间复杂度均为O(n)。</p>
+<h2 id="荷兰国旗"><a href="#荷兰国旗" class="headerlink" title="荷兰国旗"></a>荷兰国旗</h2><blockquote>
+<p>”荷兰国旗难题“是计算机科学中的一个程序难题，它是由Edsger Dijkstra提出的。荷兰国旗是由红、白、蓝三色组成的。现有红白蓝三个不同颜色的小球，乱序排列在一起，请重新排列这些小球，使得红白蓝三色的同颜色的球在一起。<br>ps:我们可以将红白蓝三色小球想象成条状物，有序排列后正好组成荷兰国旗。</p>
 </blockquote>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MaximumGap</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">maximumGap</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> len = arr.length;</span><br><span class="line">        <span class="keyword">int</span> min = Integer.MAX_VALUE;</span><br><span class="line">        <span class="keyword">int</span> max = Integer.MIN_VALUE;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">            min = Math.min(min, arr[i]);</span><br><span class="line">            max = Math.max(max, arr[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (min == max) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">boolean</span> book[] = <span class="keyword">new</span> <span class="keyword">boolean</span>[len + <span class="number">1</span>];</span><br><span class="line">        <span class="keyword">int</span> maxs[] = <span class="keyword">new</span> <span class="keyword">int</span>[len + <span class="number">1</span>];</span><br><span class="line">        <span class="keyword">int</span> mins[] = <span class="keyword">new</span> <span class="keyword">int</span>[len + <span class="number">1</span>];</span><br><span class="line">        <span class="keyword">int</span> id = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">            <span class="comment">// 划分桶号</span></span><br><span class="line">            id = (<span class="keyword">int</span>) ((arr[i] - min) * len / (max - min));</span><br><span class="line">            mins[id] = book[id] ? Math.min(mins[id], arr[i]) : arr[i];</span><br><span class="line">            maxs[id] = book[id] ? Math.max(maxs[id], arr[i]) : arr[i];</span><br><span class="line">            book[id] = <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="comment">// 第一个桶内默认是最小值</span></span><br><span class="line">        <span class="keyword">int</span> lastMax = maxs[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (; i &lt;= len; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (book[i]) &#123;</span><br><span class="line">                <span class="comment">// 两个相邻的非空桶，后一个的最小值减去前一个的最大值为相对间隔最大值</span></span><br><span class="line">                res = Math.max(res, mins[i] - lastMax);</span><br><span class="line">                <span class="comment">// 当前桶的最大值更新为前一个最大值</span></span><br><span class="line">                lastMax = maxs[i];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">comparator</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length &lt; <span class="number">2</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        Arrays.sort(arr);</span><br><span class="line">        <span class="keyword">int</span> gap = Integer.MIN_VALUE;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; arr.length; i++) &#123;</span><br><span class="line">            gap = Math.max(arr[i] - arr[i - <span class="number">1</span>], gap);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> gap;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] getRandomArray(<span class="keyword">int</span> maxSize, <span class="keyword">int</span> maxValue) &#123;</span><br><span class="line">        <span class="keyword">int</span>[] arr = <span class="keyword">new</span> <span class="keyword">int</span>[(<span class="keyword">int</span>) ((maxSize + <span class="number">1</span>) * Math.random())];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123;</span><br><span class="line">            <span class="comment">// 获取 -maxVlaue + 1 ~ maxValue 的值</span></span><br><span class="line">            arr[i] = (<span class="keyword">int</span>) ((maxValue + <span class="number">1</span>) * Math.random()) - (<span class="keyword">int</span>) (maxValue * Math.random());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> arr;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] copyArray(<span class="keyword">int</span>[] arr) &#123;</span><br><span class="line">        <span class="keyword">if</span> (arr == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span>[] book = <span class="keyword">new</span> <span class="keyword">int</span>[arr.length];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123;</span><br><span class="line">            book[i] = arr[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> book;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 测试次数</span></span><br><span class="line">        <span class="keyword">int</span> test = <span class="number">50000</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 数组长度</span></span><br><span class="line">        <span class="keyword">int</span> maxSize = <span class="number">100</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 最大数值</span></span><br><span class="line">        <span class="keyword">int</span> maxValue = <span class="number">100</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">boolean</span> flag = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; test; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> arr1[] = getRandomArray(maxSize, maxValue);</span><br><span class="line">            <span class="comment">// 拷贝比较</span></span><br><span class="line">            <span class="keyword">int</span> arr2[] = copyArray(arr1);</span><br><span class="line">            <span class="keyword">if</span> (maximumGap(arr1) != comparator(arr2)) &#123;</span><br><span class="line">                flag = <span class="keyword">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(flag ? <span class="string">&quot;测试正常&quot;</span> : <span class="string">&quot;发生错误&quot;</span>);</span><br><span class="line">        <span class="comment">// 随机测试一组数据</span></span><br><span class="line">        <span class="keyword">int</span> arr[] = getRandomArray(maxSize, maxValue);</span><br><span class="line">        <span class="keyword">int</span> t = maximumGap(arr);</span><br><span class="line">        System.out.println(<span class="string">&quot;原数组:&quot;</span>+Arrays.toString(arr));</span><br><span class="line">        Arrays.sort(arr);</span><br><span class="line">        System.out.println(<span class="string">&quot;排序后:&quot;</span>+Arrays.toString(arr));</span><br><span class="line">        System.out.println(<span class="string">&quot;最大差值:&quot;</span>+t);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><blockquote>
+<p>arr[i]&lt; key时相当于“荷兰国旗问题”中的0<br>arr[i]= key时相当于“荷兰国旗问题”中的1<br>arr[i]&gt; key时相当于“荷兰国旗问题”中的2</p>
+</blockquote>
+<p>这样就可以使用“荷兰国旗问题”的解法来解决快速排序了，这样一来，即使待排序的元素中有一些元素和key一样，也能保证时间复杂度是最差是NlogN的，因为对于待排序的等于Key的数值，可以在执行下一次Partition时直接跳过，利于数据规模的降低。</p>
+<hr>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight java"><figcaption><span>荷兰国旗</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NetherlandsFlag</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] partition(<span class="keyword">int</span>[] arr,<span class="keyword">int</span> L,<span class="keyword">int</span> R,<span class="keyword">int</span> p) &#123;</span><br><span class="line">		<span class="keyword">int</span> less = L-<span class="number">1</span>;</span><br><span class="line">		<span class="keyword">int</span> more = R+<span class="number">1</span>;</span><br><span class="line">		<span class="keyword">while</span>(L &lt; more) &#123;</span><br><span class="line">			<span class="keyword">if</span>(arr[L] &lt; p) &#123;</span><br><span class="line">				swap(arr,++less,L++);</span><br><span class="line">			&#125;<span class="keyword">else</span> <span class="keyword">if</span>(arr[L] &gt; p) &#123;</span><br><span class="line">				swap(arr,--more,L);</span><br><span class="line">			&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">				L++;</span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123;less+<span class="number">1</span>,more-<span class="number">1</span>&#125;;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">     </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> temp = arr[i];</span><br><span class="line">		arr[i] = arr[j];</span><br><span class="line">		arr[j] = temp;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] getArray() &#123;</span><br><span class="line">		<span class="keyword">int</span> arr[] = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>];</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; arr.length;i++) &#123;</span><br><span class="line">			arr[i] = (<span class="keyword">int</span>)(Math.random()*<span class="number">3</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> arr;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printArray</span><span class="params">(<span class="keyword">int</span> arr[])</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(arr == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> ;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; arr.length;i++) &#123;</span><br><span class="line">			System.out.print(arr[i]+<span class="string">&quot; &quot;</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		System.out.println();</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> test[] = getArray();</span><br><span class="line">		printArray(test);                             </span><br><span class="line">		<span class="keyword">int</span> res[] = partition(test,<span class="number">0</span>,test.length-<span class="number">1</span>,<span class="number">1</span>);   <span class="comment">//p值为1，用来判断0，1，2   </span></span><br><span class="line">		printArray(test);</span><br><span class="line">		System.out.println(res[<span class="number">0</span>]);</span><br><span class="line">		System.out.println(res[<span class="number">1</span>]);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
       <tags>
-        <tag>桶排序</tag>
-        <tag>对数器</tag>
+        <tag>算法</tag>
+        <tag>快速排序</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>蓝桥杯-历届试题-Excel地址</title>
+    <url>/posts/b1245755/</url>
+    <content><![CDATA[<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><blockquote>
+<p>Excel单元格的地址表示很有趣，它使用字母来表示列号。<br>　　比如，<br>　　A表示第1列，<br>　　B表示第2列，<br>　　Z表示第26列，<br>　　AA表示第27列，<br>　　AB表示第28列，<br>　　BA表示第53列，<br>　　….<br>　　当然Excel的最大列号是有限度的，所以转换起来不难。<br>　　如果我们想把这种表示法一般化，可以把很大的数字转换为很长的字母序列呢？<br>　　本题目即是要求对输入的数字, 输出其对应的Excel地址表示方式。</p>
+</blockquote>
+<span id="more"></span>
+<hr>
+<p><strong>样例输入</strong><br>      26<br><strong>样例输出</strong><br>      Z<br><strong>样例输入</strong><br>      2054<br><strong>样例输出</strong><br>      BZZ</p>
+<hr>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> n, i;</span><br><span class="line">	<span class="keyword">int</span> cont = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">char</span> a[<span class="number">100</span>];</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">	<span class="keyword">while</span> (n)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (n % <span class="number">26</span> == <span class="number">0</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			a[cont++] = <span class="number">26</span> + <span class="number">64</span>;</span><br><span class="line">			n /= <span class="number">26</span>;</span><br><span class="line">			n--;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> &#123;</span><br><span class="line">			a[cont++] = n % <span class="number">26</span> + <span class="number">64</span>;</span><br><span class="line">			n /= <span class="number">26</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (i = cont - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>, a[i]);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>算法</tag>
+        <tag>蓝桥杯</tag>
+        <tag>C语言</tag>
       </tags>
   </entry>
   <entry>
@@ -797,50 +841,6 @@
       </tags>
   </entry>
   <entry>
-    <title>荷兰国旗-快速排序应用</title>
-    <url>/posts/5644be5d/</url>
-    <content><![CDATA[<hr>
-<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2019-04-20%20.png' height=120px >
-
-<hr>
-<span id="more"></span>
-
-<h2 id="荷兰国旗"><a href="#荷兰国旗" class="headerlink" title="荷兰国旗"></a>荷兰国旗</h2><blockquote>
-<p>”荷兰国旗难题“是计算机科学中的一个程序难题，它是由Edsger Dijkstra提出的。荷兰国旗是由红、白、蓝三色组成的。现有红白蓝三个不同颜色的小球，乱序排列在一起，请重新排列这些小球，使得红白蓝三色的同颜色的球在一起。<br>ps:我们可以将红白蓝三色小球想象成条状物，有序排列后正好组成荷兰国旗。</p>
-</blockquote>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><blockquote>
-<p>arr[i]&lt; key时相当于“荷兰国旗问题”中的0<br>arr[i]= key时相当于“荷兰国旗问题”中的1<br>arr[i]&gt; key时相当于“荷兰国旗问题”中的2</p>
-</blockquote>
-<p>这样就可以使用“荷兰国旗问题”的解法来解决快速排序了，这样一来，即使待排序的元素中有一些元素和key一样，也能保证时间复杂度是最差是NlogN的，因为对于待排序的等于Key的数值，可以在执行下一次Partition时直接跳过，利于数据规模的降低。</p>
-<hr>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight java"><figcaption><span>荷兰国旗</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NetherlandsFlag</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] partition(<span class="keyword">int</span>[] arr,<span class="keyword">int</span> L,<span class="keyword">int</span> R,<span class="keyword">int</span> p) &#123;</span><br><span class="line">		<span class="keyword">int</span> less = L-<span class="number">1</span>;</span><br><span class="line">		<span class="keyword">int</span> more = R+<span class="number">1</span>;</span><br><span class="line">		<span class="keyword">while</span>(L &lt; more) &#123;</span><br><span class="line">			<span class="keyword">if</span>(arr[L] &lt; p) &#123;</span><br><span class="line">				swap(arr,++less,L++);</span><br><span class="line">			&#125;<span class="keyword">else</span> <span class="keyword">if</span>(arr[L] &gt; p) &#123;</span><br><span class="line">				swap(arr,--more,L);</span><br><span class="line">			&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">				L++;</span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123;less+<span class="number">1</span>,more-<span class="number">1</span>&#125;;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">     </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> temp = arr[i];</span><br><span class="line">		arr[i] = arr[j];</span><br><span class="line">		arr[j] = temp;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] getArray() &#123;</span><br><span class="line">		<span class="keyword">int</span> arr[] = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>];</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; arr.length;i++) &#123;</span><br><span class="line">			arr[i] = (<span class="keyword">int</span>)(Math.random()*<span class="number">3</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> arr;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printArray</span><span class="params">(<span class="keyword">int</span> arr[])</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(arr == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> ;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; arr.length;i++) &#123;</span><br><span class="line">			System.out.print(arr[i]+<span class="string">&quot; &quot;</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		System.out.println();</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> test[] = getArray();</span><br><span class="line">		printArray(test);                             </span><br><span class="line">		<span class="keyword">int</span> res[] = partition(test,<span class="number">0</span>,test.length-<span class="number">1</span>,<span class="number">1</span>);   <span class="comment">//p值为1，用来判断0，1，2   </span></span><br><span class="line">		printArray(test);</span><br><span class="line">		System.out.println(res[<span class="number">0</span>]);</span><br><span class="line">		System.out.println(res[<span class="number">1</span>]);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>算法</tag>
-        <tag>快速排序</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>蓝桥杯-历届试题-Excel地址</title>
-    <url>/posts/b1245755/</url>
-    <content><![CDATA[<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><blockquote>
-<p>Excel单元格的地址表示很有趣，它使用字母来表示列号。<br>　　比如，<br>　　A表示第1列，<br>　　B表示第2列，<br>　　Z表示第26列，<br>　　AA表示第27列，<br>　　AB表示第28列，<br>　　BA表示第53列，<br>　　….<br>　　当然Excel的最大列号是有限度的，所以转换起来不难。<br>　　如果我们想把这种表示法一般化，可以把很大的数字转换为很长的字母序列呢？<br>　　本题目即是要求对输入的数字, 输出其对应的Excel地址表示方式。</p>
-</blockquote>
-<span id="more"></span>
-<hr>
-<p><strong>样例输入</strong><br>      26<br><strong>样例输出</strong><br>      Z<br><strong>样例输入</strong><br>      2054<br><strong>样例输出</strong><br>      BZZ</p>
-<hr>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> n, i;</span><br><span class="line">	<span class="keyword">int</span> cont = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">char</span> a[<span class="number">100</span>];</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">	<span class="keyword">while</span> (n)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (n % <span class="number">26</span> == <span class="number">0</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			a[cont++] = <span class="number">26</span> + <span class="number">64</span>;</span><br><span class="line">			n /= <span class="number">26</span>;</span><br><span class="line">			n--;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> &#123;</span><br><span class="line">			a[cont++] = n % <span class="number">26</span> + <span class="number">64</span>;</span><br><span class="line">			n /= <span class="number">26</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (i = cont - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>, a[i]);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>算法</tag>
-        <tag>蓝桥杯</tag>
-        <tag>C语言</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>记录腾讯云服务器当矿机的一天</title>
     <url>/posts/23f6ec83/</url>
     <content><![CDATA[<img data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/wx_title_2019-11-26-0.png' >
@@ -874,26 +874,6 @@
       </tags>
   </entry>
   <entry>
-    <title>银杏</title>
-    <url>/posts/3ab1619b/</url>
-    <content><![CDATA[<img  data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/yx_head.jpg' >
-<span id="more"></span>
-
-<blockquote>
-<p>小时候家中院子里有一棵银杏树，印象里不知道结过几次果，只记得金灿灿的落叶。</p>
-<p>现在院子和树都没了，才知道银杏果和开心果是两回事。</p>
-</blockquote>
-<hr>
-<img  style="zoom: 50%;" data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/yx1.png" />
-
-<hr>
-<img  style="zoom: 50%;" data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/yx2.png" />
-]]></content>
-      <tags>
-        <tag>随笔</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>“莫名其妙”的鸡汤词条</title>
     <url>/posts/70c9131d/</url>
     <content><![CDATA[<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=545449273&auto=0&height=66"></iframe>
@@ -907,11 +887,16 @@
 <li>虚妄</li>
 <li>交集</li>
 <li>共性</li>
+<li>共鸣</li>
 <li>吸引</li>
 <li>盲区</li>
 <li>影子</li>
 <li>树洞</li>
 <li>底线</li>
+<li>愤青</li>
+<li>废柴</li>
+<li>标榜</li>
+<li>洒脱</li>
 <li>劣根性</li>
 <li>虚荣心</li>
 <li>小聪明</li>
@@ -934,11 +919,32 @@
 <li>心灵鸡汤</li>
 <li>芸芸众生</li>
 <li>妄自菲薄</li>
+<li>眼高手低</li>
 <li>随遇而安</li>
 <li>人微言轻</li>
 <li>闲言碎语</li>
 <li>庸人自扰</li>
 </ul>
+]]></content>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>银杏</title>
+    <url>/posts/3ab1619b/</url>
+    <content><![CDATA[<img  data-src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/yx_head.jpg' >
+<span id="more"></span>
+
+<blockquote>
+<p>小时候家中院子里有一棵银杏树，印象里不知道结过几次果，只记得金灿灿的落叶。</p>
+<p>现在院子和树都没了，才知道银杏果和开心果是两回事。</p>
+</blockquote>
+<hr>
+<img  style="zoom: 50%;" data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/yx1.png" />
+
+<hr>
+<img  style="zoom: 50%;" data-src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/yx2.png" />
 ]]></content>
       <tags>
         <tag>随笔</tag>
