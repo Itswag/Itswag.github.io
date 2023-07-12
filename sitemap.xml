@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.srblog.cn/posts/660e61a1/</loc>
+    
+    <lastmod>2023-07-12</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://www.srblog.cn/posts/7a9127ac/</loc>
     
     <lastmod>2023-07-12</lastmod>
@@ -208,6 +217,27 @@
   
   <url>
     <loc>https://www.srblog.cn/tags/%E6%95%B0%E6%8D%AE%E5%82%A8%E5%AD%98/</loc>
+    <lastmod>2023-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.srblog.cn/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/</loc>
+    <lastmod>2023-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.srblog.cn/tags/JSON/</loc>
+    <lastmod>2023-07-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.srblog.cn/tags/HTTP/</loc>
     <lastmod>2023-07-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
