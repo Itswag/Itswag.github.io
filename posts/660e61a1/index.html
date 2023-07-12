@@ -1,0 +1,667 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="sr">
+  <meta name="keywords" content="itswag">
+  
+    <meta property="og:type" content="article">
+<meta property="og:title" content="Android网络编程之HttpURLConnection应用-快递查询案例">
+<meta property="og:url" content="https://www.srblog.cn/posts/660e61a1/index.html">
+<meta property="og:site_name" content="It Swag">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2018.12.06_blog_title_httpdemo.png">
+<meta property="article:published_time" content="2018-12-06T12:20:38.000Z">
+<meta property="article:modified_time" content="2023-07-12T04:14:54.774Z">
+<meta property="article:author" content="sr">
+<meta property="article:tag" content="Android">
+<meta property="article:tag" content="网络编程">
+<meta property="article:tag" content="JSON">
+<meta property="article:tag" content="HTTP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2018.12.06_blog_title_httpdemo.png">
+  
+  
+  
+  <title>Android网络编程之HttpURLConnection应用-快递查询案例 - It Swag</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"www.srblog.cn","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>It Swag</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Android网络编程之HttpURLConnection应用-快递查询案例"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2018-12-06 20:20" pubdate>
+          2018年12月6日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          33 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Android网络编程之HttpURLConnection应用-快递查询案例</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <img src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2018.12.06_blog_title_httpdemo.png'>
+<span id="more"></span>
+
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
+<p><strong>HttpURLConnection</strong>是一种多用途、轻量极的HTTP客户端。它的API简单，体积较小，因而非常适用于Android项目，压缩和缓存机制可以有效地减少网络访问的流量，在提升速度和省电方面也起到了较大的作用，使用它来进行HTTP操作可以适用于大多数的应用程序。HttpUrlConnection是Android SDK的标准实现，直接支持系统级连接池，即打开的连接不会直接关闭，在一段时间内所有程序可共用；直接在系统层面做了缓存策略处理，加快重复请求的速度</p>
+</blockquote>
+<p>本文将以一个查询快递信息的案例来介绍，包括GET，POST两中方式请求网络资源，解析JSON数据，Handler异步消息处理机制等应用~</p>
+<h2 id="部分代码"><a href="#部分代码" class="headerlink" title="部分代码"></a>部分代码</h2><ul>
+<li>主界面<br> <img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/20181206200417_blog_adroid_httpdemo.png" srcset="/img/loading.gif" lazyload></li>
+<li>这里主要介绍GET和POST两种网络请求方式<figure class="highlight java"><figcaption><span>GET方式</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doGet</span><span class="hljs-params">(<span class="hljs-keyword">final</span> String params)</span> &#123;<br>       <span class="hljs-comment">//子线程执行网络操作</span><br>       <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Runnable</span>() &#123;<br>           <span class="hljs-meta">@Override</span><br>           <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>               <span class="hljs-keyword">try</span> &#123;<br>                   <span class="hljs-type">URL</span> <span class="hljs-variable">url</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">URL</span>(URL_Source+<span class="hljs-string">&quot;?type=&quot;</span>+URLEncoder.encode(Param_DHL,<span class="hljs-string">&quot;UTF-8&quot;</span>)+<span class="hljs-string">&quot;&amp;postid=&quot;</span>+URLEncoder.encode(params,<span class="hljs-string">&quot;UTF-8&quot;</span>));<br>                   <span class="hljs-type">HttpURLConnection</span> <span class="hljs-variable">httpURLConnection</span> <span class="hljs-operator">=</span> (HttpURLConnection) url.openConnection();<br>                   httpURLConnection.setRequestMethod(<span class="hljs-string">&quot;GET&quot;</span>);<span class="hljs-comment">//设置请求方式为GET</span><br>                   httpURLConnection.setReadTimeout(<span class="hljs-number">3000</span>);<span class="hljs-comment">//设置连接超时时间</span><br>                   <span class="hljs-keyword">if</span>(httpURLConnection.getResponseCode() == <span class="hljs-number">200</span>)&#123;<br>                       <span class="hljs-type">InputStream</span> <span class="hljs-variable">is</span> <span class="hljs-operator">=</span> httpURLConnection.getInputStream();<br>                       <span class="hljs-type">BufferedReader</span> <span class="hljs-variable">br</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">BufferedReader</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">InputStreamReader</span>(is));<br>                       <span class="hljs-type">String</span> <span class="hljs-variable">line</span> <span class="hljs-operator">=</span><span class="hljs-string">&quot;&quot;</span>;<br>                       StringBuffer result= <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringBuffer</span>();<br>                       <span class="hljs-keyword">while</span>((line = br.readLine()) != <span class="hljs-literal">null</span>)&#123;<br>                             result.append(line);<br>                       &#125;<br>                       is.close();<br>                       br.close();<br><br>                       httpURLConnection.disconnect();<span class="hljs-comment">//关闭连接</span><br>                       <span class="hljs-type">Message</span> <span class="hljs-variable">message</span> <span class="hljs-operator">=</span><span class="hljs-keyword">new</span> <span class="hljs-title class_">Message</span>();<span class="hljs-comment">//创建消息体</span><br>                       message.what = <span class="hljs-number">1</span>;<br>                       message.obj = parseData(result.toString());<br>                       handler.sendMessage(message);<span class="hljs-comment">//发送消息体，添加到消息队列中</span><br><br>                   &#125;<br>               &#125; <span class="hljs-keyword">catch</span> (MalformedURLException e) &#123;<br>                   e.printStackTrace();<br>               &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>                   e.printStackTrace();<br>               &#125;<br><br><br>           &#125;<br>       &#125;).start();<br>   &#125;<br><br></code></pre></td></tr></table></figure></li>
+</ul>
+<figure class="highlight java"><figcaption><span>POST方式</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doPost</span><span class="hljs-params">(<span class="hljs-keyword">final</span> String params)</span> &#123;<br>       <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Runnable</span>() &#123;<br>           <span class="hljs-meta">@Override</span><br>           <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>               <span class="hljs-keyword">try</span> &#123;<br>                   <span class="hljs-type">URL</span> <span class="hljs-variable">url</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">URL</span>(URL_Source);<br>                   <span class="hljs-type">HttpURLConnection</span> <span class="hljs-variable">httpURLConnection</span> <span class="hljs-operator">=</span> (HttpURLConnection) url.openConnection();<br>                   httpURLConnection.setConnectTimeout(<span class="hljs-number">3000</span>);     <span class="hljs-comment">//设置连接超时时间</span><br>                   httpURLConnection.setDoInput(<span class="hljs-literal">true</span>);            <span class="hljs-comment">//打开输入流，以便从服务器获取数据</span><br>                   httpURLConnection.setDoOutput(<span class="hljs-literal">true</span>);           <span class="hljs-comment">//打开输出流，以便向服务器提交数据</span><br>                   httpURLConnection.setUseCaches(<span class="hljs-literal">false</span>);         <span class="hljs-comment">//禁用缓存</span><br>                   httpURLConnection.setRequestMethod(<span class="hljs-string">&quot;POST&quot;</span>);<br>                   httpURLConnection.setRequestProperty(<span class="hljs-string">&quot;Content-Type&quot;</span>,<span class="hljs-string">&quot;application/x-www-form-urlencoded&quot;</span>);<span class="hljs-comment">//设置数据编码方式</span><br>                   <span class="hljs-type">String</span> <span class="hljs-variable">param</span> <span class="hljs-operator">=</span><span class="hljs-string">&quot;type=&quot;</span>+URLEncoder.encode(Param_DHL,<span class="hljs-string">&quot;UTF-8&quot;</span>) +<span class="hljs-string">&quot;&amp;postid=&quot;</span>+URLEncoder.encode(params,<span class="hljs-string">&quot;UTF-8&quot;</span>);<br><br>                   <span class="hljs-type">OutputStream</span> <span class="hljs-variable">os</span> <span class="hljs-operator">=</span> httpURLConnection.getOutputStream();<br>                   os.write(param.getBytes());<br><br>                   <span class="hljs-keyword">if</span>(httpURLConnection.getResponseCode() == <span class="hljs-number">200</span>)&#123;<br>                       <span class="hljs-type">InputStream</span> <span class="hljs-variable">is</span> <span class="hljs-operator">=</span> httpURLConnection.getInputStream();<br>                       <span class="hljs-type">BufferedReader</span> <span class="hljs-variable">br</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">BufferedReader</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">InputStreamReader</span>(is));<br>                       <span class="hljs-type">String</span> <span class="hljs-variable">line</span> <span class="hljs-operator">=</span><span class="hljs-string">&quot;&quot;</span>;<br>                       StringBuffer result= <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringBuffer</span>();<br>                       <span class="hljs-keyword">while</span>((line = br.readLine()) != <span class="hljs-literal">null</span>)&#123;<br>                           result.append(line);<br>                       &#125;<br>                       is.close();<br>                       br.close();<br><br>                       httpURLConnection.disconnect();<span class="hljs-comment">//关闭连接</span><br>                       <span class="hljs-type">Message</span> <span class="hljs-variable">message</span> <span class="hljs-operator">=</span><span class="hljs-keyword">new</span> <span class="hljs-title class_">Message</span>();<br>                       message.what = <span class="hljs-number">2</span>;<br>                       message.obj = parseData(result.toString());<br>                       handler.sendMessage(message);<br><br>                   &#125;<br>               &#125; <span class="hljs-keyword">catch</span> (MalformedURLException e) &#123;<br>                   e.printStackTrace();<br>               &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>                   e.printStackTrace();<br>               &#125;<br><br><br>           &#125;<br>       &#125;).start();<br>   &#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>JSON数据的解析</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> String <span class="hljs-title function_">parseData</span><span class="hljs-params">(String json)</span>&#123;<br>       <span class="hljs-type">String</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;&quot;</span>;<br>       <span class="hljs-keyword">try</span> &#123;<br>           <span class="hljs-type">JSONObject</span> <span class="hljs-variable">jsonObject</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">JSONObject</span>(json);<br>           <span class="hljs-type">JSONArray</span> <span class="hljs-variable">data</span> <span class="hljs-operator">=</span> jsonObject.getJSONArray(<span class="hljs-string">&quot;data&quot;</span>);<br>           <span class="hljs-comment">//这里只取最新的一条数据显示</span><br>             <span class="hljs-keyword">if</span>(data.length()&gt;<span class="hljs-number">0</span>)&#123;<br>                 result=<span class="hljs-string">&quot;更新时间: &quot;</span>+data.getJSONObject(<span class="hljs-number">0</span>).getString(<span class="hljs-string">&quot;time&quot;</span>)+<br>                         <span class="hljs-string">&quot;\n状态: &quot;</span>+data.getJSONObject(<span class="hljs-number">0</span>).getString(<span class="hljs-string">&quot;context&quot;</span>);<br>             &#125;<span class="hljs-keyword">else</span>&#123;<br>                 result = <span class="hljs-string">&quot;该单号暂无物流进展,请稍后再试,或检查公司和单号是否有误&quot;</span>;<br>             &#125;<br>       &#125; <span class="hljs-keyword">catch</span> (JSONException e) &#123;<br>           e.printStackTrace();<br>       &#125;<br>       <span class="hljs-keyword">return</span> result;<br>   &#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>使用Handler更新UI</p>
+</li>
+</ul>
+<figure class="highlight java"><figcaption><span>更新TextView</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-type">Handler</span> <span class="hljs-variable">handler</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Handler</span>()&#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">handleMessage</span><span class="hljs-params">(Message msg)</span> &#123;<br>       <span class="hljs-keyword">if</span>(msg.what == <span class="hljs-number">1</span>)&#123;<br>           message.setText(<span class="hljs-string">&quot;最新状态 (GET方式)&quot;</span>);<br>           info.setText(msg.obj+<span class="hljs-string">&quot;&quot;</span>);<br>       &#125;<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (msg.what == <span class="hljs-number">2</span>)&#123;<br>           message.setText(<span class="hljs-string">&quot;最新状态 (POST方式)&quot;</span>);<br>           info.setText(msg.obj+<span class="hljs-string">&quot;&quot;</span>);<br>       &#125;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h2 id="动图演示"><a href="#动图演示" class="headerlink" title="动图演示"></a>动图演示</h2><p><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/gif/20181206_android_httpdemo.gif" srcset="/img/loading.gif" lazyload></p>
+<h2 id="项目源码"><a href="#项目源码" class="headerlink" title="项目源码"></a>项目源码</h2><p>等待上传中~</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Android/" class="print-no-link">#Android</a>
+      
+        <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="print-no-link">#网络编程</a>
+      
+        <a href="/tags/JSON/" class="print-no-link">#JSON</a>
+      
+        <a href="/tags/HTTP/" class="print-no-link">#HTTP</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Android网络编程之HttpURLConnection应用-快递查询案例</div>
+      <div>https://www.srblog.cn/posts/660e61a1/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>sr</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2018年12月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/posts/2502e0fe/" title="SSM框架结合LayUi文件上传模块接入COS对象存储服务">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">SSM框架结合LayUi文件上传模块接入COS对象存储服务</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/posts/ccb2c90f/" title="一段Js代码开启任意网站的匿名聊天室">
+                        <span class="hidden-mobile">一段Js代码开启任意网站的匿名聊天室</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      皖ICP备18009731号
+    </a>
+  </span>
+  
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
