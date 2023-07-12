@@ -16,17 +16,18 @@
   <meta name="author" content="sr">
   <meta name="keywords" content="itswag">
   
-    <meta property="og:type" content="article">
+    <meta name="description" content="日常开发项目时,一般本机都是基于http协议,但是要实现某些需求必须要开启https协议，本文以Tomcat服务器为例,简单介绍如何在本机开发环境配置https协议。">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Tomcat服务器配置Https协议">
 <meta property="og:url" content="https://www.srblog.cn/posts/8baea545/index.html">
 <meta property="og:site_name" content="It Swag">
+<meta property="og:description" content="日常开发项目时,一般本机都是基于http协议,但是要实现某些需求必须要开启https协议，本文以Tomcat服务器为例,简单介绍如何在本机开发环境配置https协议。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/wx_title_2019.04.25.png">
 <meta property="article:published_time" content="2019-04-25T10:46:34.000Z">
-<meta property="article:modified_time" content="2023-07-12T00:19:18.281Z">
+<meta property="article:modified_time" content="2023-07-12T06:25:39.924Z">
 <meta property="article:author" content="sr">
 <meta property="article:tag" content="Tomcat">
-<meta property="article:tag" content="Https协议">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/wx_title_2019.04.25.png">
   
@@ -275,13 +276,14 @@
               <div class="markdown-body">
                 
                 <img src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/wx_title_2019.04.25.png'>
-<span id="more"></span>
+<!-- more -->
 
 <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><blockquote>
 <p>日常开发项目时,一般本机都是基于http协议,但是要实现某些需求必须要开启https协议。<br>现在https协议已经成为主流,网站如果未开启https协议,浏览器会进行安全提示。<br>本文以<strong>Tomcat</strong>服务器为例,简单介绍如何在<strong>本机开发环境</strong>配置https协议</p>
 </blockquote>
 <h3 id="证书生成"><a href="#证书生成" class="headerlink" title="证书生成"></a>证书生成</h3><p><strong>使用JDK自带的keytool工具来生成证书库</strong>：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">keytool -genkeypair -alias <span class="hljs-string">&quot;tomcat&quot;</span> -keyalg <span class="hljs-string">&quot;RSA&quot;</span> -keystore <span class="hljs-string">&quot;d:\https\tomcat.keystore&quot;</span>  <br></code></pre></td></tr></table></figure>
+
 <p><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2019-4-25-https1.png" srcset="/img/loading.gif" lazyload></p>
 <table>
 <thead>
@@ -303,9 +305,11 @@
 <td>证书保存路径</td>
 </tr>
 </tbody></table>
-<h3 id="环境设置"><a href="#环境设置" class="headerlink" title="环境设置"></a>环境设置</h3><p> <strong>修改Tomcat配置文件</strong>：<br>打开Tomcat安装目录&#x2F;conf&#x2F;server.xml,修改如下配置,并取消注释<br>注：这里以Tomcat8.0为例,8.5以上配置请另行百度</p>
+<h3 id="环境设置"><a href="#环境设置" class="headerlink" title="环境设置"></a>环境设置</h3><p><strong>修改Tomcat配置文件</strong>：<br>打开Tomcat安装目录&#x2F;conf&#x2F;server.xml,修改如下配置,并取消注释<br>注：这里以Tomcat8.0为例,8.5以上配置请另行百度</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">Connector</span> <span class="hljs-attr">port</span>=<span class="hljs-string">&quot;8443&quot;</span> <span class="hljs-attr">protocol</span>=<span class="hljs-string">&quot;org.apache.coyote.http11.Http11NioProtocol&quot;</span></span><br><span class="hljs-tag">              <span class="hljs-attr">maxThreads</span>=<span class="hljs-string">&quot;150&quot;</span> <span class="hljs-attr">SSLEnabled</span>=<span class="hljs-string">&quot;true&quot;</span> <span class="hljs-attr">scheme</span>=<span class="hljs-string">&quot;https&quot;</span> <span class="hljs-attr">secure</span>=<span class="hljs-string">&quot;true&quot;</span></span><br><span class="hljs-tag">              <span class="hljs-attr">clientAuth</span>=<span class="hljs-string">&quot;false&quot;</span> <span class="hljs-attr">sslProtocol</span>=<span class="hljs-string">&quot;TLS&quot;</span></span><br><span class="hljs-tag">              <span class="hljs-attr">keystoreFile</span>=<span class="hljs-string">&quot;d:\https\tomcat.keystore&quot;</span>  <span class="hljs-attr">keystorePass</span>=<span class="hljs-string">&quot;123456&quot;</span> /&gt;</span><br></code></pre></td></tr></table></figure>
+
 <h3 id="启动Tomcat"><a href="#启动Tomcat" class="headerlink" title="启动Tomcat"></a>启动Tomcat</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">https:<span class="hljs-comment">//localhost:8443/</span><br></code></pre></td></tr></table></figure>
+
 <p>访问链接,浏览器会提示站点不安全，点击继续访问即可(<strong>本地安装证书</strong>或者<strong>互联网申请证书解决</strong>)<br><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2019-4-25-https2.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
 
                 
@@ -320,8 +324,6 @@
       <i class="iconfont icon-tags"></i>
       
         <a href="/tags/Tomcat/" class="print-no-link">#Tomcat</a>
-      
-        <a href="/tags/Https%E5%8D%8F%E8%AE%AE/" class="print-no-link">#Https协议</a>
       
     </div>
   

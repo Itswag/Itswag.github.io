@@ -16,23 +16,24 @@
   <meta name="author" content="sr">
   <meta name="keywords" content="itswag">
   
-    <meta property="og:type" content="article">
-<meta property="og:title" content="CentOS更换Yum源为阿里云源">
+    <meta name="description" content="Yum仓库部署在国外，本文将介绍如何更改为为国内的阿里云镜像源">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CentOS7更换Yum源为阿里云源">
 <meta property="og:url" content="https://www.srblog.cn/posts/e8a99a62/index.html">
 <meta property="og:site_name" content="It Swag">
+<meta property="og:description" content="Yum仓库部署在国外，本文将介绍如何更改为为国内的阿里云镜像源">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/wx_title_centos_yum_2018.11.21.png">
 <meta property="article:published_time" content="2018-11-21T06:20:38.000Z">
-<meta property="article:modified_time" content="2023-07-12T00:19:18.797Z">
+<meta property="article:modified_time" content="2023-07-12T06:24:24.167Z">
 <meta property="article:author" content="sr">
 <meta property="article:tag" content="Linux">
-<meta property="article:tag" content="Yum">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/wx_title_centos_yum_2018.11.21.png">
   
   
   
-  <title>CentOS更换Yum源为阿里云源 - It Swag</title>
+  <title>CentOS7更换Yum源为阿里云源 - It Swag</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -198,7 +199,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="CentOS更换Yum源为阿里云源"></span>
+            <span id="subtitle" data-typed-text="CentOS7更换Yum源为阿里云源"></span>
           
         </div>
 
@@ -269,25 +270,27 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">CentOS更换Yum源为阿里云源</h1>
+            <h1 id="seo-header">CentOS7更换Yum源为阿里云源</h1>
             
             
               <div class="markdown-body">
                 
                 <img src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/wx_title_centos_yum_2018.11.21.png' >
-<span id="more"></span>
+<!-- more -->
 
 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Yum仓库部署在国外，为了方便之后项目环境的部署更新操作，最好更新为国内的镜像源，本文以阿里云源为例。<br>参考网站:<a target="_blank" rel="noopener" href="https://opsx.alibaba.com/mirror">https://opsx.alibaba.com/mirror</a></p>
 <h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1-备份"><a href="#1-备份" class="headerlink" title="1.备份"></a>1.备份</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup<br></code></pre></td></tr></table></figure>
+
 <p><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/20181121_centosbf.png" srcset="/img/loading.gif" lazyload alt="图中即为重命名的备份文件"></p>
 <h3 id="2-下载阿里云的源文件"><a href="#2-下载阿里云的源文件" class="headerlink" title="2.下载阿里云的源文件"></a>2.下载阿里云的源文件</h3><p>这里我的虚拟机版本为CentOS 7，这里根据你的版本进行操作，参考上文链接</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">wget -O /etc/yum.repos.d/CentOS-Base.repo http:<span class="hljs-comment">//mirrors.aliyun.com/repo/Centos-7.repo</span><br></code></pre></td></tr></table></figure>
+
 <p><font color="red">注意：这里需要给与管理员权限<font/><br><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/20181121213830.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
 <h3 id="3-生成缓存"><a href="#3-生成缓存" class="headerlink" title="3.生成缓存"></a>3.生成缓存</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">yum makecache<br></code></pre></td></tr></table></figure>
+
 <p><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/20181121214100.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
 <h2 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h2><p>如果更换源后出现问题，则需要先清除默认Yum源的本地缓存</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">yum clean all<br></code></pre></td></tr></table></figure>
-
 
                 
               </div>
@@ -302,8 +305,6 @@
       
         <a href="/tags/Linux/" class="print-no-link">#Linux</a>
       
-        <a href="/tags/Yum/" class="print-no-link">#Yum</a>
-      
     </div>
   
 </div>
@@ -314,7 +315,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>CentOS更换Yum源为阿里云源</div>
+      <div>CentOS7更换Yum源为阿里云源</div>
       <div>https://www.srblog.cn/posts/e8a99a62/</div>
     </div>
     <div class="license-meta">
