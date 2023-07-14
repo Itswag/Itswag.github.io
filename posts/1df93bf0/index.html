@@ -69,7 +69,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"www.srblog.cn","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":13177398,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"XaXQ6DsrdJpeM4GK52QcpikI-gzGzoHsz","app_key":"dx7t2R3p070TQAJrUlIMX7yU","server_url":"https://xaxq6dsr.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"www.srblog.cn","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/search-computer.svg","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":13177398,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"XaXQ6DsrdJpeM4GK52QcpikI-gzGzoHsz","app_key":"dx7t2R3p070TQAJrUlIMX7yU","server_url":"https://xaxq6dsr.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -268,8 +268,25 @@
     
 
     
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          11 分钟
+        
+      </span>
+    
 
     
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
     
   </div>
 
@@ -313,12 +330,12 @@
 <h5 id="下载架包"><a href="#下载架包" class="headerlink" title="下载架包"></a>下载架包</h5></blockquote>
 <p>这里以4.3.20版本为例，点击下载:<a target="_blank" rel="noopener" href="http://repo.spring.io/release/org/springframework/spring/4.3.20.RELEASE/spring-framework-4.3.20.RELEASE-dist.zip">SpringFramewoek 4.3.20版本</a></p>
 <hr>
-<h6 id="解压缩后目录"><a href="#解压缩后目录" class="headerlink" title="解压缩后目录:"></a>解压缩后目录:</h6><p><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/20181030144323.png" srcset="/img/loading.gif" lazyload alt="解压缩"></p>
-<p>— docs目录为api和开发文档介绍，schema目录为配置xml的schema约束文件，libs文件夹中为我们要使用的架包<br><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/lib20181030144732.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"><br><strong><font color=red size=3>注意：</font>另外还要下载spring的依赖架包:</strong> <a target="_blank" rel="noopener" href="http://mirrors.shu.edu.cn/apache//commons/logging/binaries/commons-logging-1.2-bin.zip">commons-logging</a></p>
+<h6 id="解压缩后目录"><a href="#解压缩后目录" class="headerlink" title="解压缩后目录:"></a>解压缩后目录:</h6><p><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/20181030144323.png" srcset="/img/search-computer.svg" lazyload alt="解压缩"></p>
+<p>— docs目录为api和开发文档介绍，schema目录为配置xml的schema约束文件，libs文件夹中为我们要使用的架包<br><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/lib20181030144732.png" srcset="/img/search-computer.svg" lazyload alt="在这里插入图片描述"><br><strong><font color=red size=3>注意：</font>另外还要下载spring的依赖架包:</strong> <a target="_blank" rel="noopener" href="http://mirrors.shu.edu.cn/apache//commons/logging/binaries/commons-logging-1.2-bin.zip">commons-logging</a></p>
 <hr>
 <blockquote>
 <h5 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h5></blockquote>
-<h6 id="1-打开IDE工具，新建项目，导入上文下载好的架包"><a href="#1-打开IDE工具，新建项目，导入上文下载好的架包" class="headerlink" title="1. 打开IDE工具，新建项目，导入上文下载好的架包"></a>1. 打开IDE工具，新建项目，导入上文下载好的架包</h6><p><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/prolibs20181030154520.png" srcset="/img/loading.gif" lazyload alt="导入项目"></p>
+<h6 id="1-打开IDE工具，新建项目，导入上文下载好的架包"><a href="#1-打开IDE工具，新建项目，导入上文下载好的架包" class="headerlink" title="1. 打开IDE工具，新建项目，导入上文下载好的架包"></a>1. 打开IDE工具，新建项目，导入上文下载好的架包</h6><p><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/prolibs20181030154520.png" srcset="/img/search-computer.svg" lazyload alt="导入项目"></p>
 <h6 id="2-创建实体类并意添加一个方法打印输入"><a href="#2-创建实体类并意添加一个方法打印输入" class="headerlink" title="2. 创建实体类并意添加一个方法打印输入"></a>2. 创建实体类并意添加一个方法打印输入</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> cn.sr.spring;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">User</span> &#123;<br><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">isSelf</span><span class="hljs-params">()</span> &#123;<br>		System.out.println(<span class="hljs-string">&quot;我是谁，我在哪，我在干什么&quot;</span>);<br>	&#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
 
 <h6 id="3-在src目录下-创建xml文件"><a href="#3-在src目录下-创建xml文件" class="headerlink" title="3. 在src目录下 创建xml文件"></a>3. 在src目录下 创建xml文件</h6><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;?xml version=<span class="hljs-string">&quot;1.0&quot;</span> encoding=<span class="hljs-string">&quot;UTF-8&quot;</span>?&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">beans</span> <span class="hljs-attr">xmlns</span>=<span class="hljs-string">&quot;http://www.springframework.org/schema/beans&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">xmlns:xsi</span>=<span class="hljs-string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">xsi:schemaLocation</span>=<span class="hljs-string">&quot;http://www.springframework.org/schema/beans</span></span><br><span class="hljs-string"><span class="hljs-tag">        http://www.springframework.org/schema/beans/spring-beans.xsd&quot;</span>&gt;</span><br>    <span class="hljs-comment">&lt;!-- 配置javabean对象 --&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;user&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;cn.sr.spring.User&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">bean</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">beans</span>&gt;</span><br></code></pre></td></tr></table></figure>
@@ -327,7 +344,7 @@
 
 <blockquote>
 <h5 id="配置完成"><a href="#配置完成" class="headerlink" title="配置完成"></a>配置完成</h5></blockquote>
-<p><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/prolibs.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/prolibs.png" srcset="/img/search-computer.svg" lazyload></p>
 <p>如图所示，即配置成功。</p>
 <hr>
 

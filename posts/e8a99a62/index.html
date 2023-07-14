@@ -71,7 +71,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"www.srblog.cn","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":13177398,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"XaXQ6DsrdJpeM4GK52QcpikI-gzGzoHsz","app_key":"dx7t2R3p070TQAJrUlIMX7yU","server_url":"https://xaxq6dsr.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"www.srblog.cn","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/search-computer.svg","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":13177398,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"XaXQ6DsrdJpeM4GK52QcpikI-gzGzoHsz","app_key":"dx7t2R3p070TQAJrUlIMX7yU","server_url":"https://xaxq6dsr.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -270,8 +270,25 @@
     
 
     
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          4 分钟
+        
+      </span>
+    
 
     
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
     
   </div>
 
@@ -314,14 +331,14 @@
 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Yum仓库部署在国外，为了方便之后项目环境的部署更新操作，最好更新为国内的镜像源，本文以阿里云源为例。<br>参考网站:<a target="_blank" rel="noopener" href="https://opsx.alibaba.com/mirror">https://opsx.alibaba.com/mirror</a></p>
 <h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="1-备份"><a href="#1-备份" class="headerlink" title="1.备份"></a>1.备份</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup<br></code></pre></td></tr></table></figure>
 
-<p><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/20181121_centosbf.png" srcset="/img/loading.gif" lazyload alt="图中即为重命名的备份文件"></p>
+<p><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/20181121_centosbf.png" srcset="/img/search-computer.svg" lazyload alt="图中即为重命名的备份文件"></p>
 <h3 id="2-下载阿里云的源文件"><a href="#2-下载阿里云的源文件" class="headerlink" title="2.下载阿里云的源文件"></a>2.下载阿里云的源文件</h3><p>这里我的虚拟机版本为CentOS 7，这里根据你的版本进行操作，参考上文链接</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">wget -O /etc/yum.repos.d/CentOS-Base.repo http:<span class="hljs-comment">//mirrors.aliyun.com/repo/Centos-7.repo</span><br></code></pre></td></tr></table></figure>
 
-<p><font color="red">注意：这里需要给与管理员权限<font/><br><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/20181121213830.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p><font color="red">注意：这里需要给与管理员权限<font/><br><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/20181121213830.png" srcset="/img/search-computer.svg" lazyload alt="在这里插入图片描述"></p>
 <h3 id="3-生成缓存"><a href="#3-生成缓存" class="headerlink" title="3.生成缓存"></a>3.生成缓存</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">yum makecache<br></code></pre></td></tr></table></figure>
 
-<p><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/20181121214100.png" srcset="/img/loading.gif" lazyload alt="在这里插入图片描述"></p>
+<p><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/20181121214100.png" srcset="/img/search-computer.svg" lazyload alt="在这里插入图片描述"></p>
 <h2 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h2><p>如果更换源后出现问题，则需要先清除默认Yum源的本地缓存</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">yum clean all<br></code></pre></td></tr></table></figure>
 
