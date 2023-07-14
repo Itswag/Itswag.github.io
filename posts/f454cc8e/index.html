@@ -72,7 +72,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"www.srblog.cn","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":13177398,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"XaXQ6DsrdJpeM4GK52QcpikI-gzGzoHsz","app_key":"dx7t2R3p070TQAJrUlIMX7yU","server_url":"https://xaxq6dsr.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"www.srblog.cn","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/search-computer.svg","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":13177398,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"XaXQ6DsrdJpeM4GK52QcpikI-gzGzoHsz","app_key":"dx7t2R3p070TQAJrUlIMX7yU","server_url":"https://xaxq6dsr.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -271,8 +271,25 @@
     
 
     
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          18 分钟
+        
+      </span>
+    
 
     
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
     
   </div>
 
@@ -337,7 +354,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">Editor editor=sharedPreferences.edit();<br></code></pre></td></tr></table></figure>
 
 <ol start="2">
-<li>存放数据<br>以Key-Value的形式储存，只适用于一些简单的数据类型<br><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/shareputdata20181108234424.png" srcset="/img/loading.gif" lazyload alt="数据类型"></li>
+<li>存放数据<br>以Key-Value的形式储存，只适用于一些简单的数据类型<br><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/shareputdata20181108234424.png" srcset="/img/search-computer.svg" lazyload alt="数据类型"></li>
 <li>提交保存</li>
 </ol>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//后台提交，没有返回值</span><br>editor.apply();<br><span class="hljs-comment">//编译处理，返回Boolean</span><br>editor.commit();<br></code></pre></td></tr></table></figure>
@@ -349,9 +366,9 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//移除数据</span><br>editor.remove(String key);<br><span class="hljs-comment">//清空数据</span><br>editor.clear();<br></code></pre></td></tr></table></figure>
 
 <ol start="5">
-<li>读取数据<br><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/shareGetData20181108235553.png" srcset="/img/loading.gif" lazyload alt="getData"></li>
+<li>读取数据<br><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/shareGetData20181108235553.png" srcset="/img/search-computer.svg" lazyload alt="getData"></li>
 </ol>
-<h2 id="记住密码案列"><a href="#记住密码案列" class="headerlink" title="记住密码案列"></a>记住密码案列</h2><p><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/gif/111.gif" srcset="/img/loading.gif" lazyload alt="记住密码~"></p>
+<h2 id="记住密码案列"><a href="#记住密码案列" class="headerlink" title="记住密码案列"></a>记住密码案列</h2><p><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/gif/111.gif" srcset="/img/search-computer.svg" lazyload alt="记住密码~"></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//XML文件的形式储存</span><br><span class="hljs-comment">//设置本程序的私有访问</span><br>      sharedPreferences=getSharedPreferences(<span class="hljs-string">&quot;userInfo&quot;</span>,MODE_PRIVATE);<br><br>      <span class="hljs-comment">//获取程序中已保存的信息</span><br>      rememeber.setChecked(sharedPreferences.getBoolean(<span class="hljs-string">&quot;rememeber&quot;</span>,<span class="hljs-literal">false</span>));<br>      mName.setText(sharedPreferences.getString(<span class="hljs-string">&quot;name&quot;</span>,<span class="hljs-string">&quot;&quot;</span>));<br>      mPassWord.setText(sharedPreferences.getString(<span class="hljs-string">&quot;password&quot;</span>,<span class="hljs-string">&quot;&quot;</span>));<br><br>      mLogin.setOnClickListener(<span class="hljs-keyword">new</span> <span class="hljs-title class_">View</span>.OnClickListener() &#123;<br>          <span class="hljs-meta">@Override</span><br>          <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onClick</span><span class="hljs-params">(View v)</span> &#123;<br>              String name=mName.getText().toString();<br>              String password=mPassWord.getText().toString();<br>              Editor editor=sharedPreferences.edit();<br>              <span class="hljs-keyword">if</span>(name.equals(<span class="hljs-string">&quot;admin&quot;</span>)&amp;&amp;password.equals(<span class="hljs-string">&quot;admin&quot;</span>))&#123;<br>                  <span class="hljs-comment">//标记是否勾选记住密码</span><br>                  <span class="hljs-type">boolean</span> flag=<span class="hljs-literal">false</span>;<br>                  <span class="hljs-keyword">if</span>(rememeber.isChecked())&#123;<br>                       flag=<span class="hljs-literal">true</span>;<br>                      editor.putString(<span class="hljs-string">&quot;name&quot;</span>,name);<br>                      editor.putString(<span class="hljs-string">&quot;password&quot;</span>,password);<br>                      editor.putBoolean(<span class="hljs-string">&quot;rememeber&quot;</span>,<span class="hljs-literal">true</span>);<br>                  &#125;<br>                  editor.putBoolean(<span class="hljs-string">&quot;rememeber&quot;</span>,flag);<br>                  editor.commit();<br>                  startActivityForResult(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Intent</span>(MainActivity.<span class="hljs-built_in">this</span>,Main2Activity.class).putExtra(<span class="hljs-string">&quot;rememeber&quot;</span>,flag),<span class="hljs-number">1</span>);<br>              &#125;<br><br>          &#125;<br>      &#125;);<br></code></pre></td></tr></table></figure>
 
 <p>下载地址: 等待上传~~</p>
