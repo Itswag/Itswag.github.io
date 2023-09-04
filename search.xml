@@ -184,39 +184,6 @@
       </tags>
   </entry>
   <entry>
-    <title>SSM框架结合LayUi文件上传模块接入COS对象存储服务</title>
-    <url>/posts/2502e0fe/</url>
-    <content><![CDATA[<img src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2019.01.05_wx-cos.png'>
-<!-- more -->
-
-<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>在日常项目开发中经常会用到图片，视频等文件存储的操作，但是文件如果一直存放在本地服务器中，可以会导致资源浪费，且访问速度也有所限制，这时我们就会考虑<strong>CDN加速</strong>或<strong>云端存储</strong>等方式来解决问题，这里就要介绍下本文用到的<strong>COS对象存储</strong>-安全稳定、海量、便捷、低延迟、低成本的云端存储服务。</p>
-<h3 id="COS对象存储"><a href="#COS对象存储" class="headerlink" title="COS对象存储"></a>COS对象存储</h3><blockquote>
-<p>对象存储（Cloud Object Storage，COS）是腾讯云提供的面向非结构化数据，支持 HTTP&#x2F;HTTPS 协议访问的分布式存储服务，它能容纳海量数据并保证用户对带宽和容量扩充无感知，可以作为大数据计算与分析的数据池。腾讯云 COS 提供网页端管理界面、多种语言的 SDK 以及命令行和图形化工具，并且完全兼容 S3 的 API 接口，方便用户直接使用社区工具和插件，COS 还可以和其他云产品结合，比如利用 CDN 的全球节点提供加速服务，利用数据万象的图片处理能力提供一站式图片解决方案等(<a href="https://cloud.tencent.com/product/cos">详细介绍</a>)</p>
-</blockquote>
-<h3 id="案例实现"><a href="#案例实现" class="headerlink" title="案例实现"></a>案例实现</h3><ul>
-<li>本文使用的是腾讯云提供的COS服务，每个月提供50G存储容量，10G流量，对于一般的博客网站，以及项目测试来说绰绰有余</li>
-<li>腾讯云对象存储 COS 除了提供多种 API 接口，还提供了丰富多样的 SDK 供开发者使用，如Java、Python、Js等…，本项目后台基于SpringMVC实现，前端通过LayUi框架的文件上传模块结合实现</li>
-<li>存储桶相应的还有<strong>防盗链</strong>设置，<strong>跨域规则</strong>设置，<strong>读写权限</strong>设置，以及相应的<strong>CDN加速</strong>服务<br><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/emoji/2019-01-05%20154723-zx.jpg" alt="www.srblog.cn"></li>
-</ul>
-<hr>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> cn.mall.controller.portal;<br><br><span class="hljs-keyword">import</span> cn.mall.common.ServerResponse;<br><span class="hljs-keyword">import</span> cn.mall.util.PropertiesUtil;<br><span class="hljs-keyword">import</span> com.qcloud.cos.COSClient;<br><span class="hljs-keyword">import</span> com.qcloud.cos.ClientConfig;<br><span class="hljs-keyword">import</span> com.qcloud.cos.auth.BasicCOSCredentials;<br><span class="hljs-keyword">import</span> com.qcloud.cos.auth.COSCredentials;<br><span class="hljs-keyword">import</span> com.qcloud.cos.model.PutObjectRequest;<br><span class="hljs-keyword">import</span> com.qcloud.cos.model.PutObjectResult;<br><span class="hljs-keyword">import</span> com.qcloud.cos.region.Region;<br><span class="hljs-keyword">import</span> org.springframework.stereotype.Controller;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RequestMethod;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RequestParam;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.ResponseBody;<br><span class="hljs-keyword">import</span> org.springframework.web.multipart.MultipartFile;<br><br><span class="hljs-keyword">import</span> javax.servlet.http.HttpSession;<br><span class="hljs-keyword">import</span> java.io.File;<br><span class="hljs-keyword">import</span> java.io.IOException;<br><span class="hljs-keyword">import</span> java.util.UUID;<br><br><span class="hljs-meta">@Controller</span><br><span class="hljs-meta">@RequestMapping(&quot;/upload/&quot;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">UploadController</span> &#123;<br><br>    <span class="hljs-comment">//密钥请前往腾讯云后台查询</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String secretId=<span class="hljs-string">&quot;*************&quot;</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String secretKey=<span class="hljs-string">&quot;*************&quot;</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String bucketName=<span class="hljs-string">&quot;你的存储桶名称&quot;</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String RegionName=<span class="hljs-string">&quot;存储桶所属地域&quot;</span>;<br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 文件上传</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> file</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> session</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>   <br>    <span class="hljs-meta">@RequestMapping(value = &quot;upload_image_cos.do&quot;,method = RequestMethod.POST)</span><br>    <span class="hljs-meta">@ResponseBody</span><br>    <span class="hljs-keyword">public</span> Object <span class="hljs-title function_">Upload</span><span class="hljs-params">(<span class="hljs-meta">@RequestParam(value = &quot;file&quot;)</span> MultipartFile file, HttpSession session)</span>&#123;<br>        <span class="hljs-keyword">if</span>(file == <span class="hljs-literal">null</span>)&#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">UploadMsg</span>(<span class="hljs-number">0</span>,<span class="hljs-string">&quot;文件为空&quot;</span>,<span class="hljs-literal">null</span>);<br>        &#125;<br>        <span class="hljs-comment">//获取文件上传原名</span><br>        <span class="hljs-type">String</span> <span class="hljs-variable">oldFileName</span> <span class="hljs-operator">=</span> file.getOriginalFilename();<br>        <span class="hljs-type">String</span> <span class="hljs-variable">eName</span> <span class="hljs-operator">=</span> oldFileName.substring(oldFileName.lastIndexOf(<span class="hljs-string">&quot;.&quot;</span>));<br>        <span class="hljs-comment">//通过UUID随机生成新的文件名</span><br>        <span class="hljs-type">String</span> <span class="hljs-variable">newFileName</span> <span class="hljs-operator">=</span> UUID.randomUUID()+eName;<br> <br>        <span class="hljs-comment">// 1 初始化用户身份信息(secretId, secretKey)</span><br>        <span class="hljs-type">COSCredentials</span> <span class="hljs-variable">cred</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">BasicCOSCredentials</span>(secretId, secretKey);<br>        <span class="hljs-comment">// 2 设置bucket的区域, COS地域的简称请参照 https://cloud.tencent.com/document/product/436/6224</span><br>        <span class="hljs-type">ClientConfig</span> <span class="hljs-variable">clientConfig</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ClientConfig</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Region</span>(RegionName));<br>        <span class="hljs-comment">// 3 生成cos客户端</span><br>        <span class="hljs-type">COSClient</span> <span class="hljs-variable">cosclient</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">COSClient</span>(cred, clientConfig);<br>        <span class="hljs-comment">// bucket的命名规则为&#123;name&#125;-&#123;appid&#125; ，此处填写的存储桶名称必须为此格式</span><br>        <span class="hljs-type">String</span> <span class="hljs-variable">bucketName</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">this</span>.bucketName;<br><br>        <span class="hljs-comment">// 简单文件上传, 最大支持 5 GB, 适用于小文件上传, 建议 20 M 以下的文件使用该接口</span><br>        <span class="hljs-comment">// 大文件上传请参照 API 文档高级 API 上传</span><br>        <span class="hljs-type">File</span> <span class="hljs-variable">localFile</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-comment">//创建临时文件</span><br>            localFile = File.createTempFile(<span class="hljs-string">&quot;temp&quot;</span>,<span class="hljs-literal">null</span>);<br>            file.transferTo(localFile);<br>            <span class="hljs-comment">// 指定要上传到 COS 上的路径</span><br>            <span class="hljs-type">String</span> <span class="hljs-variable">key</span> <span class="hljs-operator">=</span> PropertiesUtil.getProperty(<span class="hljs-string">&quot;cos_key_name&quot;</span>)+newFileName;<br>            <span class="hljs-type">PutObjectRequest</span> <span class="hljs-variable">putObjectRequest</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">PutObjectRequest</span>(bucketName, key, localFile);<br>            <span class="hljs-type">PutObjectResult</span> <span class="hljs-variable">putObjectResult</span> <span class="hljs-operator">=</span> cosclient.putObject(putObjectRequest);<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">UploadMsg</span>(<span class="hljs-number">1</span>,<span class="hljs-string">&quot;上传成功&quot;</span>, newFileName);<br>        &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">UploadMsg</span>(-<span class="hljs-number">1</span>,e.getMessage(),<span class="hljs-literal">null</span>);<br>        &#125; <span class="hljs-keyword">finally</span> &#123;<br>            <span class="hljs-comment">// 关闭客户端(关闭后台线程)</span><br>            cosclient.shutdown();<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-comment">//自定义JSON消息体</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">UploadMsg</span> &#123;<br>        <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> status;<br>        <span class="hljs-keyword">public</span> String msg;<br>        <span class="hljs-keyword">public</span> String path;<br><br>        <span class="hljs-keyword">public</span> <span class="hljs-title function_">UploadMsg</span><span class="hljs-params">()</span> &#123;<br>            <span class="hljs-built_in">super</span>();<br>        &#125;<br><br>        <span class="hljs-keyword">public</span> <span class="hljs-title function_">UploadMsg</span><span class="hljs-params">(<span class="hljs-type">int</span> status, String msg,String path)</span>&#123;<br>            <span class="hljs-built_in">this</span>.status =status;<br>            <span class="hljs-built_in">this</span>.msg =msg;<br>            <span class="hljs-built_in">this</span>.path =path;<br>        &#125;<br>    &#125;<br><br>&#125;<br><br></code></pre></td></tr></table></figure>
-
-<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js">&lt;!<span class="hljs-variable constant_">DOCTYPE</span> html&gt;<br>&lt;html&gt;<br>&lt;head&gt;<br>    &lt;meta charset=&quot;UTF-8&quot;&gt;<br>    &lt;meta name=&quot;renderer&quot; content=&quot;webkit&quot;&gt;<br>    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge,chrome=1&quot;&gt;<br>    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no&quot; /&gt;<br>    &lt;title&gt;商品添加&lt;/title&gt;<br>    &lt;link rel=&quot;stylesheet&quot; href=&quot;../assets/layui/css/layui.css&quot;&gt;<br><br>&lt;/head&gt;<br>&lt;body&gt;<br>&lt;form class=&quot;layui-form column-content-detail&quot;&gt;<br><br>    &lt;div class=&quot;layui-tab-content&quot;&gt;<br>        &lt;div class=&quot;layui-tab-item layui-show&quot;&gt;<br>            &lt;div class=&quot;layui-form-item&quot;&gt;<br>                &lt;label class=&quot;layui-form-label&quot;&gt;商品标题：&lt;/label&gt;<br>                &lt;div class=&quot;layui-input-block&quot;&gt;<br>                    &lt;input type=&quot;text&quot; name=&quot;name&quot; required lay-verify=&quot;required&quot; placeholder=&quot;请输入商品标题&quot; autocomplete=&quot;off&quot; class=&quot;layui-input&quot;&gt;<br>                &lt;/div&gt;<br>            &lt;/div&gt;<br>            &lt;div class=&quot;layui-form-item&quot;&gt;<br>                &lt;label class=&quot;layui-form-label&quot;&gt;分类：&lt;/label&gt;<br>                &lt;div class=&quot;layui-input-block&quot;&gt;<br>                    &lt;select name=&quot;categoryId&quot; lay-verify=&quot;required&quot;&gt;<br>                        &lt;option value=&quot;&quot;&gt;请选择分类&lt;/option&gt;<br>                        &lt;option value=&quot;100001&quot;&gt;家用电器&lt;/option&gt;<br>                        &lt;option value=&quot;100002&quot;&gt;数码3C&lt;/option&gt;<br>                        &lt;option value=&quot;100003&quot;&gt;服装箱包&lt;/option&gt;<br>                        &lt;option value=&quot;100004&quot;&gt;食品生鲜&lt;/option&gt;<br>                        &lt;option value=&quot;100005&quot;&gt;酒水饮料&lt;/option&gt;<br>                    &lt;/select&gt;<br>                &lt;/div&gt;<br>            &lt;/div&gt;<br>            &lt;div class=&quot;layui-form-item&quot;&gt;<br>                &lt;label class=&quot;layui-form-label&quot;&gt;图像上传：&lt;/label&gt;<br>                &lt;div class=&quot;layui-input-block&quot;&gt;<br>                    &lt;img id=&quot;upload_img&quot; src=&quot;../images/default_img.png&quot; width=&quot;100&quot; height=&quot;100&quot;&gt;<br>                    &lt;button type=&quot;button&quot; class=&quot;layui-btn&quot; id=&quot;test1&quot;&gt;<br>                        &lt;i class=&quot;layui-icon&quot;&gt;&lt;/i&gt;上传图片<br>                    &lt;/button&gt;<br>                &lt;/div&gt;<br>            &lt;/div&gt;<br>            &lt;div class=&quot;layui-form-item layui-form-text&quot;&gt;<br>                &lt;label class=&quot;layui-form-label&quot;&gt;商品介绍：&lt;/label&gt;<br>                &lt;div class=&quot;layui-input-block&quot;&gt;<br>                    &lt;textarea class=&quot;layui-textarea layui-hide&quot; name=&quot;detail&quot; lay-verify=&quot;detail&quot; id=&quot;LAY_demo_editor&quot;&gt;&lt;/textarea&gt;<br>                &lt;/div&gt;<br>            &lt;/div&gt;<br>            &lt;input type=&quot;hidden&quot; id=&quot;mainImage&quot; name=&quot;mainImage&quot; required value=&quot;default_img.png&quot;  class=&quot;layui-input&quot;&gt;<br>            &lt;input type=&quot;hidden&quot; id=&quot;status&quot; name=&quot;status&quot; value=&quot;1&quot; class=&quot;layui-input&quot;&gt;<br>            &lt;div class=&quot;layui-form-item&quot;&gt;<br>                &lt;label class=&quot;layui-form-label&quot;&gt;商品库存：&lt;/label&gt;<br>                &lt;div class=&quot;layui-input-block&quot;&gt;<br>                    &lt;input type=&quot;text&quot; name=&quot;stock&quot; required lay-verify=&quot;number&quot; placeholder=&quot;请输入商品库存&quot; autocomplete=&quot;off&quot; class=&quot;layui-input&quot;&gt;<br>                &lt;/div&gt;<br>            &lt;/div&gt;<br>            &lt;div class=&quot;layui-form-item&quot;&gt;<br>                &lt;label class=&quot;layui-form-label&quot;&gt;商品价格：&lt;/label&gt;<br>                &lt;div class=&quot;layui-input-block&quot;&gt;<br>                    &lt;input type=&quot;text&quot; name=&quot;price&quot; required lay-verify=&quot;number&quot; placeholder=&quot;请输入商品价格&quot; autocomplete=&quot;off&quot; class=&quot;layui-input&quot;&gt;<br>                &lt;/div&gt;<br>            &lt;/div&gt;<br><br>        &lt;/div&gt;<br>    &lt;/div&gt;<br><br>    &lt;div class=&quot;layui-form-item&quot; style=&quot;padding-left: 10px;&quot;&gt;<br>        &lt;div class=&quot;layui-input-block&quot;&gt;<br>            &lt;button class=&quot;layui-btn&quot; lay-submit lay-filter=&quot;add_product&quot;&gt;立即提交&lt;/button&gt;<br>            &lt;button id=&quot;reset&quot; type=&quot;reset&quot; class=&quot;layui-btn layui-btn-primary&quot;&gt;重置&lt;/button&gt;<br>        &lt;/div&gt;<br>    &lt;/div&gt;<br>&lt;/form&gt;<br>&lt;script src=&quot;../js/cos-js-sdk-v5.min.js&quot; type=&quot;text/javascript&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;<br>&lt;script src=&quot;../js/jquery-1.10.2.js&quot; type=&quot;text/javascript&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;<br>&lt;script src=&quot;../assets/layui/layui.all.js&quot;&gt;&lt;/script&gt;<br>&lt;script&gt;<br>    layui.use([&#x27;form&#x27;, &#x27;jquery&#x27;, &#x27;laydate&#x27;, &#x27;layer&#x27;, &#x27;laypage&#x27;, &#x27;element&#x27;, &#x27;upload&#x27;, &#x27;layedit&#x27;], function() &#123;<br>        var form = layui.form,<br>            layer = layui.layer,<br>            $ = layui.jquery,<br>            laypage = layui.laypage,<br>            laydate = layui.laydate,<br>            layedit = layui.layedit,<br>            element = layui.element,<br>            upload=layui.upload;<br><br>        //创建一个编辑器<br>        var editIndex = layedit.build(&#x27;LAY_demo_editor&#x27;, &#123;<br>            tool: [&#x27;strong&#x27; //加粗<br>                , &#x27;italic&#x27; //斜体<br>                , &#x27;underline&#x27; //下划线<br>                , &#x27;del&#x27; //删除线<br>                , &#x27;|&#x27; //分割线<br>                , &#x27;left&#x27; //左对齐<br>                , &#x27;center&#x27; //居中对齐<br>                , &#x27;right&#x27; //右对齐<br>                , &#x27;link&#x27; //超链接<br>                , &#x27;unlink&#x27; //清除链接<br>                , &#x27;image&#x27; //插入图片<br>            ],<br>            height: 100<br>        &#125;);<br>     <br>        var uploadInst = upload.render(&#123;<br>            elem: &#x27;#test1&#x27; //绑定元素<br>            ,url:&#x27;../upload/upload_image_cos.do&#x27;//后台上传接口<br>            ,before: function(obj)&#123; //obj参数包含的信息，跟 choose回调完全一致，可参见上文。<br>                layer.msg(&#x27;上传中&#x27;,&#123;icon: 16,time:0,shade:0.01&#125;);<br>            &#125;<br>            ,done: function(res, index, upload)&#123;<br>                layer.closeAll(&#x27;loading&#x27;);<br>                //status=1代表上传成功<br>                if(res.status == 1)&#123;<br>                    layer.msg(&quot;上传成功&quot;,&#123;icon:1&#125;);<br>                //do something （比如将res返回的图片链接保存到表单的隐藏域）<br>                    $(&#x27;#upload_img&#x27;).attr(&#x27;src&#x27;,&#x27;https://sr-1251242863.cos.ap-shanghai.myqcloud.com/webdemo/images/&#x27;+res.path);<br>                    $(&#x27;#mainImage&#x27;).val(res.path);<br>                &#125;<br><br>                //获取当前触发上传的元素，一般用于 elem 绑定 class 的情况，注意：此乃 layui 2.1.0 新增<br>                var item = this.item;<br>                //文件保存失败<br>                //do something<br>            &#125;<br>            ,error: function()&#123;<br>                layer.closeAll(&#x27;loading&#x27;);<br>                //请求异常回调<br>                layer.msg(&quot;上传失败，请重试&quot;,&#123;icon:2&#125;);<br>            &#125;<br>            ,size:2048 //文件大小限制<br>            ,number:1 //文件数量限制<br>            ,accept: &#x27;images&#x27; //文件类型限制<br>            ,acceptMime: &#x27;image/jpg, image/png&#x27; //选择窗口属性<br>        &#125;);<br>    &#125;);<br>&lt;/script&gt;<br>&lt;/body&gt;<br>&lt;/html&gt;<br></code></pre></td></tr></table></figure>
-
-<h2 id="动图演示"><a href="#动图演示" class="headerlink" title="动图演示"></a>动图演示</h2><p><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/gif/2019-0105-10b99e3e-cos.gif" alt="www.srblog.cn"></p>
-]]></content>
-      <categories>
-        <category>Spring</category>
-      </categories>
-      <tags>
-        <tag>JAVA</tag>
-        <tag>SSM框架</tag>
-        <tag>COS对象存储</tag>
-        <tag>LayUi</tag>
-        <tag>Spring</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Spring Data JPA 映射VO/DTO对象</title>
     <url>/posts/17193f90/</url>
     <content><![CDATA[<img src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/weixin_title_2019.05.13.png' >
@@ -282,147 +249,6 @@
         <tag>Spring Data JPA</tag>
         <tag>VO</tag>
         <tag>HQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Spring框架入门(一):概念简介</title>
-    <url>/posts/f9407374/</url>
-    <content><![CDATA[<img src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/wx_title_2018.10.30.png'>
-<!-- more -->
-
-<blockquote>
-<p><strong>简介</strong></p>
-</blockquote>
-<p>Spring 是一个开源的轻量级 Java SE（ Java 标准版本）&#x2F;Java EE（ Java 企业版本）开发应用框架，其目的是用于简化企业级应用程序开发。Spring容器通过反转控制( IoC )和依赖注入( DI )来实现高内聚、低耦合的应用。除此之外它可以整合很多第三方框架，它还提供面向切面编程（ AOP ）的能力，对通用任务如安全、事务、日志等进行集中式管理</p>
-<blockquote>
-<p><strong>概念介绍</strong></p>
-</blockquote>
-<ul>
-<li>框架：能完成一定功能的半成品，比如我们可以使用框架进行购物网站开发；框架做一部分功能，我们自己做一部分功能，辅助高效工作。而且框架规定了你在开发应用程序时的整体架构，提供了一些基础功能，还规定了类和对象的如何创建、如何协作等，从而简化我们的代码编写，让我们专注于业务逻辑开发。</li>
-<li>非侵入式设计：从框架角度可以这样理解，无需继承框架提供的类，这种设计就可以看作是非侵入式设计，如果继承了这些框架类，就是侵入设计，如果以后想更换框架，之前写过的代码几乎无法重用，如果非侵入式设计则之前写过的代码仍然可以继续使用。</li>
-<li>轻量级与重量级：轻量级是相对于重量级而言的，轻量级一般就是非入侵性的、所依赖的东西非常少、资源占用非常少、部署简单等等，其实就是比较容易使用，而重量级正好相反。</li>
-<li>POJO ： POJO （ Plain Ordinary Java Object ）简单的 Java 对象。它可以包含业务逻辑或持久化逻辑，但不担当任何特殊角色且不继承或不实现任何其它 Java 框架的类或接口。</li>
-<li>容器：在日常生活中容器就是一种盛放东西的器具，从程序设计角度看就是装对象的的对象，因为存在放入、拿出等操作，所以容器还要管理对象的生命周期。</li>
-<li>控制反转：即 Inversion of Control ，缩写为 IoC ，控制反转还有一个名字叫做依赖注入（ Dependency Injection ），就是由容器控制程序之间的关系，而非传统实现中，由程序代码直接操控。</li>
-<li>Bean ：一般指容器管理对象，在 Spring 中指 Spring IoC 容器管理对象。</li>
-</ul>
-<blockquote>
-<p><strong>优点</strong></p>
-</blockquote>
-<ul>
-<li>低侵入式设计，代码的污染极低。</li>
-<li>独立于各种应用服务器，基于Spring框架的应用，可以真正实现Write Once，Run Anywhere的承诺。</li>
-<li>Spring的IoC容器降低了业务对象替换的复杂性，提高了组件之间的解耦。</li>
-<li>Spring的AOP支持允许将一些通用任务如安全、事务、日志等进行集中式管理，从而提供了更好的复用。</li>
-<li>Spring的ORM和DAO提供了与第三方持久层框架的良好整合，并简化了底层的数据库访问。</li>
-<li>Spring的高度开放性，并不强制应用完全依赖于Spring，开发者可自由选用Spring框架的部分或全部。</li>
-</ul>
-<blockquote>
-<p><strong>架构图</strong></p>
-</blockquote>
-<p><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/spring_frameword.png"><br><strong>核心容器：包括 Core 、 Beans 、 Context 、 EL 模块</strong></p>
-<ul>
-<li>Core 模块：封装了框架依赖的最底层部分，包括资源访问、类型转换及一些常用工具类。</li>
-<li>Beans 模块：提供了框架的基础部分，包括控制反转（ IOC ）和依赖注入（ DI ）。其中 BeanFactory 是容器核心，本质是“工厂设计模式”的实现，而且无需编程实现“单例设计模式”，单例完全由容器控制，而且提倡面向接口编程，而非面向实现编程；所有应用程序对象及对象间关系由框架管理，从而真正从程序逻辑中把维护对象之间的依赖关系提取出来，所有这些依赖关系都由 BeanFactory 来维护。</li>
-<li>Context 模块：以 Core 和 Beans 为基础，集成 Beans 模块功能并添加资源绑定、数据验证、国际化、 Java EE 支持、容器生命周期、事件传播等；核心接口是 ApplicationContext 。</li>
-<li>EL 模块：提供强大的表达式语言支持，支持访问和修改属性值，方法调用，支持访问及修改数组、容器和索引器，命名变量，支持算数和逻辑运算，支持从 Spring 容器获取 Bean， 它也支持列表投影、选择和一般的列表聚合等。</li>
-</ul>
-<hr>
-<ul>
-<li>AOP 模块： Spring AOP 模块提供了符合 AOP Alliance 规范的面向切面的编程（ aspect-oriented programming ）实现，提供比如日志记录、权限控制、性能统计等通用功能和业务逻辑分离的技术，并且能动态的把这些功能添加到需要的代码中；这样各专其职，降低业务逻辑和通用功能的耦合。<br>-Aspects 模块：提供了对 AspectJ 的集成，AspectJ 提供了比 Spring ASP 更强大的功能。</li>
-<li>数据访问&#x2F;集成模块：该模块包括了 JDBC 、 ORM 、 OXM 、 JMS 和事务管理。<br>事务模块：该模块用于 Spring 管理事务，只要是 Spring 管理对象都能得到 Spring 管理事务的好处，无需在代码中进行事务控制了，而且支持编程和声明性的事务管理。</li>
-<li>JDBC 模块：提供了一个 JBDC 的样例模板，使用这些模板能消除传统冗长的 JDBC 编码还有必须的事务控制，而且能享受到 Spring 管理事务的好处。<br>ORM 模块：提供与流行的“对象-关系”映射框架的无缝集成，包括 Hibernate 、JPA 、 MyBatis 等。而且可以使用 Spring 事务管理，无需额外控制事务。<br>OXM 模块：提供了一个对 Object &#x2F; XML 映射实现，将 java 对象映射成 XML 数据，或者将 XML 数据映射成 java 对象， Object &#x2F; XML 映射实现包括 JAXB 、 Castor 、 XMLBeans 和 XStream 。</li>
-<li>JMS 模块：用于 JMS ( Java Messaging Service )，提供一套 “消息生产者、消息消费者”模板用于更加简单的使用 JMS ， JMS 用于用于在两个应用程序之间，或分布式系统中发送消息，进行异步通信。</li>
-<li>Web &#x2F; Remoting 模块： Web &#x2F; Remoting 模块包含了 Web 、 Web-Servlet 、 Web-Struts 、 Web-Porlet 模块。</li>
-<li>Web 模块：提供了基础的 web 功能。例如多文件上传、集成 IoC 容器、远程过程访问（ RMI 、Hessian 、 Burlap ）以及 Web Service 支持，并提供一个 RestTemplate 类来提供方便的 Restful services 访问。<br>Web-Servlet 模块：提供了一个 Spring MVC Web 框架实现。Spring MVC 框架提供了基于注解的请求资源注入、更简单的数据绑定、数据验证等及一套非常易用的 JSP 标签，完全无缝与 Spring 其他技术协作。</li>
-<li>Web-Struts 模块：提供了与 Struts 无缝集成， Struts1.x 和 Struts2.x 都支持。</li>
-<li>Test 模块： Spring 支持 Junit 和 TestNG 测试框架，而且还额外提供了一些基于 Spring 的测试功能，比如在测试 Web 框架时，模拟 Http 请求的功能。</li>
-</ul>
-<hr>
-]]></content>
-      <categories>
-        <category>Spring</category>
-      </categories>
-      <tags>
-        <tag>Spring</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Spring框架入门(三):依赖注入和控制反转</title>
-    <url>/posts/2d0cab43/</url>
-    <content><![CDATA[<img src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/spring3_2018.10.31.png' >
-<!-- more -->
-
-<h1 id="依赖注入和控制反转概念"><a href="#依赖注入和控制反转概念" class="headerlink" title="依赖注入和控制反转概念"></a>依赖注入和控制反转概念</h1><p>依赖注入(IoC) 和 控制反转(DI) 有什么关系呢？其实它们是同一个概念的不同角度描述。</p>
-<h2 id="依赖注入-Dependency-injection"><a href="#依赖注入-Dependency-injection" class="headerlink" title="依赖注入(Dependency injection)"></a>依赖注入(Dependency injection)</h2><blockquote>
-<p>是指应用在运行期，由外部容器（Spring容器）动态地将依赖对象注入到另一个对象中。</p>
-</blockquote>
-<p>理解 DI 的关键是：<font color="red">“谁依赖谁，为什么需要依赖，谁注入谁，注入了什么”</font>：</p>
-<ul>
-<li>谁依赖于谁：当然是某个容器管理对象依赖于 IoC 容器；“被注入对象的对象”依赖于“依赖对象”；</li>
-<li>为什么需要依赖：容器管理对象需要 IoC 容器来提供对象需要的外部资源；</li>
-<li>谁注入谁：很明显是 IoC 容器注入某个对象，也就是注入“依赖对象”；</li>
-<li>注入了什么：就是注入某个对象所需要的外部资源（包括对象、资源、常量数据）。</li>
-</ul>
-<h2 id="控制反转-Inversion-Of-Control"><a href="#控制反转-Inversion-Of-Control" class="headerlink" title="控制反转(Inversion Of Control)"></a>控制反转(Inversion Of Control)</h2><blockquote>
-<p>IoC 容器就是具有依赖注入功能的容器，IoC 容器负责实例化、定位、配置应用程序中的对象及建立这些对象间的依赖。应用程序无需直接在代码中 new 相关的对象，应用程序由 IoC 容器进行组装。</p>
-</blockquote>
-<h3 id="在传统模式下通常有两种做法："><a href="#在传统模式下通常有两种做法：" class="headerlink" title="在传统模式下通常有两种做法："></a>在传统模式下通常有两种做法：</h3><ul>
-<li>原始做法: 调用者主动创建被依赖对象，然后再调用被依赖对象的方法。</li>
-<li>简单工厂模式: 调用者先找到被依赖对象的工厂，然后主动通过工厂去获取被依赖对象，最后再调用被依赖对象的方法。</li>
-</ul>
-<h3 id="Spring容器的依赖注入"><a href="#Spring容器的依赖注入" class="headerlink" title="Spring容器的依赖注入"></a>Spring容器的依赖注入</h3><ul>
-<li>设值注入：是指IoC容器通过成员变量的setter方法来注入被依赖对象。这种注入方式简单、直观，因而在Spring的依赖注入里大量使用。</li>
-<li>构造注入：利用构造器来设置依赖关系的方式，被称为构造注入。通过构造器参数对成员变量执行初始化，驱动Spring在底层以反射方式执行带指定参数的构造器。</li>
-</ul>
-<p><strong>注意：</strong> 建议采用设值注入为主，构造注入为辅的注入策略。对于依赖关系无须变化的注入，尽量采用构造注入；而其他依赖关系的注入，则考虑采用设值注入。</p>
-<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><figure class="highlight xml"><table><tr><td class="code"><pre><code class="hljs xml"><span class="hljs-comment">&lt;!-- 通过property属性注入（必须提供set方法） --&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;user&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;cn.sr.spring.javabean.User&quot;</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;张三&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">property</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;password&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;123456&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">property</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">bean</span>&gt;</span><br><br><span class="hljs-comment">&lt;!-- 通过构造函数注入 --&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;user&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;cn.sr.spring.javabean.User&quot;</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">constructor-arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;张三&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">constructor-arg</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">constructor-arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;password&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;123456&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">constructor-arg</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">bean</span>&gt;</span><br><br>//除此之外还可以注入集合类型的对象，List、Set、Map、Properties……<br><br></code></pre></td></tr></table></figure>
-
-<h1 id="Spring容器中的Bean"><a href="#Spring容器中的Bean" class="headerlink" title="Spring容器中的Bean"></a>Spring容器中的Bean</h1><blockquote>
-<p>对于开发者来说，开发者使用Spring框架主要是做两件事：①开发Bean；②配置Bean。对于Spring框架来说，它要做的就是根据配置文件来创建Bean实例，并调用Bean实例的方法完成”依赖注入”——这就是所谓IoC的本质。</p>
-</blockquote>
-<h2 id="容器中Bean的作用域"><a href="#容器中Bean的作用域" class="headerlink" title="容器中Bean的作用域"></a>容器中Bean的作用域</h2><p>当通过Spring容器创建一个Bean实例时，不仅可以完成Bean实例的实例化，还可以为Bean指定特定的作用域。Spring支持如下五种作用域：</p>
-<ul>
-<li>singleton: 单例模式，在整个Spring IoC容器中，singleton作用域的Bean将只生成一个实例。</li>
-<li>prototype: 每次通过容器的getBean()方法获取prototype作用域的Bean时，都将产生一个新的Bean实例。</li>
-<li>request: 对于一次HTTP请求，request作用域的Bean将只生成一个实例，这意味着，在同一次HTTP请求内，程序每次请求该Bean，得到的总是同一个实例。只有在Web应用中使用Spring时，该作用域才真正有效。</li>
-<li>session：该作用域将 bean 的定义限制为 HTTP 会话。 只在web-aware Spring ApplicationContext的上下文中有效。</li>
-<li>global session: 每个全局的HTTP Session对应一个Bean实例。在典型的情况下，仅在使用portlet context的时候有效，同样只在Web应用中有效。</li>
-</ul>
-<h3 id="配置格式如下："><a href="#配置格式如下：" class="headerlink" title="配置格式如下："></a>配置格式如下：</h3><figure class="highlight xml"><table><tr><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;…&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;…&quot;</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;singleton&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">bean</span>&gt;</span><br></code></pre></td></tr></table></figure>
-
-<blockquote>
-<p>如果不指定Bean的作用域，Spring默认使用singleton作用域。prototype作用域的Bean的创建、销毁代价比较大。而singleton作用域的Bean实例一旦创建成果，就可以重复使用。因此，应该尽量避免将Bean设置成prototype作用域。</p>
-</blockquote>
-<h2 id="创建Bean的3种方式"><a href="#创建Bean的3种方式" class="headerlink" title="创建Bean的3种方式"></a>创建Bean的3种方式</h2><ol>
-<li>使用构造器创建Bean实例:<br>需要提供无参数的构造器,Spring对Bean实例的所有属性执行默认初始化，即所有的基本类型的值初始化为0或false；所有的引用类型的值初始化为null。</li>
-<li>使用静态工厂方法创建Bean:<br>class属性须指定静态工厂类，使用factory-method属性来指定静态工厂方法，如果静态工厂方法需要参数，则使用&lt;constructor-arg…&#x2F;&gt;元素指定静态工厂方法的参数。</li>
-</ol>
-<figure class="highlight xml"><table><tr><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;user&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;cn.sr.spring.javabean.UserFactory&quot;</span> <span class="hljs-attr">factory-mothod</span>=<span class="hljs-string">&quot;getUser&quot;</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">constructor-arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;张三&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">constructor-arg</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">bean</span>&gt;</span><br></code></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> cn.sr.spring.javabean;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">UserFactory</span> &#123;<br>	<span class="hljs-comment">//对应factory-method</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">getUser</span><span class="hljs-params">(String name)</span> &#123;<br>		System.out.println(<span class="hljs-string">&quot;这是&quot;</span>+name);<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>使用实例工厂方法创建Bean:</li>
-</ol>
-<ul>
-<li>factory-bean指定工厂实例</li>
-<li>factory-method指定实例工厂的工厂方法。</li>
-<li></li>
-</ul>
-<p>若调用实例工厂方法时需要传入参数，则使用&lt;constructor-arg…&#x2F;&gt;元素确定参数值。</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;userFactory&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;cn.sr.spring.javabean.UserFactory&quot;</span> /&gt;</span><br>//此时getUser方法应为非静态<br><span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;user&quot;</span> <span class="hljs-attr">factory-bean</span>=<span class="hljs-string">&quot;userFactory&quot;</span> <span class="hljs-attr">factory-mothod</span>=<span class="hljs-string">&quot;getUser&quot;</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">constructor-arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;张三&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">constructor-arg</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">bean</span>&gt;</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="Bean的生命周期"><a href="#Bean的生命周期" class="headerlink" title="Bean的生命周期"></a>Bean的生命周期</h2><p>这里简单的说明一下，对于作用域为prototype的Bean，Spring在仅仅负责创建Bean，每当容器创建Bean后就交给客户端的代码进行维护。但是对应singlton作用域的Bean，Spring会进行创建一次，然后整个容器中共享。所以Spring容器会负责进行跟踪其状态,负责依赖的注入和依赖实例的分配。</p>
-<hr>
-<h1 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h1><p>本文只是做简单介绍，个人理解方面偏多，更多有关于IOC和DI以及Bean对象的详解介绍请自行查找相关资料！</p>
-]]></content>
-      <categories>
-        <category>Spring</category>
-      </categories>
-      <tags>
-        <tag>Spring</tag>
-        <tag>Java EE</tag>
       </tags>
   </entry>
   <entry>
@@ -884,6 +710,180 @@
         <tag>服务器</tag>
         <tag>Docker</tag>
         <tag>网络安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SSM框架结合LayUi文件上传模块接入COS对象存储服务</title>
+    <url>/posts/2502e0fe/</url>
+    <content><![CDATA[<img src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2019.01.05_wx-cos.png'>
+<!-- more -->
+
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>在日常项目开发中经常会用到图片，视频等文件存储的操作，但是文件如果一直存放在本地服务器中，可以会导致资源浪费，且访问速度也有所限制，这时我们就会考虑<strong>CDN加速</strong>或<strong>云端存储</strong>等方式来解决问题，这里就要介绍下本文用到的<strong>COS对象存储</strong>-安全稳定、海量、便捷、低延迟、低成本的云端存储服务。</p>
+<h3 id="COS对象存储"><a href="#COS对象存储" class="headerlink" title="COS对象存储"></a>COS对象存储</h3><blockquote>
+<p>对象存储（Cloud Object Storage，COS）是腾讯云提供的面向非结构化数据，支持 HTTP&#x2F;HTTPS 协议访问的分布式存储服务，它能容纳海量数据并保证用户对带宽和容量扩充无感知，可以作为大数据计算与分析的数据池。腾讯云 COS 提供网页端管理界面、多种语言的 SDK 以及命令行和图形化工具，并且完全兼容 S3 的 API 接口，方便用户直接使用社区工具和插件，COS 还可以和其他云产品结合，比如利用 CDN 的全球节点提供加速服务，利用数据万象的图片处理能力提供一站式图片解决方案等(<a href="https://cloud.tencent.com/product/cos">详细介绍</a>)</p>
+</blockquote>
+<h3 id="案例实现"><a href="#案例实现" class="headerlink" title="案例实现"></a>案例实现</h3><ul>
+<li>本文使用的是腾讯云提供的COS服务，每个月提供50G存储容量，10G流量，对于一般的博客网站，以及项目测试来说绰绰有余</li>
+<li>腾讯云对象存储 COS 除了提供多种 API 接口，还提供了丰富多样的 SDK 供开发者使用，如Java、Python、Js等…，本项目后台基于SpringMVC实现，前端通过LayUi框架的文件上传模块结合实现</li>
+<li>存储桶相应的还有<strong>防盗链</strong>设置，<strong>跨域规则</strong>设置，<strong>读写权限</strong>设置，以及相应的<strong>CDN加速</strong>服务<br><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/emoji/2019-01-05%20154723-zx.jpg" alt="www.srblog.cn"></li>
+</ul>
+<hr>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> cn.mall.controller.portal;<br><br><span class="hljs-keyword">import</span> cn.mall.common.ServerResponse;<br><span class="hljs-keyword">import</span> cn.mall.util.PropertiesUtil;<br><span class="hljs-keyword">import</span> com.qcloud.cos.COSClient;<br><span class="hljs-keyword">import</span> com.qcloud.cos.ClientConfig;<br><span class="hljs-keyword">import</span> com.qcloud.cos.auth.BasicCOSCredentials;<br><span class="hljs-keyword">import</span> com.qcloud.cos.auth.COSCredentials;<br><span class="hljs-keyword">import</span> com.qcloud.cos.model.PutObjectRequest;<br><span class="hljs-keyword">import</span> com.qcloud.cos.model.PutObjectResult;<br><span class="hljs-keyword">import</span> com.qcloud.cos.region.Region;<br><span class="hljs-keyword">import</span> org.springframework.stereotype.Controller;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RequestMethod;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.RequestParam;<br><span class="hljs-keyword">import</span> org.springframework.web.bind.annotation.ResponseBody;<br><span class="hljs-keyword">import</span> org.springframework.web.multipart.MultipartFile;<br><br><span class="hljs-keyword">import</span> javax.servlet.http.HttpSession;<br><span class="hljs-keyword">import</span> java.io.File;<br><span class="hljs-keyword">import</span> java.io.IOException;<br><span class="hljs-keyword">import</span> java.util.UUID;<br><br><span class="hljs-meta">@Controller</span><br><span class="hljs-meta">@RequestMapping(&quot;/upload/&quot;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">UploadController</span> &#123;<br><br>    <span class="hljs-comment">//密钥请前往腾讯云后台查询</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String secretId=<span class="hljs-string">&quot;*************&quot;</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String secretKey=<span class="hljs-string">&quot;*************&quot;</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String bucketName=<span class="hljs-string">&quot;你的存储桶名称&quot;</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String RegionName=<span class="hljs-string">&quot;存储桶所属地域&quot;</span>;<br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 文件上传</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> file</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> session</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>   <br>    <span class="hljs-meta">@RequestMapping(value = &quot;upload_image_cos.do&quot;,method = RequestMethod.POST)</span><br>    <span class="hljs-meta">@ResponseBody</span><br>    <span class="hljs-keyword">public</span> Object <span class="hljs-title function_">Upload</span><span class="hljs-params">(<span class="hljs-meta">@RequestParam(value = &quot;file&quot;)</span> MultipartFile file, HttpSession session)</span>&#123;<br>        <span class="hljs-keyword">if</span>(file == <span class="hljs-literal">null</span>)&#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">UploadMsg</span>(<span class="hljs-number">0</span>,<span class="hljs-string">&quot;文件为空&quot;</span>,<span class="hljs-literal">null</span>);<br>        &#125;<br>        <span class="hljs-comment">//获取文件上传原名</span><br>        <span class="hljs-type">String</span> <span class="hljs-variable">oldFileName</span> <span class="hljs-operator">=</span> file.getOriginalFilename();<br>        <span class="hljs-type">String</span> <span class="hljs-variable">eName</span> <span class="hljs-operator">=</span> oldFileName.substring(oldFileName.lastIndexOf(<span class="hljs-string">&quot;.&quot;</span>));<br>        <span class="hljs-comment">//通过UUID随机生成新的文件名</span><br>        <span class="hljs-type">String</span> <span class="hljs-variable">newFileName</span> <span class="hljs-operator">=</span> UUID.randomUUID()+eName;<br> <br>        <span class="hljs-comment">// 1 初始化用户身份信息(secretId, secretKey)</span><br>        <span class="hljs-type">COSCredentials</span> <span class="hljs-variable">cred</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">BasicCOSCredentials</span>(secretId, secretKey);<br>        <span class="hljs-comment">// 2 设置bucket的区域, COS地域的简称请参照 https://cloud.tencent.com/document/product/436/6224</span><br>        <span class="hljs-type">ClientConfig</span> <span class="hljs-variable">clientConfig</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ClientConfig</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Region</span>(RegionName));<br>        <span class="hljs-comment">// 3 生成cos客户端</span><br>        <span class="hljs-type">COSClient</span> <span class="hljs-variable">cosclient</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">COSClient</span>(cred, clientConfig);<br>        <span class="hljs-comment">// bucket的命名规则为&#123;name&#125;-&#123;appid&#125; ，此处填写的存储桶名称必须为此格式</span><br>        <span class="hljs-type">String</span> <span class="hljs-variable">bucketName</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">this</span>.bucketName;<br><br>        <span class="hljs-comment">// 简单文件上传, 最大支持 5 GB, 适用于小文件上传, 建议 20 M 以下的文件使用该接口</span><br>        <span class="hljs-comment">// 大文件上传请参照 API 文档高级 API 上传</span><br>        <span class="hljs-type">File</span> <span class="hljs-variable">localFile</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-comment">//创建临时文件</span><br>            localFile = File.createTempFile(<span class="hljs-string">&quot;temp&quot;</span>,<span class="hljs-literal">null</span>);<br>            file.transferTo(localFile);<br>            <span class="hljs-comment">// 指定要上传到 COS 上的路径</span><br>            <span class="hljs-type">String</span> <span class="hljs-variable">key</span> <span class="hljs-operator">=</span> PropertiesUtil.getProperty(<span class="hljs-string">&quot;cos_key_name&quot;</span>)+newFileName;<br>            <span class="hljs-type">PutObjectRequest</span> <span class="hljs-variable">putObjectRequest</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">PutObjectRequest</span>(bucketName, key, localFile);<br>            <span class="hljs-type">PutObjectResult</span> <span class="hljs-variable">putObjectResult</span> <span class="hljs-operator">=</span> cosclient.putObject(putObjectRequest);<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">UploadMsg</span>(<span class="hljs-number">1</span>,<span class="hljs-string">&quot;上传成功&quot;</span>, newFileName);<br>        &#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">UploadMsg</span>(-<span class="hljs-number">1</span>,e.getMessage(),<span class="hljs-literal">null</span>);<br>        &#125; <span class="hljs-keyword">finally</span> &#123;<br>            <span class="hljs-comment">// 关闭客户端(关闭后台线程)</span><br>            cosclient.shutdown();<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-comment">//自定义JSON消息体</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">UploadMsg</span> &#123;<br>        <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> status;<br>        <span class="hljs-keyword">public</span> String msg;<br>        <span class="hljs-keyword">public</span> String path;<br><br>        <span class="hljs-keyword">public</span> <span class="hljs-title function_">UploadMsg</span><span class="hljs-params">()</span> &#123;<br>            <span class="hljs-built_in">super</span>();<br>        &#125;<br><br>        <span class="hljs-keyword">public</span> <span class="hljs-title function_">UploadMsg</span><span class="hljs-params">(<span class="hljs-type">int</span> status, String msg,String path)</span>&#123;<br>            <span class="hljs-built_in">this</span>.status =status;<br>            <span class="hljs-built_in">this</span>.msg =msg;<br>            <span class="hljs-built_in">this</span>.path =path;<br>        &#125;<br>    &#125;<br><br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js">&lt;!<span class="hljs-variable constant_">DOCTYPE</span> html&gt;<br>&lt;html&gt;<br>&lt;head&gt;<br>    &lt;meta charset=&quot;UTF-8&quot;&gt;<br>    &lt;meta name=&quot;renderer&quot; content=&quot;webkit&quot;&gt;<br>    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge,chrome=1&quot;&gt;<br>    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no&quot; /&gt;<br>    &lt;title&gt;商品添加&lt;/title&gt;<br>    &lt;link rel=&quot;stylesheet&quot; href=&quot;../assets/layui/css/layui.css&quot;&gt;<br><br>&lt;/head&gt;<br>&lt;body&gt;<br>&lt;form class=&quot;layui-form column-content-detail&quot;&gt;<br><br>    &lt;div class=&quot;layui-tab-content&quot;&gt;<br>        &lt;div class=&quot;layui-tab-item layui-show&quot;&gt;<br>            &lt;div class=&quot;layui-form-item&quot;&gt;<br>                &lt;label class=&quot;layui-form-label&quot;&gt;商品标题：&lt;/label&gt;<br>                &lt;div class=&quot;layui-input-block&quot;&gt;<br>                    &lt;input type=&quot;text&quot; name=&quot;name&quot; required lay-verify=&quot;required&quot; placeholder=&quot;请输入商品标题&quot; autocomplete=&quot;off&quot; class=&quot;layui-input&quot;&gt;<br>                &lt;/div&gt;<br>            &lt;/div&gt;<br>            &lt;div class=&quot;layui-form-item&quot;&gt;<br>                &lt;label class=&quot;layui-form-label&quot;&gt;分类：&lt;/label&gt;<br>                &lt;div class=&quot;layui-input-block&quot;&gt;<br>                    &lt;select name=&quot;categoryId&quot; lay-verify=&quot;required&quot;&gt;<br>                        &lt;option value=&quot;&quot;&gt;请选择分类&lt;/option&gt;<br>                        &lt;option value=&quot;100001&quot;&gt;家用电器&lt;/option&gt;<br>                        &lt;option value=&quot;100002&quot;&gt;数码3C&lt;/option&gt;<br>                        &lt;option value=&quot;100003&quot;&gt;服装箱包&lt;/option&gt;<br>                        &lt;option value=&quot;100004&quot;&gt;食品生鲜&lt;/option&gt;<br>                        &lt;option value=&quot;100005&quot;&gt;酒水饮料&lt;/option&gt;<br>                    &lt;/select&gt;<br>                &lt;/div&gt;<br>            &lt;/div&gt;<br>            &lt;div class=&quot;layui-form-item&quot;&gt;<br>                &lt;label class=&quot;layui-form-label&quot;&gt;图像上传：&lt;/label&gt;<br>                &lt;div class=&quot;layui-input-block&quot;&gt;<br>                    &lt;img id=&quot;upload_img&quot; src=&quot;../images/default_img.png&quot; width=&quot;100&quot; height=&quot;100&quot;&gt;<br>                    &lt;button type=&quot;button&quot; class=&quot;layui-btn&quot; id=&quot;test1&quot;&gt;<br>                        &lt;i class=&quot;layui-icon&quot;&gt;&lt;/i&gt;上传图片<br>                    &lt;/button&gt;<br>                &lt;/div&gt;<br>            &lt;/div&gt;<br>            &lt;div class=&quot;layui-form-item layui-form-text&quot;&gt;<br>                &lt;label class=&quot;layui-form-label&quot;&gt;商品介绍：&lt;/label&gt;<br>                &lt;div class=&quot;layui-input-block&quot;&gt;<br>                    &lt;textarea class=&quot;layui-textarea layui-hide&quot; name=&quot;detail&quot; lay-verify=&quot;detail&quot; id=&quot;LAY_demo_editor&quot;&gt;&lt;/textarea&gt;<br>                &lt;/div&gt;<br>            &lt;/div&gt;<br>            &lt;input type=&quot;hidden&quot; id=&quot;mainImage&quot; name=&quot;mainImage&quot; required value=&quot;default_img.png&quot;  class=&quot;layui-input&quot;&gt;<br>            &lt;input type=&quot;hidden&quot; id=&quot;status&quot; name=&quot;status&quot; value=&quot;1&quot; class=&quot;layui-input&quot;&gt;<br>            &lt;div class=&quot;layui-form-item&quot;&gt;<br>                &lt;label class=&quot;layui-form-label&quot;&gt;商品库存：&lt;/label&gt;<br>                &lt;div class=&quot;layui-input-block&quot;&gt;<br>                    &lt;input type=&quot;text&quot; name=&quot;stock&quot; required lay-verify=&quot;number&quot; placeholder=&quot;请输入商品库存&quot; autocomplete=&quot;off&quot; class=&quot;layui-input&quot;&gt;<br>                &lt;/div&gt;<br>            &lt;/div&gt;<br>            &lt;div class=&quot;layui-form-item&quot;&gt;<br>                &lt;label class=&quot;layui-form-label&quot;&gt;商品价格：&lt;/label&gt;<br>                &lt;div class=&quot;layui-input-block&quot;&gt;<br>                    &lt;input type=&quot;text&quot; name=&quot;price&quot; required lay-verify=&quot;number&quot; placeholder=&quot;请输入商品价格&quot; autocomplete=&quot;off&quot; class=&quot;layui-input&quot;&gt;<br>                &lt;/div&gt;<br>            &lt;/div&gt;<br><br>        &lt;/div&gt;<br>    &lt;/div&gt;<br><br>    &lt;div class=&quot;layui-form-item&quot; style=&quot;padding-left: 10px;&quot;&gt;<br>        &lt;div class=&quot;layui-input-block&quot;&gt;<br>            &lt;button class=&quot;layui-btn&quot; lay-submit lay-filter=&quot;add_product&quot;&gt;立即提交&lt;/button&gt;<br>            &lt;button id=&quot;reset&quot; type=&quot;reset&quot; class=&quot;layui-btn layui-btn-primary&quot;&gt;重置&lt;/button&gt;<br>        &lt;/div&gt;<br>    &lt;/div&gt;<br>&lt;/form&gt;<br>&lt;script src=&quot;../js/cos-js-sdk-v5.min.js&quot; type=&quot;text/javascript&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;<br>&lt;script src=&quot;../js/jquery-1.10.2.js&quot; type=&quot;text/javascript&quot; charset=&quot;utf-8&quot;&gt;&lt;/script&gt;<br>&lt;script src=&quot;../assets/layui/layui.all.js&quot;&gt;&lt;/script&gt;<br>&lt;script&gt;<br>    layui.use([&#x27;form&#x27;, &#x27;jquery&#x27;, &#x27;laydate&#x27;, &#x27;layer&#x27;, &#x27;laypage&#x27;, &#x27;element&#x27;, &#x27;upload&#x27;, &#x27;layedit&#x27;], function() &#123;<br>        var form = layui.form,<br>            layer = layui.layer,<br>            $ = layui.jquery,<br>            laypage = layui.laypage,<br>            laydate = layui.laydate,<br>            layedit = layui.layedit,<br>            element = layui.element,<br>            upload=layui.upload;<br><br>        //创建一个编辑器<br>        var editIndex = layedit.build(&#x27;LAY_demo_editor&#x27;, &#123;<br>            tool: [&#x27;strong&#x27; //加粗<br>                , &#x27;italic&#x27; //斜体<br>                , &#x27;underline&#x27; //下划线<br>                , &#x27;del&#x27; //删除线<br>                , &#x27;|&#x27; //分割线<br>                , &#x27;left&#x27; //左对齐<br>                , &#x27;center&#x27; //居中对齐<br>                , &#x27;right&#x27; //右对齐<br>                , &#x27;link&#x27; //超链接<br>                , &#x27;unlink&#x27; //清除链接<br>                , &#x27;image&#x27; //插入图片<br>            ],<br>            height: 100<br>        &#125;);<br>     <br>        var uploadInst = upload.render(&#123;<br>            elem: &#x27;#test1&#x27; //绑定元素<br>            ,url:&#x27;../upload/upload_image_cos.do&#x27;//后台上传接口<br>            ,before: function(obj)&#123; //obj参数包含的信息，跟 choose回调完全一致，可参见上文。<br>                layer.msg(&#x27;上传中&#x27;,&#123;icon: 16,time:0,shade:0.01&#125;);<br>            &#125;<br>            ,done: function(res, index, upload)&#123;<br>                layer.closeAll(&#x27;loading&#x27;);<br>                //status=1代表上传成功<br>                if(res.status == 1)&#123;<br>                    layer.msg(&quot;上传成功&quot;,&#123;icon:1&#125;);<br>                //do something （比如将res返回的图片链接保存到表单的隐藏域）<br>                    $(&#x27;#upload_img&#x27;).attr(&#x27;src&#x27;,&#x27;https://sr-1251242863.cos.ap-shanghai.myqcloud.com/webdemo/images/&#x27;+res.path);<br>                    $(&#x27;#mainImage&#x27;).val(res.path);<br>                &#125;<br><br>                //获取当前触发上传的元素，一般用于 elem 绑定 class 的情况，注意：此乃 layui 2.1.0 新增<br>                var item = this.item;<br>                //文件保存失败<br>                //do something<br>            &#125;<br>            ,error: function()&#123;<br>                layer.closeAll(&#x27;loading&#x27;);<br>                //请求异常回调<br>                layer.msg(&quot;上传失败，请重试&quot;,&#123;icon:2&#125;);<br>            &#125;<br>            ,size:2048 //文件大小限制<br>            ,number:1 //文件数量限制<br>            ,accept: &#x27;images&#x27; //文件类型限制<br>            ,acceptMime: &#x27;image/jpg, image/png&#x27; //选择窗口属性<br>        &#125;);<br>    &#125;);<br>&lt;/script&gt;<br>&lt;/body&gt;<br>&lt;/html&gt;<br></code></pre></td></tr></table></figure>
+
+<h2 id="动图演示"><a href="#动图演示" class="headerlink" title="动图演示"></a>动图演示</h2><p><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/gif/2019-0105-10b99e3e-cos.gif" alt="www.srblog.cn"></p>
+]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
+        <tag>JAVA</tag>
+        <tag>SSM框架</tag>
+        <tag>COS对象存储</tag>
+        <tag>LayUi</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Spring框架入门(一):概念简介</title>
+    <url>/posts/f9407374/</url>
+    <content><![CDATA[<img src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/wx_title_2018.10.30.png'>
+<!-- more -->
+
+<blockquote>
+<p><strong>简介</strong></p>
+</blockquote>
+<p>Spring 是一个开源的轻量级 Java SE（ Java 标准版本）&#x2F;Java EE（ Java 企业版本）开发应用框架，其目的是用于简化企业级应用程序开发。Spring容器通过反转控制( IoC )和依赖注入( DI )来实现高内聚、低耦合的应用。除此之外它可以整合很多第三方框架，它还提供面向切面编程（ AOP ）的能力，对通用任务如安全、事务、日志等进行集中式管理</p>
+<blockquote>
+<p><strong>概念介绍</strong></p>
+</blockquote>
+<ul>
+<li>框架：能完成一定功能的半成品，比如我们可以使用框架进行购物网站开发；框架做一部分功能，我们自己做一部分功能，辅助高效工作。而且框架规定了你在开发应用程序时的整体架构，提供了一些基础功能，还规定了类和对象的如何创建、如何协作等，从而简化我们的代码编写，让我们专注于业务逻辑开发。</li>
+<li>非侵入式设计：从框架角度可以这样理解，无需继承框架提供的类，这种设计就可以看作是非侵入式设计，如果继承了这些框架类，就是侵入设计，如果以后想更换框架，之前写过的代码几乎无法重用，如果非侵入式设计则之前写过的代码仍然可以继续使用。</li>
+<li>轻量级与重量级：轻量级是相对于重量级而言的，轻量级一般就是非入侵性的、所依赖的东西非常少、资源占用非常少、部署简单等等，其实就是比较容易使用，而重量级正好相反。</li>
+<li>POJO ： POJO （ Plain Ordinary Java Object ）简单的 Java 对象。它可以包含业务逻辑或持久化逻辑，但不担当任何特殊角色且不继承或不实现任何其它 Java 框架的类或接口。</li>
+<li>容器：在日常生活中容器就是一种盛放东西的器具，从程序设计角度看就是装对象的的对象，因为存在放入、拿出等操作，所以容器还要管理对象的生命周期。</li>
+<li>控制反转：即 Inversion of Control ，缩写为 IoC ，控制反转还有一个名字叫做依赖注入（ Dependency Injection ），就是由容器控制程序之间的关系，而非传统实现中，由程序代码直接操控。</li>
+<li>Bean ：一般指容器管理对象，在 Spring 中指 Spring IoC 容器管理对象。</li>
+</ul>
+<blockquote>
+<p><strong>优点</strong></p>
+</blockquote>
+<ul>
+<li>低侵入式设计，代码的污染极低。</li>
+<li>独立于各种应用服务器，基于Spring框架的应用，可以真正实现Write Once，Run Anywhere的承诺。</li>
+<li>Spring的IoC容器降低了业务对象替换的复杂性，提高了组件之间的解耦。</li>
+<li>Spring的AOP支持允许将一些通用任务如安全、事务、日志等进行集中式管理，从而提供了更好的复用。</li>
+<li>Spring的ORM和DAO提供了与第三方持久层框架的良好整合，并简化了底层的数据库访问。</li>
+<li>Spring的高度开放性，并不强制应用完全依赖于Spring，开发者可自由选用Spring框架的部分或全部。</li>
+</ul>
+<blockquote>
+<p><strong>架构图</strong></p>
+</blockquote>
+<p><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/spring_frameword.png"><br><strong>核心容器：包括 Core 、 Beans 、 Context 、 EL 模块</strong></p>
+<ul>
+<li>Core 模块：封装了框架依赖的最底层部分，包括资源访问、类型转换及一些常用工具类。</li>
+<li>Beans 模块：提供了框架的基础部分，包括控制反转（ IOC ）和依赖注入（ DI ）。其中 BeanFactory 是容器核心，本质是“工厂设计模式”的实现，而且无需编程实现“单例设计模式”，单例完全由容器控制，而且提倡面向接口编程，而非面向实现编程；所有应用程序对象及对象间关系由框架管理，从而真正从程序逻辑中把维护对象之间的依赖关系提取出来，所有这些依赖关系都由 BeanFactory 来维护。</li>
+<li>Context 模块：以 Core 和 Beans 为基础，集成 Beans 模块功能并添加资源绑定、数据验证、国际化、 Java EE 支持、容器生命周期、事件传播等；核心接口是 ApplicationContext 。</li>
+<li>EL 模块：提供强大的表达式语言支持，支持访问和修改属性值，方法调用，支持访问及修改数组、容器和索引器，命名变量，支持算数和逻辑运算，支持从 Spring 容器获取 Bean， 它也支持列表投影、选择和一般的列表聚合等。</li>
+</ul>
+<hr>
+<ul>
+<li>AOP 模块： Spring AOP 模块提供了符合 AOP Alliance 规范的面向切面的编程（ aspect-oriented programming ）实现，提供比如日志记录、权限控制、性能统计等通用功能和业务逻辑分离的技术，并且能动态的把这些功能添加到需要的代码中；这样各专其职，降低业务逻辑和通用功能的耦合。<br>-Aspects 模块：提供了对 AspectJ 的集成，AspectJ 提供了比 Spring ASP 更强大的功能。</li>
+<li>数据访问&#x2F;集成模块：该模块包括了 JDBC 、 ORM 、 OXM 、 JMS 和事务管理。<br>事务模块：该模块用于 Spring 管理事务，只要是 Spring 管理对象都能得到 Spring 管理事务的好处，无需在代码中进行事务控制了，而且支持编程和声明性的事务管理。</li>
+<li>JDBC 模块：提供了一个 JBDC 的样例模板，使用这些模板能消除传统冗长的 JDBC 编码还有必须的事务控制，而且能享受到 Spring 管理事务的好处。<br>ORM 模块：提供与流行的“对象-关系”映射框架的无缝集成，包括 Hibernate 、JPA 、 MyBatis 等。而且可以使用 Spring 事务管理，无需额外控制事务。<br>OXM 模块：提供了一个对 Object &#x2F; XML 映射实现，将 java 对象映射成 XML 数据，或者将 XML 数据映射成 java 对象， Object &#x2F; XML 映射实现包括 JAXB 、 Castor 、 XMLBeans 和 XStream 。</li>
+<li>JMS 模块：用于 JMS ( Java Messaging Service )，提供一套 “消息生产者、消息消费者”模板用于更加简单的使用 JMS ， JMS 用于用于在两个应用程序之间，或分布式系统中发送消息，进行异步通信。</li>
+<li>Web &#x2F; Remoting 模块： Web &#x2F; Remoting 模块包含了 Web 、 Web-Servlet 、 Web-Struts 、 Web-Porlet 模块。</li>
+<li>Web 模块：提供了基础的 web 功能。例如多文件上传、集成 IoC 容器、远程过程访问（ RMI 、Hessian 、 Burlap ）以及 Web Service 支持，并提供一个 RestTemplate 类来提供方便的 Restful services 访问。<br>Web-Servlet 模块：提供了一个 Spring MVC Web 框架实现。Spring MVC 框架提供了基于注解的请求资源注入、更简单的数据绑定、数据验证等及一套非常易用的 JSP 标签，完全无缝与 Spring 其他技术协作。</li>
+<li>Web-Struts 模块：提供了与 Struts 无缝集成， Struts1.x 和 Struts2.x 都支持。</li>
+<li>Test 模块： Spring 支持 Junit 和 TestNG 测试框架，而且还额外提供了一些基于 Spring 的测试功能，比如在测试 Web 框架时，模拟 Http 请求的功能。</li>
+</ul>
+<hr>
+]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Spring框架入门(三):依赖注入和控制反转</title>
+    <url>/posts/2d0cab43/</url>
+    <content><![CDATA[<img src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/spring3_2018.10.31.png' >
+<!-- more -->
+
+<h1 id="依赖注入和控制反转概念"><a href="#依赖注入和控制反转概念" class="headerlink" title="依赖注入和控制反转概念"></a>依赖注入和控制反转概念</h1><p>依赖注入(IoC) 和 控制反转(DI) 有什么关系呢？其实它们是同一个概念的不同角度描述。</p>
+<h2 id="依赖注入-Dependency-injection"><a href="#依赖注入-Dependency-injection" class="headerlink" title="依赖注入(Dependency injection)"></a>依赖注入(Dependency injection)</h2><blockquote>
+<p>是指应用在运行期，由外部容器（Spring容器）动态地将依赖对象注入到另一个对象中。</p>
+</blockquote>
+<p>理解 DI 的关键是：<font color="red">“谁依赖谁，为什么需要依赖，谁注入谁，注入了什么”</font>：</p>
+<ul>
+<li>谁依赖于谁：当然是某个容器管理对象依赖于 IoC 容器；“被注入对象的对象”依赖于“依赖对象”；</li>
+<li>为什么需要依赖：容器管理对象需要 IoC 容器来提供对象需要的外部资源；</li>
+<li>谁注入谁：很明显是 IoC 容器注入某个对象，也就是注入“依赖对象”；</li>
+<li>注入了什么：就是注入某个对象所需要的外部资源（包括对象、资源、常量数据）。</li>
+</ul>
+<h2 id="控制反转-Inversion-Of-Control"><a href="#控制反转-Inversion-Of-Control" class="headerlink" title="控制反转(Inversion Of Control)"></a>控制反转(Inversion Of Control)</h2><blockquote>
+<p>IoC 容器就是具有依赖注入功能的容器，IoC 容器负责实例化、定位、配置应用程序中的对象及建立这些对象间的依赖。应用程序无需直接在代码中 new 相关的对象，应用程序由 IoC 容器进行组装。</p>
+</blockquote>
+<h3 id="在传统模式下通常有两种做法："><a href="#在传统模式下通常有两种做法：" class="headerlink" title="在传统模式下通常有两种做法："></a>在传统模式下通常有两种做法：</h3><ul>
+<li>原始做法: 调用者主动创建被依赖对象，然后再调用被依赖对象的方法。</li>
+<li>简单工厂模式: 调用者先找到被依赖对象的工厂，然后主动通过工厂去获取被依赖对象，最后再调用被依赖对象的方法。</li>
+</ul>
+<h3 id="Spring容器的依赖注入"><a href="#Spring容器的依赖注入" class="headerlink" title="Spring容器的依赖注入"></a>Spring容器的依赖注入</h3><ul>
+<li>设值注入：是指IoC容器通过成员变量的setter方法来注入被依赖对象。这种注入方式简单、直观，因而在Spring的依赖注入里大量使用。</li>
+<li>构造注入：利用构造器来设置依赖关系的方式，被称为构造注入。通过构造器参数对成员变量执行初始化，驱动Spring在底层以反射方式执行带指定参数的构造器。</li>
+</ul>
+<p><strong>注意：</strong> 建议采用设值注入为主，构造注入为辅的注入策略。对于依赖关系无须变化的注入，尽量采用构造注入；而其他依赖关系的注入，则考虑采用设值注入。</p>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><figure class="highlight xml"><table><tr><td class="code"><pre><code class="hljs xml"><span class="hljs-comment">&lt;!-- 通过property属性注入（必须提供set方法） --&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;user&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;cn.sr.spring.javabean.User&quot;</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;张三&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">property</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;password&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;123456&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">property</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">bean</span>&gt;</span><br><br><span class="hljs-comment">&lt;!-- 通过构造函数注入 --&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;user&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;cn.sr.spring.javabean.User&quot;</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">constructor-arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;张三&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">constructor-arg</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">constructor-arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;password&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;123456&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">constructor-arg</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">bean</span>&gt;</span><br><br>//除此之外还可以注入集合类型的对象，List、Set、Map、Properties……<br><br></code></pre></td></tr></table></figure>
+
+<h1 id="Spring容器中的Bean"><a href="#Spring容器中的Bean" class="headerlink" title="Spring容器中的Bean"></a>Spring容器中的Bean</h1><blockquote>
+<p>对于开发者来说，开发者使用Spring框架主要是做两件事：①开发Bean；②配置Bean。对于Spring框架来说，它要做的就是根据配置文件来创建Bean实例，并调用Bean实例的方法完成”依赖注入”——这就是所谓IoC的本质。</p>
+</blockquote>
+<h2 id="容器中Bean的作用域"><a href="#容器中Bean的作用域" class="headerlink" title="容器中Bean的作用域"></a>容器中Bean的作用域</h2><p>当通过Spring容器创建一个Bean实例时，不仅可以完成Bean实例的实例化，还可以为Bean指定特定的作用域。Spring支持如下五种作用域：</p>
+<ul>
+<li>singleton: 单例模式，在整个Spring IoC容器中，singleton作用域的Bean将只生成一个实例。</li>
+<li>prototype: 每次通过容器的getBean()方法获取prototype作用域的Bean时，都将产生一个新的Bean实例。</li>
+<li>request: 对于一次HTTP请求，request作用域的Bean将只生成一个实例，这意味着，在同一次HTTP请求内，程序每次请求该Bean，得到的总是同一个实例。只有在Web应用中使用Spring时，该作用域才真正有效。</li>
+<li>session：该作用域将 bean 的定义限制为 HTTP 会话。 只在web-aware Spring ApplicationContext的上下文中有效。</li>
+<li>global session: 每个全局的HTTP Session对应一个Bean实例。在典型的情况下，仅在使用portlet context的时候有效，同样只在Web应用中有效。</li>
+</ul>
+<h3 id="配置格式如下："><a href="#配置格式如下：" class="headerlink" title="配置格式如下："></a>配置格式如下：</h3><figure class="highlight xml"><table><tr><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;…&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;…&quot;</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;singleton&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">bean</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>如果不指定Bean的作用域，Spring默认使用singleton作用域。prototype作用域的Bean的创建、销毁代价比较大。而singleton作用域的Bean实例一旦创建成果，就可以重复使用。因此，应该尽量避免将Bean设置成prototype作用域。</p>
+</blockquote>
+<h2 id="创建Bean的3种方式"><a href="#创建Bean的3种方式" class="headerlink" title="创建Bean的3种方式"></a>创建Bean的3种方式</h2><ol>
+<li>使用构造器创建Bean实例:<br>需要提供无参数的构造器,Spring对Bean实例的所有属性执行默认初始化，即所有的基本类型的值初始化为0或false；所有的引用类型的值初始化为null。</li>
+<li>使用静态工厂方法创建Bean:<br>class属性须指定静态工厂类，使用factory-method属性来指定静态工厂方法，如果静态工厂方法需要参数，则使用&lt;constructor-arg…&#x2F;&gt;元素指定静态工厂方法的参数。</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;user&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;cn.sr.spring.javabean.UserFactory&quot;</span> <span class="hljs-attr">factory-mothod</span>=<span class="hljs-string">&quot;getUser&quot;</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">constructor-arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;张三&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">constructor-arg</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">bean</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> cn.sr.spring.javabean;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">UserFactory</span> &#123;<br>	<span class="hljs-comment">//对应factory-method</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">getUser</span><span class="hljs-params">(String name)</span> &#123;<br>		System.out.println(<span class="hljs-string">&quot;这是&quot;</span>+name);<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>使用实例工厂方法创建Bean:</li>
+</ol>
+<ul>
+<li>factory-bean指定工厂实例</li>
+<li>factory-method指定实例工厂的工厂方法。</li>
+<li></li>
+</ul>
+<p>若调用实例工厂方法时需要传入参数，则使用&lt;constructor-arg…&#x2F;&gt;元素确定参数值。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;userFactory&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;cn.sr.spring.javabean.UserFactory&quot;</span> /&gt;</span><br>//此时getUser方法应为非静态<br><span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;user&quot;</span> <span class="hljs-attr">factory-bean</span>=<span class="hljs-string">&quot;userFactory&quot;</span> <span class="hljs-attr">factory-mothod</span>=<span class="hljs-string">&quot;getUser&quot;</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">constructor-arg</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;张三&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">constructor-arg</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">bean</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="Bean的生命周期"><a href="#Bean的生命周期" class="headerlink" title="Bean的生命周期"></a>Bean的生命周期</h2><p>这里简单的说明一下，对于作用域为prototype的Bean，Spring在仅仅负责创建Bean，每当容器创建Bean后就交给客户端的代码进行维护。但是对应singlton作用域的Bean，Spring会进行创建一次，然后整个容器中共享。所以Spring容器会负责进行跟踪其状态,负责依赖的注入和依赖实例的分配。</p>
+<hr>
+<h1 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h1><p>本文只是做简单介绍，个人理解方面偏多，更多有关于IOC和DI以及Bean对象的详解介绍请自行查找相关资料！</p>
+]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
+        <tag>Java EE</tag>
       </tags>
   </entry>
 </search>
