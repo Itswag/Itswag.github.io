@@ -736,6 +736,64 @@
       </tags>
   </entry>
   <entry>
+    <title>荷兰国旗-快速排序应用</title>
+    <url>/posts/5644be5d/</url>
+    <content><![CDATA[<hr>
+<img src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2019-04-20%20.png' height=120px >
+
+<hr>
+<span id="more"></span>
+
+<h2 id="荷兰国旗"><a href="#荷兰国旗" class="headerlink" title="荷兰国旗"></a>荷兰国旗</h2><blockquote>
+<p>”荷兰国旗难题“是计算机科学中的一个程序难题，它是由Edsger Dijkstra提出的。荷兰国旗是由红、白、蓝三色组成的。现有红白蓝三个不同颜色的小球，乱序排列在一起，请重新排列这些小球，使得红白蓝三色的同颜色的球在一起。<br>ps:我们可以将红白蓝三色小球想象成条状物，有序排列后正好组成荷兰国旗。</p>
+</blockquote>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><blockquote>
+<p>arr[i]&lt; key时相当于“荷兰国旗问题”中的0<br>arr[i]&#x3D; key时相当于“荷兰国旗问题”中的1<br>arr[i]&gt; key时相当于“荷兰国旗问题”中的2</p>
+</blockquote>
+<p>这样就可以使用“荷兰国旗问题”的解法来解决快速排序了，这样一来，即使待排序的元素中有一些元素和key一样，也能保证时间复杂度是最差是NlogN的，因为对于待排序的等于Key的数值，可以在执行下一次Partition时直接跳过，利于数据规模的降低。</p>
+<hr>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight java"><figcaption><span>荷兰国旗</span></figcaption><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">NetherlandsFlag</span> &#123;<br>	<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">int</span>[] partition(<span class="hljs-type">int</span>[] arr,<span class="hljs-type">int</span> L,<span class="hljs-type">int</span> R,<span class="hljs-type">int</span> p) &#123;<br>		<span class="hljs-type">int</span> <span class="hljs-variable">less</span> <span class="hljs-operator">=</span> L-<span class="hljs-number">1</span>;<br>		<span class="hljs-type">int</span> <span class="hljs-variable">more</span> <span class="hljs-operator">=</span> R+<span class="hljs-number">1</span>;<br>		<span class="hljs-keyword">while</span>(L &lt; more) &#123;<br>			<span class="hljs-keyword">if</span>(arr[L] &lt; p) &#123;<br>				swap(arr,++less,L++);<br>			&#125;<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(arr[L] &gt; p) &#123;<br>				swap(arr,--more,L);<br>			&#125;<span class="hljs-keyword">else</span> &#123;<br>				L++;<br>			&#125;<br>			<br>		&#125;<br>		<span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[] &#123;less+<span class="hljs-number">1</span>,more-<span class="hljs-number">1</span>&#125;;<br>		<br>	&#125;<br>     <br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">swap</span><span class="hljs-params">(<span class="hljs-type">int</span>[] arr, <span class="hljs-type">int</span> i, <span class="hljs-type">int</span> j)</span> &#123;<br>		<span class="hljs-type">int</span> <span class="hljs-variable">temp</span> <span class="hljs-operator">=</span> arr[i];<br>		arr[i] = arr[j];<br>		arr[j] = temp;<br>		<br>	&#125;<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">int</span>[] getArray() &#123;<br>		<span class="hljs-type">int</span> arr[] = <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[<span class="hljs-number">10</span>];<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;i &lt; arr.length;i++) &#123;<br>			arr[i] = (<span class="hljs-type">int</span>)(Math.random()*<span class="hljs-number">3</span>);<br>		&#125;<br>		<span class="hljs-keyword">return</span> arr;<br>	&#125;<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">printArray</span><span class="hljs-params">(<span class="hljs-type">int</span> arr[])</span> &#123;<br>		<span class="hljs-keyword">if</span>(arr == <span class="hljs-literal">null</span>) &#123;<br>			<span class="hljs-keyword">return</span> ;<br>		&#125;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;i &lt; arr.length;i++) &#123;<br>			System.out.print(arr[i]+<span class="hljs-string">&quot; &quot;</span>);<br>		&#125;<br>		System.out.println();<br>		<br>	&#125;<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String args[])</span> &#123;<br>		<span class="hljs-type">int</span> test[] = getArray();<br>		printArray(test);                             <br>		<span class="hljs-type">int</span> res[] = partition(test,<span class="hljs-number">0</span>,test.length-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>);   <span class="hljs-comment">//p值为1，用来判断0，1，2   </span><br>		printArray(test);<br>		System.out.println(res[<span class="hljs-number">0</span>]);<br>		System.out.println(res[<span class="hljs-number">1</span>]);<br>	&#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>算法</tag>
+        <tag>快速排序</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>记录腾讯云服务器当矿机的一天</title>
+    <url>/posts/23f6ec83/</url>
+    <content><![CDATA[<img src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/wx_title_2019-11-26-0.png' >
+<span id="more"></span>
+
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近入手了一台腾讯云服务器玩玩，兴致勃勃的装上<code>Docker</code>，打算把之前的<code>SpringBoot</code>项目跑一跑。</p>
+<p>安装<code>Docker</code>、配置<code>Maven Docker</code>插件、开放<code>Docker</code>远程端口(这里划重点要考)、配置服务器安全组端口、编写<code>Dockerfile</code>文件、打包上传镜像、运行项目,一切都很正常。</p>
+<p>第二天早上，再次登录服务器时发现特别卡，下意识以为是自己运行项目的问题，初步排查一下，CPU占用100%，2M小水管带宽被占满……</p>
+<h2 id="排查"><a href="#排查" class="headerlink" title="排查"></a>排查</h2><h3 id="TOP命令查看进程信息"><a href="#TOP命令查看进程信息" class="headerlink" title="TOP命令查看进程信息"></a><code>TOP</code>命令查看进程信息</h3><ul>
+<li><p><code>TOP</code>命令查看进程信息，可以看到“sic”这个进程内存占用非常高，下面的“masscan”进程占用也相当高(百度发现可能是扫描端口的程序)</p>
+<p><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2019-11-26-192508-3.png"></p>
+</li>
+</ul>
+<h3 id="定位进程文件"><a href="#定位进程文件" class="headerlink" title="定位进程文件"></a>定位进程文件</h3><ul>
+<li><p>根据<code>PID</code>执行命令,<code>ll  /proc/7844</code>,发现执行路径在 &#x2F;var&#x2F;tmp&#x2F;sic&#x2F;sic ,同目录有一个<code>config.json</code>文件,其内容如下图,百度一下发现各个属性像极了挖矿程序的配置 - .-</p>
+<p><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2019-11-26-192525-2.png"></p>
+</li>
+</ul>
+<h3 id="查看定时任务"><a href="#查看定时任务" class="headerlink" title="查看定时任务"></a>查看定时任务</h3><ul>
+<li>执行<code>crontab -l</code>命令,发现三个异常任务,以第一个为例，<code>corn表达式</code>0,30 * * * *表示每0分钟和每三十分钟执行一次任务,网址返回的为一段shell脚本代码,通过管道在本地执行脚本，任务三则是每0秒(每分钟)执行一段<code>Python</code>脚本，任务四是腾讯云的监控组件。</li>
+<li>脚本内容大概就是通过<code>ssh</code>提权,删除系统日志,卸载安全组件,挖矿程序,代理服务等,然后定时执行，循环往复。</li>
+</ul>
+<p><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2019-11-26-192531-1.png"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>百度一圈发现是因为<code>Docker</code>的远程服务没有任何加密措施，黑客可以远程直接运行任意容器,通过<code>-v</code> 命令(数据卷)将他的<code>ssh</code>公钥挂载到宿主机的<code>/root/.ssh</code>目录，从而实现提权。</p>
+<p>傻乎乎当了一天矿机,出于安全考虑(系统已经惨不忍睹,也无法保证没有其他暗门),我立刻更换了公网IP,并且重置了系统镜像,然后我又安装上了<code>Docker</code>，不同的是这次我老老实实地在本地构建了镜像~</p>
+]]></content>
+      <tags>
+        <tag>服务器</tag>
+        <tag>Docker</tag>
+        <tag>网络安全</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>最大间隔数-桶排序应用</title>
     <url>/posts/28e83e0e/</url>
     <content><![CDATA[<img src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2019-05-23_wx_title.png' >
@@ -807,64 +865,6 @@
 ]]></content>
       <tags>
         <tag>服务器</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>荷兰国旗-快速排序应用</title>
-    <url>/posts/5644be5d/</url>
-    <content><![CDATA[<hr>
-<img src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2019-04-20%20.png' height=120px >
-
-<hr>
-<span id="more"></span>
-
-<h2 id="荷兰国旗"><a href="#荷兰国旗" class="headerlink" title="荷兰国旗"></a>荷兰国旗</h2><blockquote>
-<p>”荷兰国旗难题“是计算机科学中的一个程序难题，它是由Edsger Dijkstra提出的。荷兰国旗是由红、白、蓝三色组成的。现有红白蓝三个不同颜色的小球，乱序排列在一起，请重新排列这些小球，使得红白蓝三色的同颜色的球在一起。<br>ps:我们可以将红白蓝三色小球想象成条状物，有序排列后正好组成荷兰国旗。</p>
-</blockquote>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><blockquote>
-<p>arr[i]&lt; key时相当于“荷兰国旗问题”中的0<br>arr[i]&#x3D; key时相当于“荷兰国旗问题”中的1<br>arr[i]&gt; key时相当于“荷兰国旗问题”中的2</p>
-</blockquote>
-<p>这样就可以使用“荷兰国旗问题”的解法来解决快速排序了，这样一来，即使待排序的元素中有一些元素和key一样，也能保证时间复杂度是最差是NlogN的，因为对于待排序的等于Key的数值，可以在执行下一次Partition时直接跳过，利于数据规模的降低。</p>
-<hr>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight java"><figcaption><span>荷兰国旗</span></figcaption><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">NetherlandsFlag</span> &#123;<br>	<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">int</span>[] partition(<span class="hljs-type">int</span>[] arr,<span class="hljs-type">int</span> L,<span class="hljs-type">int</span> R,<span class="hljs-type">int</span> p) &#123;<br>		<span class="hljs-type">int</span> <span class="hljs-variable">less</span> <span class="hljs-operator">=</span> L-<span class="hljs-number">1</span>;<br>		<span class="hljs-type">int</span> <span class="hljs-variable">more</span> <span class="hljs-operator">=</span> R+<span class="hljs-number">1</span>;<br>		<span class="hljs-keyword">while</span>(L &lt; more) &#123;<br>			<span class="hljs-keyword">if</span>(arr[L] &lt; p) &#123;<br>				swap(arr,++less,L++);<br>			&#125;<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(arr[L] &gt; p) &#123;<br>				swap(arr,--more,L);<br>			&#125;<span class="hljs-keyword">else</span> &#123;<br>				L++;<br>			&#125;<br>			<br>		&#125;<br>		<span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[] &#123;less+<span class="hljs-number">1</span>,more-<span class="hljs-number">1</span>&#125;;<br>		<br>	&#125;<br>     <br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">swap</span><span class="hljs-params">(<span class="hljs-type">int</span>[] arr, <span class="hljs-type">int</span> i, <span class="hljs-type">int</span> j)</span> &#123;<br>		<span class="hljs-type">int</span> <span class="hljs-variable">temp</span> <span class="hljs-operator">=</span> arr[i];<br>		arr[i] = arr[j];<br>		arr[j] = temp;<br>		<br>	&#125;<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">int</span>[] getArray() &#123;<br>		<span class="hljs-type">int</span> arr[] = <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[<span class="hljs-number">10</span>];<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;i &lt; arr.length;i++) &#123;<br>			arr[i] = (<span class="hljs-type">int</span>)(Math.random()*<span class="hljs-number">3</span>);<br>		&#125;<br>		<span class="hljs-keyword">return</span> arr;<br>	&#125;<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">printArray</span><span class="hljs-params">(<span class="hljs-type">int</span> arr[])</span> &#123;<br>		<span class="hljs-keyword">if</span>(arr == <span class="hljs-literal">null</span>) &#123;<br>			<span class="hljs-keyword">return</span> ;<br>		&#125;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;i &lt; arr.length;i++) &#123;<br>			System.out.print(arr[i]+<span class="hljs-string">&quot; &quot;</span>);<br>		&#125;<br>		System.out.println();<br>		<br>	&#125;<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String args[])</span> &#123;<br>		<span class="hljs-type">int</span> test[] = getArray();<br>		printArray(test);                             <br>		<span class="hljs-type">int</span> res[] = partition(test,<span class="hljs-number">0</span>,test.length-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>);   <span class="hljs-comment">//p值为1，用来判断0，1，2   </span><br>		printArray(test);<br>		System.out.println(res[<span class="hljs-number">0</span>]);<br>		System.out.println(res[<span class="hljs-number">1</span>]);<br>	&#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>算法</tag>
-        <tag>快速排序</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>记录腾讯云服务器当矿机的一天</title>
-    <url>/posts/23f6ec83/</url>
-    <content><![CDATA[<img src='https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/wx_title_2019-11-26-0.png' >
-<span id="more"></span>
-
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近入手了一台腾讯云服务器玩玩，兴致勃勃的装上<code>Docker</code>，打算把之前的<code>SpringBoot</code>项目跑一跑。</p>
-<p>安装<code>Docker</code>、配置<code>Maven Docker</code>插件、开放<code>Docker</code>远程端口(这里划重点要考)、配置服务器安全组端口、编写<code>Dockerfile</code>文件、打包上传镜像、运行项目,一切都很正常。</p>
-<p>第二天早上，再次登录服务器时发现特别卡，下意识以为是自己运行项目的问题，初步排查一下，CPU占用100%，2M小水管带宽被占满……</p>
-<h2 id="排查"><a href="#排查" class="headerlink" title="排查"></a>排查</h2><h3 id="TOP命令查看进程信息"><a href="#TOP命令查看进程信息" class="headerlink" title="TOP命令查看进程信息"></a><code>TOP</code>命令查看进程信息</h3><ul>
-<li><p><code>TOP</code>命令查看进程信息，可以看到“sic”这个进程内存占用非常高，下面的“masscan”进程占用也相当高(百度发现可能是扫描端口的程序)</p>
-<p><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2019-11-26-192508-3.png"></p>
-</li>
-</ul>
-<h3 id="定位进程文件"><a href="#定位进程文件" class="headerlink" title="定位进程文件"></a>定位进程文件</h3><ul>
-<li><p>根据<code>PID</code>执行命令,<code>ll  /proc/7844</code>,发现执行路径在 &#x2F;var&#x2F;tmp&#x2F;sic&#x2F;sic ,同目录有一个<code>config.json</code>文件,其内容如下图,百度一下发现各个属性像极了挖矿程序的配置 - .-</p>
-<p><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2019-11-26-192525-2.png"></p>
-</li>
-</ul>
-<h3 id="查看定时任务"><a href="#查看定时任务" class="headerlink" title="查看定时任务"></a>查看定时任务</h3><ul>
-<li>执行<code>crontab -l</code>命令,发现三个异常任务,以第一个为例，<code>corn表达式</code>0,30 * * * *表示每0分钟和每三十分钟执行一次任务,网址返回的为一段shell脚本代码,通过管道在本地执行脚本，任务三则是每0秒(每分钟)执行一段<code>Python</code>脚本，任务四是腾讯云的监控组件。</li>
-<li>脚本内容大概就是通过<code>ssh</code>提权,删除系统日志,卸载安全组件,挖矿程序,代理服务等,然后定时执行，循环往复。</li>
-</ul>
-<p><img src="https://blog-resource-1251242863.cos.ap-shanghai.myqcloud.com/imags/2019-11-26-192531-1.png"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>百度一圈发现是因为<code>Docker</code>的远程服务没有任何加密措施，黑客可以远程直接运行任意容器,通过<code>-v</code> 命令(数据卷)将他的<code>ssh</code>公钥挂载到宿主机的<code>/root/.ssh</code>目录，从而实现提权。</p>
-<p>傻乎乎当了一天矿机,出于安全考虑(系统已经惨不忍睹,也无法保证没有其他暗门),我立刻更换了公网IP,并且重置了系统镜像,然后我又安装上了<code>Docker</code>，不同的是这次我老老实实地在本地构建了镜像~</p>
-]]></content>
-      <tags>
-        <tag>服务器</tag>
-        <tag>Docker</tag>
-        <tag>网络安全</tag>
       </tags>
   </entry>
 </search>
